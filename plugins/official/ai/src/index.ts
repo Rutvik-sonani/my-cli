@@ -1,10 +1,10 @@
-import { createAiManager } from '@mycli/ai-manager';
-import { createFileSystem } from '@mycli/filesystem';
-import { definePlugin } from '@mycli/plugin-system';
-import { resolveFeatureTemplatesRoot } from '@mycli/template-engine';
+import { createAiManager } from '@mycli-cli/ai-manager';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { definePlugin } from '@mycli-cli/plugin-system';
+import { resolveFeatureTemplatesRoot } from '@mycli-cli/template-engine';
 
 export default definePlugin({
-  name: '@mycli/ai',
+  name: '@mycli-cli/ai',
   version: '1.0.0',
   description: 'AI-assisted code generation for MyCLI projects',
   async install(ctx) {
@@ -24,7 +24,7 @@ export default definePlugin({
     return [
       {
         name: 'ai',
-        description: 'AI helpers (provided by @mycli/ai)',
+        description: 'AI helpers (provided by @mycli-cli/ai)',
         async handler(commandCtx) {
           commandCtx.app.logger.info('Use `my ai generate <target> <name>` or `my add ai`');
         },

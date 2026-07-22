@@ -1,9 +1,9 @@
 import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { createConfigManager } from '@mycli/config-manager';
-import { ApplicationContext } from '@mycli/core';
-import { createFileSystem } from '@mycli/filesystem';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import { ApplicationContext } from '@mycli-cli/core';
+import { createFileSystem } from '@mycli-cli/filesystem';
 import { afterEach, describe, expect, it } from 'vitest';
 import { createPluginManager } from '../src/index.js';
 
@@ -26,8 +26,8 @@ describe('PluginManager', () => {
     const plugins = createPluginManager({ app, config, filesystem: createFileSystem(dir) });
     const pluginPath = join(REPO_ROOT, 'plugins', 'official', 'docker');
 
-    const loaded = await plugins.install('@mycli/docker', { path: pluginPath });
-    expect(loaded.plugin.name).toBe('@mycli/docker');
+    const loaded = await plugins.install('@mycli-cli/docker', { path: pluginPath });
+    expect(loaded.plugin.name).toBe('@mycli-cli/docker');
     expect(loaded.plugin.version).toBe('1.0.0');
   });
 });

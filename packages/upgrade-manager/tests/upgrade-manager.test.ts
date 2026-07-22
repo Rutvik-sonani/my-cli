@@ -1,8 +1,8 @@
 import { access, mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { createConfigManager } from '@mycli/config-manager';
-import { createFileSystem } from '@mycli/filesystem';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import { createFileSystem } from '@mycli-cli/filesystem';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createUpgradeManager } from '../src/index.js';
 

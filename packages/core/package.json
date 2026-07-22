@@ -1,5 +1,5 @@
 {
-  "name": "@mycli/core",
+  "name": "@mycli-cli/core",
   "version": "1.0.0",
   "description": "MyCLI core package",
   "type": "module",

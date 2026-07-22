@@ -1,5 +1,5 @@
 {
-  "name": "@mycli/services-manager",
+  "name": "@mycli-cli/services-manager",
   "version": "1.0.0",
   "description": "MyCLI services-manager — cache, queue, events, mail, storage, payment scaffolding",
   "type": "module",
@@ -24,10 +24,10 @@
   },
   "engines": { "node": ">=22.0.0" },
   "dependencies": {
-    "@mycli/core": "workspace:*",
-    "@mycli/filesystem": "workspace:*",
-    "@mycli/template-engine": "workspace:*",
-    "@mycli/generator-engine": "workspace:*"
+    "@mycli-cli/core": "workspace:*",
+    "@mycli-cli/filesystem": "workspace:*",
+    "@mycli-cli/template-engine": "workspace:*",
+    "@mycli-cli/generator-engine": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.7.3",

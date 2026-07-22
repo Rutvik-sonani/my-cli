@@ -1,4 +1,4 @@
-# @mycli/upgrade-manager
+# @mycli-cli/upgrade-manager
 
 Migration engine for upgrading generated MyCLI projects without overwriting user code.
 
@@ -19,7 +19,7 @@ Migration engine for upgrading generated MyCLI projects without overwriting user
 ## Tests
 
 ```bash
-pnpm --filter @mycli/upgrade-manager test
+pnpm --filter @mycli-cli/upgrade-manager test
 ```
 
 Used by `apps/cli/src/commands/upgrade.ts`.

@@ -1,7 +1,7 @@
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { join, relative, resolve } from 'node:path';
-import { TemplateError, invariant } from '@mycli/core';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
+import { TemplateError, invariant } from '@mycli-cli/core';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
 import ejs from 'ejs';
 
 export interface TemplateMeta {

@@ -1,5 +1,5 @@
 /**
- * @mycli/generator-engine
+ * @mycli-cli/generator-engine
  *
  * Laravel Artisan-style generators with EJS templates and auto-registration.
  */

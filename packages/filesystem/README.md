@@ -1,3 +1,3 @@
-# @mycli/filesystem
+# @mycli-cli/filesystem
 
 Safe filesystem abstraction with dry-run support and path-escape protection.

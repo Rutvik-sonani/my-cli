@@ -1,5 +1,5 @@
 {
-  "name": "@mycli/website",
+  "name": "@mycli-cli/website",
   "version": "1.0.0",
   "private": true,
   "description": "MyCLI documentation website",

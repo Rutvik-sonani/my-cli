@@ -1,4 +1,4 @@
-# @mycli/architecture-engine
+# @mycli-cli/architecture-engine
 
 Enterprise **architecture style engine** for MyCLI (Phase 1). Selects a structural pattern and scaffolds folder layout, dependency rules, and documentation.
 
@@ -13,7 +13,7 @@ Enterprise **architecture style engine** for MyCLI (Phase 1). Selects a structur
 | Domain Driven Design | `domain-driven-design` | `src/domain` |
 | Microservice | `microservice` | `services` |
 
-Legacy layouts (`monolith`, `monorepo`, `polyrepo`) delegate to `@mycli/architecture-manager`.
+Legacy layouts (`monolith`, `monorepo`, `polyrepo`) delegate to `@mycli-cli/architecture-manager`.
 
 ## Provider interface
 
@@ -43,10 +43,10 @@ my create api --yes --architecture-style clean-architecture
 ## Tests
 
 ```bash
-pnpm --filter @mycli/architecture-engine test
+pnpm --filter @mycli-cli/architecture-engine test
 ```
 
 ## Related
 
-- `@mycli/architecture-manager` — legacy monolith/monorepo/polyrepo layouts
+- `@mycli-cli/architecture-manager` — legacy monolith/monorepo/polyrepo layouts
 - Phase 2: `my make domain` (DDD generator) — not yet implemented

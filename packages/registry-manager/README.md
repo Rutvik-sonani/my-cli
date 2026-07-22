@@ -1,4 +1,4 @@
-# @mycli/registry-manager
+# @mycli-cli/registry-manager
 
 Local plugin catalog (`plugins/plugins.json`) with search, resolve, publish, and npm registry integration.
 
@@ -7,7 +7,7 @@ Local plugin catalog (`plugins/plugins.json`) with search, resolve, publish, and
 | Command | Description |
 |---------|-------------|
 | `my plugin search docker` | Search local catalog |
-| `my plugin search mycli --registry npm` | Search npm for `@mycli/*` packages |
+| `my plugin search mycli --registry npm` | Search npm for `@mycli-cli/*` packages |
 | `my plugin publish ./plugin --dry-run` | Validate and plan catalog update |
 
 ## Catalog location
@@ -22,7 +22,7 @@ Each catalog entry includes `name`, `slug`, `npmPackage`, `version`, `compatibil
 ## API
 
 ```ts
-import { createRegistryManager } from '@mycli/registry-manager';
+import { createRegistryManager } from '@mycli-cli/registry-manager';
 
 const registry = createRegistryManager({ repoRoot: process.cwd() });
 const results = await registry.search({ query: 'docker' });
@@ -31,7 +31,7 @@ const results = await registry.search({ query: 'docker' });
 ## Tests
 
 ```bash
-pnpm --filter @mycli/registry-manager test
+pnpm --filter @mycli-cli/registry-manager test
 ```
 
 See [MARKETPLACE_GUIDE.md](../../MARKETPLACE_GUIDE.md) and [PLUGIN_GUIDE.md](../../PLUGIN_GUIDE.md).

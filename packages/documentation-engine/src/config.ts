@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import type { DocumentationDocument, DocumentationKind } from '@mycli/enterprise-core';
+import type { DocumentationDocument, DocumentationKind } from '@mycli-cli/enterprise-core';
 
 export interface DocumentationPathConfig {
   documentation?: string;

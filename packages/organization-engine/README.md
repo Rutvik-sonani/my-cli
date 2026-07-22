@@ -1,4 +1,4 @@
-# @mycli/organization-engine
+# @mycli-cli/organization-engine
 
 Enterprise organization management for MyCLI (Phase 14).
 

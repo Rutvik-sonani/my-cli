@@ -1,11 +1,11 @@
 {
-  "name": "@mycli/mariadb",
+  "name": "@mycli-cli/mariadb",
   "version": "1.0.0",
   "description": "Official MyCLI mariadb plugin",
   "main": "dist/index.js",
   "compatibility": ">=1.0.0",
   "author": "MyCLI",
   "slug": "mariadb",
-  "npmPackage": "@mycli/plugin-mariadb",
+  "npmPackage": "@mycli-cli/plugin-mariadb",
   "keywords": ["mariadb", "mycli", "database"]
 }

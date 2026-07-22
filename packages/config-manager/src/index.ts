@@ -1,5 +1,5 @@
-import { ConfigurationError, deepMerge, invariant } from '@mycli/core';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
+import { ConfigurationError, deepMerge, invariant } from '@mycli-cli/core';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
 
 export const MYCLI_CONFIG_FILENAME = 'mycli.config.json';
 export const MYCLI_PROJECT_FILENAME = '.myclirc.json';

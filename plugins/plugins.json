@@ -2,9 +2,9 @@
   "version": "1.0.0",
   "plugins": [
     {
-      "name": "@mycli/auth",
+      "name": "@mycli-cli/auth",
       "slug": "auth",
-      "npmPackage": "@mycli/plugin-auth",
+      "npmPackage": "@mycli-cli/plugin-auth",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "Authentication (JWT, OAuth, MFA, …)",
@@ -13,9 +13,9 @@
       "keywords": ["auth", "jwt", "oauth"]
     },
     {
-      "name": "@mycli/rbac",
+      "name": "@mycli-cli/rbac",
       "slug": "rbac",
-      "npmPackage": "@mycli/plugin-rbac",
+      "npmPackage": "@mycli-cli/plugin-rbac",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "Role and permission based access control",
@@ -24,9 +24,9 @@
       "keywords": ["rbac", "permissions"]
     },
     {
-      "name": "@mycli/docker",
+      "name": "@mycli-cli/docker",
       "slug": "docker",
-      "npmPackage": "@mycli/plugin-docker",
+      "npmPackage": "@mycli-cli/plugin-docker",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "Docker and Compose generation",
@@ -35,9 +35,9 @@
       "keywords": ["docker", "containers"]
     },
     {
-      "name": "@mycli/prisma",
+      "name": "@mycli-cli/prisma",
       "slug": "prisma",
-      "npmPackage": "@mycli/plugin-prisma",
+      "npmPackage": "@mycli-cli/plugin-prisma",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "Prisma ORM integration",
@@ -46,9 +46,9 @@
       "keywords": ["prisma", "orm"]
     },
     {
-      "name": "@mycli/postgres",
+      "name": "@mycli-cli/postgres",
       "slug": "postgres",
-      "npmPackage": "@mycli/plugin-postgres",
+      "npmPackage": "@mycli-cli/plugin-postgres",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "PostgreSQL database plugin",
@@ -57,9 +57,9 @@
       "keywords": ["postgres", "database"]
     },
     {
-      "name": "@mycli/mysql",
+      "name": "@mycli-cli/mysql",
       "slug": "mysql",
-      "npmPackage": "@mycli/plugin-mysql",
+      "npmPackage": "@mycli-cli/plugin-mysql",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "MySQL database plugin",
@@ -68,9 +68,9 @@
       "keywords": ["mysql", "database"]
     },
     {
-      "name": "@mycli/mongodb",
+      "name": "@mycli-cli/mongodb",
       "slug": "mongodb",
-      "npmPackage": "@mycli/plugin-mongodb",
+      "npmPackage": "@mycli-cli/plugin-mongodb",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "MongoDB database plugin",
@@ -79,9 +79,9 @@
       "keywords": ["mongodb", "database"]
     },
     {
-      "name": "@mycli/mariadb",
+      "name": "@mycli-cli/mariadb",
       "slug": "mariadb",
-      "npmPackage": "@mycli/plugin-mariadb",
+      "npmPackage": "@mycli-cli/plugin-mariadb",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "MariaDB database plugin",
@@ -90,9 +90,9 @@
       "keywords": ["mariadb", "database"]
     },
     {
-      "name": "@mycli/sqlite",
+      "name": "@mycli-cli/sqlite",
       "slug": "sqlite",
-      "npmPackage": "@mycli/plugin-sqlite",
+      "npmPackage": "@mycli-cli/plugin-sqlite",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "SQLite database plugin",
@@ -101,9 +101,9 @@
       "keywords": ["sqlite", "database"]
     },
     {
-      "name": "@mycli/redis",
+      "name": "@mycli-cli/redis",
       "slug": "redis",
-      "npmPackage": "@mycli/plugin-redis",
+      "npmPackage": "@mycli-cli/plugin-redis",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "Redis database plugin",
@@ -112,9 +112,9 @@
       "keywords": ["redis", "database", "cache"]
     },
     {
-      "name": "@mycli/sqlserver",
+      "name": "@mycli-cli/sqlserver",
       "slug": "sqlserver",
-      "npmPackage": "@mycli/plugin-sqlserver",
+      "npmPackage": "@mycli-cli/plugin-sqlserver",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "SQL Server database plugin",
@@ -123,9 +123,9 @@
       "keywords": ["sqlserver", "database"]
     },
     {
-      "name": "@mycli/cockroachdb",
+      "name": "@mycli-cli/cockroachdb",
       "slug": "cockroachdb",
-      "npmPackage": "@mycli/plugin-cockroachdb",
+      "npmPackage": "@mycli-cli/plugin-cockroachdb",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "CockroachDB database plugin",
@@ -134,9 +134,9 @@
       "keywords": ["cockroachdb", "database"]
     },
     {
-      "name": "@mycli/swagger",
+      "name": "@mycli-cli/swagger",
       "slug": "swagger",
-      "npmPackage": "@mycli/plugin-swagger",
+      "npmPackage": "@mycli-cli/plugin-swagger",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "Swagger / OpenAPI documentation",
@@ -145,9 +145,9 @@
       "keywords": ["swagger", "openapi", "api-docs"]
     },
     {
-      "name": "@mycli/kubernetes",
+      "name": "@mycli-cli/kubernetes",
       "slug": "kubernetes",
-      "npmPackage": "@mycli/plugin-kubernetes",
+      "npmPackage": "@mycli-cli/plugin-kubernetes",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "Kubernetes manifests and Helm charts",
@@ -156,9 +156,9 @@
       "keywords": ["kubernetes", "k8s", "helm"]
     },
     {
-      "name": "@mycli/aws",
+      "name": "@mycli-cli/aws",
       "slug": "aws",
-      "npmPackage": "@mycli/plugin-aws",
+      "npmPackage": "@mycli-cli/plugin-aws",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "AWS deployment via Terraform",
@@ -167,9 +167,9 @@
       "keywords": ["aws", "terraform", "cloud"]
     },
     {
-      "name": "@mycli/azure",
+      "name": "@mycli-cli/azure",
       "slug": "azure",
-      "npmPackage": "@mycli/plugin-azure",
+      "npmPackage": "@mycli-cli/plugin-azure",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "Azure deployment via Terraform",
@@ -178,9 +178,9 @@
       "keywords": ["azure", "terraform", "cloud"]
     },
     {
-      "name": "@mycli/gcp",
+      "name": "@mycli-cli/gcp",
       "slug": "gcp",
-      "npmPackage": "@mycli/plugin-gcp",
+      "npmPackage": "@mycli-cli/plugin-gcp",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "GCP deployment via Terraform",
@@ -189,9 +189,9 @@
       "keywords": ["gcp", "terraform", "cloud"]
     },
     {
-      "name": "@mycli/github",
+      "name": "@mycli-cli/github",
       "slug": "github",
-      "npmPackage": "@mycli/plugin-github",
+      "npmPackage": "@mycli-cli/plugin-github",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "GitHub repository and Actions integration",
@@ -200,9 +200,9 @@
       "keywords": ["github", "ci", "workflows"]
     },
     {
-      "name": "@mycli/railway",
+      "name": "@mycli-cli/railway",
       "slug": "railway",
-      "npmPackage": "@mycli/plugin-railway",
+      "npmPackage": "@mycli-cli/plugin-railway",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "Railway cloud deployment",
@@ -211,9 +211,9 @@
       "keywords": ["railway", "deploy", "paas"]
     },
     {
-      "name": "@mycli/fly",
+      "name": "@mycli-cli/fly",
       "slug": "fly",
-      "npmPackage": "@mycli/plugin-fly",
+      "npmPackage": "@mycli-cli/plugin-fly",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "Fly.io cloud deployment",
@@ -222,9 +222,9 @@
       "keywords": ["fly", "deploy", "paas"]
     },
     {
-      "name": "@mycli/ai",
+      "name": "@mycli-cli/ai",
       "slug": "ai",
-      "npmPackage": "@mycli/plugin-ai",
+      "npmPackage": "@mycli-cli/plugin-ai",
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "AI-assisted code generation",

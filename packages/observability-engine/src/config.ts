@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import type { ObservabilityLoggerId } from '@mycli/enterprise-core';
+import type { ObservabilityLoggerId } from '@mycli-cli/enterprise-core';
 
 export interface ObservabilityPathConfig {
   observability?: string;

@@ -26,14 +26,14 @@ my add database --database postgresql --orm drizzle
 my add database --database mongodb --orm mongoose
 
 # Marketplace plugins
-my plugin install @mycli/mysql
-my plugin install @mycli/mongodb
-my plugin install @mycli/postgres
-my plugin install @mycli/mariadb
-my plugin install @mycli/sqlite
-my plugin install @mycli/redis
-my plugin install @mycli/sqlserver
-my plugin install @mycli/cockroachdb
+my plugin install @mycli-cli/mysql
+my plugin install @mycli-cli/mongodb
+my plugin install @mycli-cli/postgres
+my plugin install @mycli-cli/mariadb
+my plugin install @mycli-cli/sqlite
+my plugin install @mycli-cli/redis
+my plugin install @mycli-cli/sqlserver
+my plugin install @mycli-cli/cockroachdb
 ```
 
 ## Generated files by ORM
@@ -47,6 +47,6 @@ my plugin install @mycli/cockroachdb
 | Sequelize | `src/database/sequelize/config.ts`, `src/database/sequelize/models/` |
 | MikroORM | `src/database/mikro-orm.config.ts`, `src/database/entities/` |
 
-Official database plugins: `@mycli/postgres`, `@mycli/mysql`, `@mycli/mongodb`, `@mycli/mariadb`, `@mycli/sqlite`, `@mycli/redis`, `@mycli/sqlserver`, `@mycli/cockroachdb`.
+Official database plugins: `@mycli-cli/postgres`, `@mycli-cli/mysql`, `@mycli-cli/mongodb`, `@mycli-cli/mariadb`, `@mycli-cli/sqlite`, `@mycli-cli/redis`, `@mycli-cli/sqlserver`, `@mycli-cli/cockroachdb`.
 
 Each database plugin also writes `docs/database-<engine>.md` with local dev and production guidance.

@@ -1,7 +1,7 @@
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { createConfigManager } from '@mycli/config-manager';
+import { createConfigManager } from '@mycli-cli/config-manager';
 import { describe, expect, it, vi } from 'vitest';
 import { createTelemetryManager } from '../src/index.js';
 

@@ -1,4 +1,4 @@
-import { MyCliError } from '@mycli/core';
+import { MyCliError } from '@mycli-cli/core';
 import { execa } from 'execa';
 
 export interface GithubLabelDefinition {

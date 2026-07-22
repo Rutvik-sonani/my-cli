@@ -1,11 +1,11 @@
 {
-  "name": "@mycli/sqlserver",
+  "name": "@mycli-cli/sqlserver",
   "version": "1.0.0",
   "description": "Official MyCLI sqlserver plugin",
   "main": "dist/index.js",
   "compatibility": ">=1.0.0",
   "author": "MyCLI",
   "slug": "sqlserver",
-  "npmPackage": "@mycli/plugin-sqlserver",
+  "npmPackage": "@mycli-cli/plugin-sqlserver",
   "keywords": ["sqlserver", "mycli", "database"]
 }

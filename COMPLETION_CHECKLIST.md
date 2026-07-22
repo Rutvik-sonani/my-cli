@@ -15,7 +15,7 @@ Track spec compliance by phase. Update status as work lands.
 | 0.1 | Tests for `cli-engine`, `config-manager`, `dependency-manager`, `prompt-engine`, `telemetry-manager` | ✅ |
 | 0.3 | CLI integration tests (`apps/cli/tests/commands.test.ts`) | ✅ |
 | 0.5 | Husky `pre-push` + `commit-msg` | ✅ |
-| 1.1 | i18n module in `@mycli/prompt-engine` | ✅ |
+| 1.1 | i18n module in `@mycli-cli/prompt-engine` | ✅ |
 | 1.2 | Locales `en`, `hi`, `es`, `fr` | ✅ |
 | 1.3 | Create wizard uses `engine.i18n.t()` | ✅ |
 
@@ -53,7 +53,7 @@ Track spec compliance by phase. Update status as work lands.
 
 **Notes:**
 - Non-interactive flags: `--branch-strategy`, `--commit-convention`, `--git-hooks`, `--cicd`, `--publish`
-- GitHub CI uses `@mycli/github-manager` (includes deploy + Renovate); other providers use `@mycli/cicd-manager`
+- GitHub CI uses `@mycli-cli/github-manager` (includes deploy + Renovate); other providers use `@mycli-cli/cicd-manager`
 
 ---
 
@@ -72,7 +72,7 @@ Track spec compliance by phase. Update status as work lands.
 - Queue providers: `my add queue --provider bullmq|rabbitmq|kafka|sqs`
 - `my make queue <name>` → `src/jobs/<name>/`
 - `my make mail <name>` → `src/mail/<name>.mail.ts`
-- `my backup run|list` uses `@mycli/backup-manager`
+- `my backup run|list` uses `@mycli-cli/backup-manager`
 
 ---
 
@@ -82,8 +82,8 @@ Track spec compliance by phase. Update status as work lands.
 |----|------|--------|
 | 4.1 | `docker-compose.test.yml` | ✅ |
 | 4.5 | AWS terraform module split | ✅ |
-| 6.1 | `@mycli/azure` plugin | ✅ |
-| 6.2 | `@mycli/gcp` plugin | ✅ |
+| 6.1 | `@mycli-cli/azure` plugin | ✅ |
+| 6.2 | `@mycli-cli/gcp` plugin | ✅ |
 | 4.7 | Unified `DEPLOYMENT.md` | ✅ |
 
 **Notes:**
@@ -199,7 +199,7 @@ See prior audit in chat for full 96-task breakdown.
 | ID | Task | Status |
 |----|------|--------|
 | 11.1 | Telemetry transport (`MYCLI_TELEMETRY_URL`, flush on shutdown) | ✅ |
-| 11.2 | `my upgrade` migration engine (`@mycli/upgrade-manager`) | ✅ |
+| 11.2 | `my upgrade` migration engine (`@mycli-cli/upgrade-manager`) | ✅ |
 | 11.3 | `my doctor` DB ping + dependency audit | ✅ |
 | 11.4 | `my security audit` + secret scan | ✅ |
 
@@ -239,7 +239,7 @@ See prior audit in chat for full 96-task breakdown.
 **Notes:**
 - Every `packages/*` package now has a README with CLI commands, outputs, and test command
 - Root `.github/ISSUE_TEMPLATE/`, `dependabot.yml`, and PR template added for the MyCLI repo
-- `ARCHITECTURE.md` documents `apps/cli` (binary + templates) vs `@mycli/cli-engine` (library orchestrator)
+- `ARCHITECTURE.md` documents `apps/cli` (binary + templates) vs `@mycli-cli/cli-engine` (library orchestrator)
 - `PLUGIN_GUIDE.md` / `MARKETPLACE_GUIDE.md` document `plugins/plugins.json` location and layout
 
 ---
@@ -318,7 +318,7 @@ See prior audit in chat for full 96-task breakdown.
 **Notes:**
 - RBAC DB entities emitted when `includeRbac: true` during database setup
 - AWS terraform now includes `eks.tf`, `lambda.tf`, `cloudfront.tf` alongside ECS Fargate
-- Docs site: `pnpm --filter @mycli/website build` → `apps/website/dist`
+- Docs site: `pnpm --filter @mycli-cli/website build` → `apps/website/dist`
 - Overall compliance estimate: **~95% structural / ~90% production-depth**
 
 ---

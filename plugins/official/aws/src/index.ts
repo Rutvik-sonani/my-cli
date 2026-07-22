@@ -1,10 +1,10 @@
-import { createDeploymentManager } from '@mycli/deployment-manager';
-import { createFileSystem } from '@mycli/filesystem';
-import { definePlugin } from '@mycli/plugin-system';
-import { resolveFeatureTemplatesRoot } from '@mycli/template-engine';
+import { createDeploymentManager } from '@mycli-cli/deployment-manager';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { definePlugin } from '@mycli-cli/plugin-system';
+import { resolveFeatureTemplatesRoot } from '@mycli-cli/template-engine';
 
 export default definePlugin({
-  name: '@mycli/aws',
+  name: '@mycli-cli/aws',
   version: '1.0.0',
   description: 'AWS deployment via Terraform (ECS Fargate)',
   async install(ctx) {
@@ -27,7 +27,7 @@ export default definePlugin({
     return [
       {
         name: 'aws',
-        description: 'AWS deployment helpers (provided by @mycli/aws)',
+        description: 'AWS deployment helpers (provided by @mycli-cli/aws)',
         async handler(commandCtx) {
           commandCtx.app.logger.info(
             'Use `my add terraform --provider aws` or `my deploy terraform --provider aws`',

@@ -1,11 +1,11 @@
 {
-  "name": "@mycli/postgres",
+  "name": "@mycli-cli/postgres",
   "version": "1.0.0",
   "description": "Official MyCLI postgres plugin",
   "main": "dist/index.js",
   "compatibility": ">=1.0.0",
   "author": "MyCLI",
   "slug": "postgres",
-  "npmPackage": "@mycli/plugin-postgres",
+  "npmPackage": "@mycli-cli/plugin-postgres",
   "keywords": ["postgres", "mycli"]
 }

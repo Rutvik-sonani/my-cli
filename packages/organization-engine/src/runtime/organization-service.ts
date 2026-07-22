@@ -6,7 +6,7 @@ import type {
   OrganizationPermission,
   OrganizationRole,
   Team,
-} from '@mycli/enterprise-core';
+} from '@mycli-cli/enterprise-core';
 import { slugify } from '../config.js';
 
 const ROLE_PERMISSIONS: Record<OrganizationRole, OrganizationPermission[]> = {

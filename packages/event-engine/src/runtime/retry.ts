@@ -1,4 +1,4 @@
-import type { RetryOptions } from '@mycli/enterprise-core';
+import type { RetryOptions } from '@mycli-cli/enterprise-core';
 
 export const DEFAULT_RETRY_OPTIONS: RetryOptions = {
   maxAttempts: 3,

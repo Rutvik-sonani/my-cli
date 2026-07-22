@@ -6,7 +6,7 @@ import type {
   IntegrationEvent,
   QueryHandler,
   QueryMessage,
-} from '@mycli/enterprise-core';
+} from '@mycli-cli/enterprise-core';
 
 export class CommandBusError extends Error {
   constructor(message: string) {

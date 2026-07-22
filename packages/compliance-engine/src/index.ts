@@ -19,4 +19,4 @@ export {
   createDefaultComplianceService,
   type ComplianceCatalogEntry,
 } from './runtime/compliance-service.js';
-export type { ComplianceFramework } from '@mycli/enterprise-core';
+export type { ComplianceFramework } from '@mycli-cli/enterprise-core';

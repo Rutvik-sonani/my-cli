@@ -66,14 +66,14 @@ export class RegistryManager {
       for (const pkg of npmResults) {
         if (entries.some((e) => e.npmPackage === pkg.name || e.name === pkg.name)) continue;
         entries.push({
-          name: pkg.name.startsWith('@mycli/plugin-')
-            ? `@mycli/${pkg.name.replace('@mycli/plugin-', '')}`
+          name: pkg.name.startsWith('@mycli-cli/plugin-')
+            ? `@mycli-cli/${pkg.name.replace('@mycli-cli/plugin-', '')}`
             : pkg.name,
           npmPackage: pkg.name,
           version: pkg.version,
           description: pkg.description,
           keywords: pkg.keywords,
-          slug: pkg.name.replace('@mycli/plugin-', '').replace('@mycli/', ''),
+          slug: pkg.name.replace('@mycli-cli/plugin-', '').replace('@mycli-cli/', ''),
           compatibility: '>=1.0.0',
           downloads: 0,
         });
@@ -155,12 +155,14 @@ export class RegistryManager {
   }
 
   async resolveFromNpm(name: string): Promise<RegistryEntry | undefined> {
-    const npmName = name.startsWith('@') ? name : `@mycli/plugin-${name.replace(/^@mycli\//, '')}`;
+    const npmName = name.startsWith('@')
+      ? name
+      : `@mycli-cli/plugin-${name.replace(/^@mycli\//, '')}`;
     const meta = await this.npm.getMetadata(npmName);
     if (!meta) return undefined;
 
     return {
-      name: name.startsWith('@mycli/') ? name : `@mycli/${name}`,
+      name: name.startsWith('@mycli-cli/') ? name : `@mycli-cli/${name}`,
       npmPackage: meta.name,
       version: meta.version,
       description: meta.description,

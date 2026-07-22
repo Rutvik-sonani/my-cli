@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import type { EventSystemProvider } from '@mycli/enterprise-core';
+import type { EventSystemProvider } from '@mycli-cli/enterprise-core';
 
 export interface EventSystemPathConfig {
   eventSystem?: string;

@@ -1,8 +1,8 @@
-import type { CliEngine } from '@mycli/cli-engine';
-import { defineCommand } from '@mycli/command-engine';
-import { createConfigManager } from '@mycli/config-manager';
-import { createDocumentationManager } from '@mycli/documentation-engine';
-import { createFileSystem } from '@mycli/filesystem';
+import type { CliEngine } from '@mycli-cli/cli-engine';
+import { defineCommand } from '@mycli-cli/command-engine';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import { createDocumentationManager } from '@mycli-cli/documentation-engine';
+import { createFileSystem } from '@mycli-cli/filesystem';
 import { resolveTemplatesRoot } from '../paths.js';
 
 export function docsCommand(engine: CliEngine) {

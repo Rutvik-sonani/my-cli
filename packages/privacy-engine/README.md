@@ -1,4 +1,4 @@
-# @mycli/privacy-engine
+# @mycli-cli/privacy-engine
 
 Enterprise privacy management for MyCLI (Phase 9).
 

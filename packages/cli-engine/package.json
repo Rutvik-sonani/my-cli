@@ -1,5 +1,5 @@
 {
-  "name": "@mycli/cli-engine",
+  "name": "@mycli-cli/cli-engine",
   "version": "1.0.0",
   "description": "MyCLI cli-engine package",
   "type": "module",
@@ -28,13 +28,13 @@
     "node": ">=22.0.0"
   },
   "dependencies": {
-    "@mycli/core": "workspace:*",
-    "@mycli/command-engine": "workspace:*",
-    "@mycli/prompt-engine": "workspace:*",
-    "@mycli/config-manager": "workspace:*",
-    "@mycli/plugin-system": "workspace:*",
-    "@mycli/filesystem": "workspace:*",
-    "@mycli/telemetry-manager": "workspace:*",
+    "@mycli-cli/core": "workspace:*",
+    "@mycli-cli/command-engine": "workspace:*",
+    "@mycli-cli/prompt-engine": "workspace:*",
+    "@mycli-cli/config-manager": "workspace:*",
+    "@mycli-cli/plugin-system": "workspace:*",
+    "@mycli-cli/filesystem": "workspace:*",
+    "@mycli-cli/telemetry-manager": "workspace:*",
     "picocolors": "^1.1.1"
   },
   "devDependencies": {

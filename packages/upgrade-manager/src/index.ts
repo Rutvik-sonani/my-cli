@@ -1,6 +1,6 @@
-import { createConfigManager } from '@mycli/config-manager';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
-import { createTemplateEngine } from '@mycli/template-engine';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
+import { createTemplateEngine } from '@mycli-cli/template-engine';
 import { listUpgradeMigrations } from './migrations/index.js';
 import type { UpgradeRunOptions, UpgradeRunResult, UpgradeState } from './types.js';
 

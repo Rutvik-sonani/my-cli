@@ -29,4 +29,4 @@ export type {
   TemplateSearchOptions,
   TemplateSearchResult,
   TemplateVisibility,
-} from '@mycli/enterprise-core';
+} from '@mycli-cli/enterprise-core';

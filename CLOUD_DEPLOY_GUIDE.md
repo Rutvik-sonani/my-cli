@@ -60,14 +60,14 @@ See [GIT_CICD_GUIDE.md](./GIT_CICD_GUIDE.md) for full `my git` command reference
 
 ## Official plugins
 
-- `@mycli/railway` — Railway setup via plugin install
-- `@mycli/fly` — Fly.io setup via plugin install
-- `@mycli/aws` — AWS Terraform setup
+- `@mycli-cli/railway` — Railway setup via plugin install
+- `@mycli-cli/fly` — Fly.io setup via plugin install
+- `@mycli-cli/aws` — AWS Terraform setup
 
 ## Managers
 
 | Package | Responsibility |
 |---------|----------------|
-| `@mycli/cloud-manager` | Runtime deploy, status, logs, rollback, destroy |
-| `@mycli/secrets-manager` | Env parsing and secrets sync planning |
-| `@mycli/deployment-manager` | Static config generation (Phase 4) + validateSetup |
+| `@mycli-cli/cloud-manager` | Runtime deploy, status, logs, rollback, destroy |
+| `@mycli-cli/secrets-manager` | Env parsing and secrets sync planning |
+| `@mycli-cli/deployment-manager` | Static config generation (Phase 4) + validateSetup |

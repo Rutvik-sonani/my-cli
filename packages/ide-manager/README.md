@@ -1,4 +1,4 @@
-# @mycli/ide-manager
+# @mycli-cli/ide-manager
 
 Generates DevContainer, VS Code, and Cursor IDE configuration for MyCLI projects.
 

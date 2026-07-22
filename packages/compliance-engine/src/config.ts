@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import type { ComplianceFramework } from '@mycli/enterprise-core';
+import type { ComplianceFramework } from '@mycli-cli/enterprise-core';
 
 export interface CompliancePathConfig {
   compliance?: string;

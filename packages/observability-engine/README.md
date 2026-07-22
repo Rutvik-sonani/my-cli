@@ -1,4 +1,4 @@
-# @mycli/observability-engine
+# @mycli-cli/observability-engine
 
 Enterprise observability platform for MyCLI (Phase 11).
 

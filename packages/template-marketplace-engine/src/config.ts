@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import type { MarketplaceTemplate } from '@mycli/enterprise-core';
+import type { MarketplaceTemplate } from '@mycli-cli/enterprise-core';
 
 export interface TemplateMarketplacePathConfig {
   templateMarketplace?: string;

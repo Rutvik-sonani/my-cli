@@ -50,172 +50,172 @@ importers:
 
   apps/cli:
     dependencies:
-      '@mycli/ai-manager':
+      '@mycli-cli/ai-manager':
         specifier: workspace:*
         version: link:../../packages/ai-manager
-      '@mycli/api-manager':
+      '@mycli-cli/api-manager':
         specifier: workspace:*
         version: link:../../packages/api-manager
-      '@mycli/architecture-engine':
+      '@mycli-cli/architecture-engine':
         specifier: workspace:*
         version: link:../../packages/architecture-engine
-      '@mycli/architecture-manager':
+      '@mycli-cli/architecture-manager':
         specifier: workspace:*
         version: link:../../packages/architecture-manager
-      '@mycli/audit-engine':
+      '@mycli-cli/audit-engine':
         specifier: workspace:*
         version: link:../../packages/audit-engine
-      '@mycli/auth-manager':
+      '@mycli-cli/auth-manager':
         specifier: workspace:*
         version: link:../../packages/auth-manager
-      '@mycli/backup-manager':
+      '@mycli-cli/backup-manager':
         specifier: workspace:*
         version: link:../../packages/backup-manager
-      '@mycli/cicd-manager':
+      '@mycli-cli/cicd-manager':
         specifier: workspace:*
         version: link:../../packages/cicd-manager
-      '@mycli/cli-engine':
+      '@mycli-cli/cli-engine':
         specifier: workspace:*
         version: link:../../packages/cli-engine
-      '@mycli/cloud-manager':
+      '@mycli-cli/cloud-manager':
         specifier: workspace:*
         version: link:../../packages/cloud-manager
-      '@mycli/command-engine':
+      '@mycli-cli/command-engine':
         specifier: workspace:*
         version: link:../../packages/command-engine
-      '@mycli/compliance-engine':
+      '@mycli-cli/compliance-engine':
         specifier: workspace:*
         version: link:../../packages/compliance-engine
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../../packages/config-manager
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@mycli/cqrs-engine':
+      '@mycli-cli/cqrs-engine':
         specifier: workspace:*
         version: link:../../packages/cqrs-engine
-      '@mycli/database-manager':
+      '@mycli-cli/database-manager':
         specifier: workspace:*
         version: link:../../packages/database-manager
-      '@mycli/dependency-manager':
+      '@mycli-cli/dependency-manager':
         specifier: workspace:*
         version: link:../../packages/dependency-manager
-      '@mycli/deployment-manager':
+      '@mycli-cli/deployment-manager':
         specifier: workspace:*
         version: link:../../packages/deployment-manager
-      '@mycli/docker-manager':
+      '@mycli-cli/docker-manager':
         specifier: workspace:*
         version: link:../../packages/docker-manager
-      '@mycli/documentation-engine':
+      '@mycli-cli/documentation-engine':
         specifier: workspace:*
         version: link:../../packages/documentation-engine
-      '@mycli/domain-engine':
+      '@mycli-cli/domain-engine':
         specifier: workspace:*
         version: link:../../packages/domain-engine
-      '@mycli/event-engine':
+      '@mycli-cli/event-engine':
         specifier: workspace:*
         version: link:../../packages/event-engine
-      '@mycli/feature-flag-engine':
+      '@mycli-cli/feature-flag-engine':
         specifier: workspace:*
         version: link:../../packages/feature-flag-engine
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../packages/filesystem
-      '@mycli/frontend-manager':
+      '@mycli-cli/frontend-manager':
         specifier: workspace:*
         version: link:../../packages/frontend-manager
-      '@mycli/generator-engine':
+      '@mycli-cli/generator-engine':
         specifier: workspace:*
         version: link:../../packages/generator-engine
-      '@mycli/git-manager':
+      '@mycli-cli/git-manager':
         specifier: workspace:*
         version: link:../../packages/git-manager
-      '@mycli/github-manager':
+      '@mycli-cli/github-manager':
         specifier: workspace:*
         version: link:../../packages/github-manager
-      '@mycli/governance-engine':
+      '@mycli-cli/governance-engine':
         specifier: workspace:*
         version: link:../../packages/governance-engine
-      '@mycli/ide-manager':
+      '@mycli-cli/ide-manager':
         specifier: workspace:*
         version: link:../../packages/ide-manager
-      '@mycli/identity-engine':
+      '@mycli-cli/identity-engine':
         specifier: workspace:*
         version: link:../../packages/identity-engine
-      '@mycli/kubernetes-manager':
+      '@mycli-cli/kubernetes-manager':
         specifier: workspace:*
         version: link:../../packages/kubernetes-manager
-      '@mycli/marketplace-manager':
+      '@mycli-cli/marketplace-manager':
         specifier: workspace:*
         version: link:../../packages/marketplace-manager
-      '@mycli/migration-engine':
+      '@mycli-cli/migration-engine':
         specifier: workspace:*
         version: link:../../packages/migration-engine
-      '@mycli/observability-engine':
+      '@mycli-cli/observability-engine':
         specifier: workspace:*
         version: link:../../packages/observability-engine
-      '@mycli/organization-engine':
+      '@mycli-cli/organization-engine':
         specifier: workspace:*
         version: link:../../packages/organization-engine
-      '@mycli/platform-manager':
+      '@mycli-cli/platform-manager':
         specifier: workspace:*
         version: link:../../packages/platform-manager
-      '@mycli/plugin-sdk':
+      '@mycli-cli/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../packages/plugin-system
-      '@mycli/privacy-engine':
+      '@mycli-cli/privacy-engine':
         specifier: workspace:*
         version: link:../../packages/privacy-engine
-      '@mycli/project-health-engine':
+      '@mycli-cli/project-health-engine':
         specifier: workspace:*
         version: link:../../packages/project-health-engine
-      '@mycli/prompt-engine':
+      '@mycli-cli/prompt-engine':
         specifier: workspace:*
         version: link:../../packages/prompt-engine
-      '@mycli/rbac-manager':
+      '@mycli-cli/rbac-manager':
         specifier: workspace:*
         version: link:../../packages/rbac-manager
-      '@mycli/registry-manager':
+      '@mycli-cli/registry-manager':
         specifier: workspace:*
         version: link:../../packages/registry-manager
-      '@mycli/release-manager':
+      '@mycli-cli/release-manager':
         specifier: workspace:*
         version: link:../../packages/release-manager
-      '@mycli/search-engine':
+      '@mycli-cli/search-engine':
         specifier: workspace:*
         version: link:../../packages/search-engine
-      '@mycli/secrets-manager':
+      '@mycli-cli/secrets-manager':
         specifier: workspace:*
         version: link:../../packages/secrets-manager
-      '@mycli/security-engine':
+      '@mycli-cli/security-engine':
         specifier: workspace:*
         version: link:../../packages/security-engine
-      '@mycli/services-manager':
+      '@mycli-cli/services-manager':
         specifier: workspace:*
         version: link:../../packages/services-manager
-      '@mycli/telemetry-manager':
+      '@mycli-cli/telemetry-manager':
         specifier: workspace:*
         version: link:../../packages/telemetry-manager
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../packages/template-engine
-      '@mycli/template-marketplace-engine':
+      '@mycli-cli/template-marketplace-engine':
         specifier: workspace:*
         version: link:../../packages/template-marketplace-engine
-      '@mycli/tenancy-engine':
+      '@mycli-cli/tenancy-engine':
         specifier: workspace:*
         version: link:../../packages/tenancy-engine
-      '@mycli/testing-manager':
+      '@mycli-cli/testing-manager':
         specifier: workspace:*
         version: link:../../packages/testing-manager
-      '@mycli/ui-manager':
+      '@mycli-cli/ui-manager':
         specifier: workspace:*
         version: link:../../packages/ui-manager
-      '@mycli/upgrade-manager':
+      '@mycli-cli/upgrade-manager':
         specifier: workspace:*
         version: link:../../packages/upgrade-manager
       execa:
@@ -246,13 +246,13 @@ importers:
 
   packages/ai-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
@@ -268,16 +268,16 @@ importers:
 
   packages/api-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/generator-engine':
+      '@mycli-cli/generator-engine':
         specifier: workspace:*
         version: link:../generator-engine
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
@@ -293,19 +293,19 @@ importers:
 
   packages/architecture-engine:
     dependencies:
-      '@mycli/architecture-manager':
+      '@mycli-cli/architecture-manager':
         specifier: workspace:*
         version: link:../architecture-manager
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
@@ -321,13 +321,13 @@ importers:
 
   packages/architecture-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
@@ -343,20 +343,20 @@ importers:
 
   packages/audit-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
       '@types/node':
@@ -371,16 +371,16 @@ importers:
 
   packages/auth-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/generator-engine':
+      '@mycli-cli/generator-engine':
         specifier: workspace:*
         version: link:../generator-engine
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
@@ -396,13 +396,13 @@ importers:
 
   packages/backup-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
       execa:
@@ -421,13 +421,13 @@ importers:
 
   packages/cicd-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
@@ -443,25 +443,25 @@ importers:
 
   packages/cli-engine:
     dependencies:
-      '@mycli/command-engine':
+      '@mycli-cli/command-engine':
         specifier: workspace:*
         version: link:../command-engine
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../plugin-system
-      '@mycli/prompt-engine':
+      '@mycli-cli/prompt-engine':
         specifier: workspace:*
         version: link:../prompt-engine
-      '@mycli/telemetry-manager':
+      '@mycli-cli/telemetry-manager':
         specifier: workspace:*
         version: link:../telemetry-manager
       picocolors:
@@ -480,13 +480,13 @@ importers:
 
   packages/cloud-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
       execa:
@@ -505,7 +505,7 @@ importers:
 
   packages/command-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -521,20 +521,20 @@ importers:
 
   packages/compliance-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
       '@types/node':
@@ -549,10 +549,10 @@ importers:
 
   packages/config-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
     devDependencies:
@@ -580,23 +580,23 @@ importers:
 
   packages/cqrs-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/generator-engine':
+      '@mycli-cli/generator-engine':
         specifier: workspace:*
         version: link:../generator-engine
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
       '@types/node':
@@ -611,13 +611,13 @@ importers:
 
   packages/database-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
@@ -633,10 +633,10 @@ importers:
 
   packages/dependency-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
       execa:
@@ -655,13 +655,13 @@ importers:
 
   packages/deployment-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
@@ -677,13 +677,13 @@ importers:
 
   packages/docker-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
@@ -699,20 +699,20 @@ importers:
 
   packages/documentation-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
       '@types/node':
@@ -727,23 +727,23 @@ importers:
 
   packages/domain-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/generator-engine':
+      '@mycli-cli/generator-engine':
         specifier: workspace:*
         version: link:../generator-engine
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
       '@types/node':
@@ -770,23 +770,23 @@ importers:
 
   packages/event-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/generator-engine':
+      '@mycli-cli/generator-engine':
         specifier: workspace:*
         version: link:../generator-engine
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
       '@types/node':
@@ -801,20 +801,20 @@ importers:
 
   packages/feature-flag-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
       '@types/node':
@@ -829,7 +829,7 @@ importers:
 
   packages/filesystem:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -845,13 +845,13 @@ importers:
 
   packages/frontend-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
@@ -867,16 +867,16 @@ importers:
 
   packages/generator-engine:
     dependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
@@ -892,13 +892,13 @@ importers:
 
   packages/git-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
       execa:
@@ -917,13 +917,13 @@ importers:
 
   packages/github-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
       execa:
@@ -942,20 +942,20 @@ importers:
 
   packages/governance-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
       '@types/node':
@@ -970,13 +970,13 @@ importers:
 
   packages/ide-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
@@ -992,20 +992,20 @@ importers:
 
   packages/identity-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
       '@types/node':
@@ -1020,13 +1020,13 @@ importers:
 
   packages/kubernetes-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
@@ -1042,23 +1042,23 @@ importers:
 
   packages/marketplace-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../plugin-system
-      '@mycli/registry-manager':
+      '@mycli-cli/registry-manager':
         specifier: workspace:*
         version: link:../registry-manager
       execa:
         specifier: ^9.5.2
         version: 9.6.1
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
       '@types/node':
@@ -1073,22 +1073,22 @@ importers:
 
   packages/migration-engine:
     dependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
-      '@mycli/upgrade-manager':
+      '@mycli-cli/upgrade-manager':
         specifier: workspace:*
         version: link:../upgrade-manager
     devDependencies:
@@ -1104,20 +1104,20 @@ importers:
 
   packages/observability-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
       '@types/node':
@@ -1132,20 +1132,20 @@ importers:
 
   packages/organization-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
       '@types/node':
@@ -1160,16 +1160,16 @@ importers:
 
   packages/platform-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/generator-engine':
+      '@mycli-cli/generator-engine':
         specifier: workspace:*
         version: link:../generator-engine
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
@@ -1185,16 +1185,16 @@ importers:
 
   packages/plugin-sdk:
     dependencies:
-      '@mycli/command-engine':
+      '@mycli-cli/command-engine':
         specifier: workspace:*
         version: link:../command-engine
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../plugin-system
     devDependencies:
@@ -1210,16 +1210,16 @@ importers:
 
   packages/plugin-system:
     dependencies:
-      '@mycli/command-engine':
+      '@mycli-cli/command-engine':
         specifier: workspace:*
         version: link:../command-engine
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
     devDependencies:
@@ -1235,20 +1235,20 @@ importers:
 
   packages/privacy-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
       '@types/node':
@@ -1263,20 +1263,20 @@ importers:
 
   packages/project-health-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
       '@types/node':
@@ -1294,7 +1294,7 @@ importers:
       '@clack/prompts':
         specifier: ^0.9.1
         version: 0.9.1
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
       picocolors:
@@ -1313,16 +1313,16 @@ importers:
 
   packages/rbac-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/generator-engine':
+      '@mycli-cli/generator-engine':
         specifier: workspace:*
         version: link:../generator-engine
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
       execa:
@@ -1341,7 +1341,7 @@ importers:
 
   packages/registry-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -1357,16 +1357,16 @@ importers:
 
   packages/release-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/git-manager':
+      '@mycli-cli/git-manager':
         specifier: workspace:*
         version: link:../git-manager
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
@@ -1382,20 +1382,20 @@ importers:
 
   packages/search-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
       '@types/node':
@@ -1410,13 +1410,13 @@ importers:
 
   packages/secrets-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
       execa:
@@ -1435,20 +1435,20 @@ importers:
 
   packages/security-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
       '@types/node':
@@ -1463,16 +1463,16 @@ importers:
 
   packages/services-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/generator-engine':
+      '@mycli-cli/generator-engine':
         specifier: workspace:*
         version: link:../generator-engine
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
@@ -1488,10 +1488,10 @@ importers:
 
   packages/telemetry-manager:
     dependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -1507,10 +1507,10 @@ importers:
 
   packages/template-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
       ejs:
@@ -1532,20 +1532,20 @@ importers:
 
   packages/template-marketplace-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
       '@types/node':
@@ -1560,23 +1560,23 @@ importers:
 
   packages/tenancy-engine:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/enterprise-core':
+      '@mycli-cli/enterprise-core':
         specifier: workspace:*
         version: link:../enterprise-core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/generator-engine':
+      '@mycli-cli/generator-engine':
         specifier: workspace:*
         version: link:../generator-engine
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
       '@types/node':
@@ -1591,13 +1591,13 @@ importers:
 
   packages/testing-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
@@ -1613,16 +1613,16 @@ importers:
 
   packages/ui-manager:
     dependencies:
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/dependency-manager':
+      '@mycli-cli/dependency-manager':
         specifier: workspace:*
         version: link:../dependency-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
       execa:
@@ -1641,16 +1641,16 @@ importers:
 
   packages/upgrade-manager:
     dependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../config-manager
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../template-engine
     devDependencies:
@@ -1666,17 +1666,17 @@ importers:
 
   plugins/community/hello-mycli:
     dependencies:
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../../../packages/config-manager
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../../../packages/core
       '@types/node':
@@ -1691,16 +1691,16 @@ importers:
 
   plugins/official-tests:
     devDependencies:
-      '@mycli/config-manager':
+      '@mycli-cli/config-manager':
         specifier: workspace:*
         version: link:../../packages/config-manager
-      '@mycli/core':
+      '@mycli-cli/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../packages/plugin-system
       '@types/node':
@@ -1715,16 +1715,16 @@ importers:
 
   plugins/official/ai:
     dependencies:
-      '@mycli/ai-manager':
+      '@mycli-cli/ai-manager':
         specifier: workspace:*
         version: link:../../../packages/ai-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -1740,16 +1740,16 @@ importers:
 
   plugins/official/auth:
     dependencies:
-      '@mycli/auth-manager':
+      '@mycli-cli/auth-manager':
         specifier: workspace:*
         version: link:../../../packages/auth-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -1765,16 +1765,16 @@ importers:
 
   plugins/official/aws:
     dependencies:
-      '@mycli/deployment-manager':
+      '@mycli-cli/deployment-manager':
         specifier: workspace:*
         version: link:../../../packages/deployment-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -1790,16 +1790,16 @@ importers:
 
   plugins/official/azure:
     dependencies:
-      '@mycli/deployment-manager':
+      '@mycli-cli/deployment-manager':
         specifier: workspace:*
         version: link:../../../packages/deployment-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -1815,16 +1815,16 @@ importers:
 
   plugins/official/cockroachdb:
     dependencies:
-      '@mycli/database-manager':
+      '@mycli-cli/database-manager':
         specifier: workspace:*
         version: link:../../../packages/database-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -1840,16 +1840,16 @@ importers:
 
   plugins/official/docker:
     dependencies:
-      '@mycli/docker-manager':
+      '@mycli-cli/docker-manager':
         specifier: workspace:*
         version: link:../../../packages/docker-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -1865,19 +1865,19 @@ importers:
 
   plugins/official/fly:
     dependencies:
-      '@mycli/cloud-manager':
+      '@mycli-cli/cloud-manager':
         specifier: workspace:*
         version: link:../../../packages/cloud-manager
-      '@mycli/deployment-manager':
+      '@mycli-cli/deployment-manager':
         specifier: workspace:*
         version: link:../../../packages/deployment-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -1893,16 +1893,16 @@ importers:
 
   plugins/official/gcp:
     dependencies:
-      '@mycli/deployment-manager':
+      '@mycli-cli/deployment-manager':
         specifier: workspace:*
         version: link:../../../packages/deployment-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -1918,16 +1918,16 @@ importers:
 
   plugins/official/github:
     dependencies:
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/github-manager':
+      '@mycli-cli/github-manager':
         specifier: workspace:*
         version: link:../../../packages/github-manager
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -1943,16 +1943,16 @@ importers:
 
   plugins/official/kubernetes:
     dependencies:
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/kubernetes-manager':
+      '@mycli-cli/kubernetes-manager':
         specifier: workspace:*
         version: link:../../../packages/kubernetes-manager
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -1968,16 +1968,16 @@ importers:
 
   plugins/official/mariadb:
     dependencies:
-      '@mycli/database-manager':
+      '@mycli-cli/database-manager':
         specifier: workspace:*
         version: link:../../../packages/database-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -1993,16 +1993,16 @@ importers:
 
   plugins/official/mongodb:
     dependencies:
-      '@mycli/database-manager':
+      '@mycli-cli/database-manager':
         specifier: workspace:*
         version: link:../../../packages/database-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -2018,16 +2018,16 @@ importers:
 
   plugins/official/mysql:
     dependencies:
-      '@mycli/database-manager':
+      '@mycli-cli/database-manager':
         specifier: workspace:*
         version: link:../../../packages/database-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -2043,16 +2043,16 @@ importers:
 
   plugins/official/postgres:
     dependencies:
-      '@mycli/database-manager':
+      '@mycli-cli/database-manager':
         specifier: workspace:*
         version: link:../../../packages/database-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -2068,16 +2068,16 @@ importers:
 
   plugins/official/prisma:
     dependencies:
-      '@mycli/database-manager':
+      '@mycli-cli/database-manager':
         specifier: workspace:*
         version: link:../../../packages/database-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -2093,19 +2093,19 @@ importers:
 
   plugins/official/railway:
     dependencies:
-      '@mycli/cloud-manager':
+      '@mycli-cli/cloud-manager':
         specifier: workspace:*
         version: link:../../../packages/cloud-manager
-      '@mycli/deployment-manager':
+      '@mycli-cli/deployment-manager':
         specifier: workspace:*
         version: link:../../../packages/deployment-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -2121,16 +2121,16 @@ importers:
 
   plugins/official/rbac:
     dependencies:
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/rbac-manager':
+      '@mycli-cli/rbac-manager':
         specifier: workspace:*
         version: link:../../../packages/rbac-manager
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -2146,16 +2146,16 @@ importers:
 
   plugins/official/redis:
     dependencies:
-      '@mycli/database-manager':
+      '@mycli-cli/database-manager':
         specifier: workspace:*
         version: link:../../../packages/database-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -2171,16 +2171,16 @@ importers:
 
   plugins/official/sqlite:
     dependencies:
-      '@mycli/database-manager':
+      '@mycli-cli/database-manager':
         specifier: workspace:*
         version: link:../../../packages/database-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -2196,16 +2196,16 @@ importers:
 
   plugins/official/sqlserver:
     dependencies:
-      '@mycli/database-manager':
+      '@mycli-cli/database-manager':
         specifier: workspace:*
         version: link:../../../packages/database-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:
@@ -2221,16 +2221,16 @@ importers:
 
   plugins/official/swagger:
     dependencies:
-      '@mycli/api-manager':
+      '@mycli-cli/api-manager':
         specifier: workspace:*
         version: link:../../../packages/api-manager
-      '@mycli/filesystem':
+      '@mycli-cli/filesystem':
         specifier: workspace:*
         version: link:../../../packages/filesystem
-      '@mycli/plugin-system':
+      '@mycli-cli/plugin-system':
         specifier: workspace:*
         version: link:../../../packages/plugin-system
-      '@mycli/template-engine':
+      '@mycli-cli/template-engine':
         specifier: workspace:*
         version: link:../../../packages/template-engine
     devDependencies:

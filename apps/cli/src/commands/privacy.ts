@@ -1,9 +1,9 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import type { CliEngine } from '@mycli/cli-engine';
-import { defineCommand } from '@mycli/command-engine';
-import { createConfigManager } from '@mycli/config-manager';
-import { InMemoryPrivacyUserStore, createPrivacyService } from '@mycli/privacy-engine';
+import type { CliEngine } from '@mycli-cli/cli-engine';
+import { defineCommand } from '@mycli-cli/command-engine';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import { InMemoryPrivacyUserStore, createPrivacyService } from '@mycli-cli/privacy-engine';
 
 async function loadSeedProfiles(cwd: string): Promise<Map<string, Record<string, unknown>>> {
   const seedPath = join(cwd, 'data', 'privacy-users.json');

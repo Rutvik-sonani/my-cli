@@ -1,8 +1,12 @@
-import type { CliEngine } from '@mycli/cli-engine';
-import { defineCommand } from '@mycli/command-engine';
-import { createConfigManager } from '@mycli/config-manager';
-import { type GitProvider, createGitManager, listGitProviderAdapters } from '@mycli/git-manager';
-import { createGithubManager } from '@mycli/github-manager';
+import type { CliEngine } from '@mycli-cli/cli-engine';
+import { defineCommand } from '@mycli-cli/command-engine';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import {
+  type GitProvider,
+  createGitManager,
+  listGitProviderAdapters,
+} from '@mycli-cli/git-manager';
+import { createGithubManager } from '@mycli-cli/github-manager';
 import pc from 'picocolors';
 
 const GIT_PROVIDERS = ['github', 'gitlab', 'bitbucket', 'azure-devops'] as const;

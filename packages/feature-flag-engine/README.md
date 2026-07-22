@@ -1,4 +1,4 @@
-# @mycli/feature-flag-engine
+# @mycli-cli/feature-flag-engine
 
 Enterprise feature flag platform for MyCLI (Phase 10).
 

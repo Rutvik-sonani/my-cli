@@ -1,4 +1,4 @@
-import type { TemplateEngine } from '@mycli/template-engine';
+import type { TemplateEngine } from '@mycli-cli/template-engine';
 import { buildTemplateData, environmentFor } from '../env.js';
 import type { DatabaseManager } from '../manager.js';
 import type { DatabaseEngine, DatabasePlugin, DatabaseSetupOptions } from '../types.js';
@@ -97,7 +97,7 @@ function createDocPlugin(engine: DatabaseEngine, templates?: TemplateEngine): Da
   return {
     name: engine,
     async configure(options: DatabaseSetupOptions): Promise<string[]> {
-      const { createFileSystem } = await import('@mycli/filesystem');
+      const { createFileSystem } = await import('@mycli-cli/filesystem');
       const fs = createFileSystem(options.cwd ?? process.cwd());
       const out = `docs/database-${engine}.md`;
       const data = {
@@ -160,7 +160,7 @@ export function createFullDatabasePlugin(
       );
     },
     async generateMigration(options: DatabaseSetupOptions): Promise<string[]> {
-      const { createFileSystem } = await import('@mycli/filesystem');
+      const { createFileSystem } = await import('@mycli-cli/filesystem');
       const fs = createFileSystem(options.cwd ?? process.cwd());
       const out = `docs/migrations-${engine}.md`;
       const data = {
@@ -179,7 +179,7 @@ export function createFullDatabasePlugin(
       if (engine === 'sqlite') {
         return [];
       }
-      const { createFileSystem } = await import('@mycli/filesystem');
+      const { createFileSystem } = await import('@mycli-cli/filesystem');
       const fs = createFileSystem(options.cwd ?? process.cwd());
       const out = `docker/database-${engine}.yml`;
       const content = buildDockerServiceYaml(meta, options.appName);

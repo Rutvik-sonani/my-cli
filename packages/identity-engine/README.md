@@ -1,4 +1,4 @@
-# @mycli/identity-engine
+# @mycli-cli/identity-engine
 
 Enterprise identity and SSO for MyCLI (Phase 6).
 

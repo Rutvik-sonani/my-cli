@@ -1,8 +1,8 @@
-# @mycli/architecture-manager
+# @mycli-cli/architecture-manager
 
 Legacy layout scaffolding for **monolith**, **monorepo**, and **polyrepo** during project creation.
 
-> **Enterprise architecture styles** (MVC, Clean Architecture, Hexagonal, DDD, Microservice, Modular Monolith) are handled by [`@mycli/architecture-engine`](../architecture-engine/README.md).
+> **Enterprise architecture styles** (MVC, Clean Architecture, Hexagonal, DDD, Microservice, Modular Monolith) are handled by [`@mycli-cli/architecture-engine`](../architecture-engine/README.md).
 
 ## CLI commands
 
@@ -29,8 +29,8 @@ Templates: `apps/cli/templates/architecture-engine/` (enterprise) and `apps/cli/
 ## Tests
 
 ```bash
-pnpm --filter @mycli/architecture-manager test
-pnpm --filter @mycli/architecture-engine test
+pnpm --filter @mycli-cli/architecture-manager test
+pnpm --filter @mycli-cli/architecture-engine test
 ```
 
 See [ARCHITECTURE.md](../../ARCHITECTURE.md).

@@ -1,4 +1,8 @@
-import type { IdentityProvider, IdentityProviderId, IdentityUser } from '@mycli/enterprise-core';
+import type {
+  IdentityProvider,
+  IdentityProviderId,
+  IdentityUser,
+} from '@mycli-cli/enterprise-core';
 
 /**
  * Registry for enterprise identity providers (runtime helper + test double).

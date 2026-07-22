@@ -1,7 +1,7 @@
 import { join } from 'node:path';
-import type { SearchProviderId } from '@mycli/enterprise-core';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
-import { type TemplateEngine, createTemplateEngine } from '@mycli/template-engine';
+import type { SearchProviderId } from '@mycli-cli/enterprise-core';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
+import { type TemplateEngine, createTemplateEngine } from '@mycli-cli/template-engine';
 import {
   type SearchPathConfig,
   getSearchDependencies,

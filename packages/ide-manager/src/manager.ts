@@ -1,5 +1,5 @@
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
-import { type TemplateEngine, createTemplateEngine } from '@mycli/template-engine';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
+import { type TemplateEngine, createTemplateEngine } from '@mycli-cli/template-engine';
 import type { IdeSetupOptions, IdeSetupResult } from './types.js';
 
 function buildIdeData(options: IdeSetupOptions): Record<string, unknown> {

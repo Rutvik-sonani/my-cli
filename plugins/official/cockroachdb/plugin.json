@@ -1,11 +1,11 @@
 {
-  "name": "@mycli/cockroachdb",
+  "name": "@mycli-cli/cockroachdb",
   "version": "1.0.0",
   "description": "Official MyCLI cockroachdb plugin",
   "main": "dist/index.js",
   "compatibility": ">=1.0.0",
   "author": "MyCLI",
   "slug": "cockroachdb",
-  "npmPackage": "@mycli/plugin-cockroachdb",
+  "npmPackage": "@mycli-cli/plugin-cockroachdb",
   "keywords": ["cockroachdb", "mycli", "database"]
 }

@@ -1,5 +1,5 @@
-import { createFileSystem } from '@mycli/filesystem';
-import type { TemplateEngine } from '@mycli/template-engine';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import type { TemplateEngine } from '@mycli-cli/template-engine';
 import { buildTemplateData } from '../env.js';
 import type { DatabaseSetupOptions, OrmGenerator } from '../types.js';
 

@@ -1,7 +1,7 @@
-import type { CliEngine } from '@mycli/cli-engine';
-import { defineCommand } from '@mycli/command-engine';
-import { createFileSystem } from '@mycli/filesystem';
-import { createRbacManager } from '@mycli/rbac-manager';
+import type { CliEngine } from '@mycli-cli/cli-engine';
+import { defineCommand } from '@mycli-cli/command-engine';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { createRbacManager } from '@mycli-cli/rbac-manager';
 import { resolveTemplatesRoot } from '../paths.js';
 import { syncRbacStoreToDatabase } from '../utils/rbac-sync.js';
 

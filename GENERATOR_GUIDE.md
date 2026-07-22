@@ -2,7 +2,7 @@
 
 ## Overview
 
-Generators are registered with `@mycli/generator-engine` and render EJS templates.
+Generators are registered with `@mycli-cli/generator-engine` and render EJS templates.
 
 ```bash
 my make module user
@@ -20,7 +20,7 @@ my make migration create_users
 ## Creating a generator
 
 ```ts
-import { createTemplateGenerator } from '@mycli/generator-engine';
+import { createTemplateGenerator } from '@mycli-cli/generator-engine';
 
 export const moduleGenerator = createTemplateGenerator({
   name: 'module',

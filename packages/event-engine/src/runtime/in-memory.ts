@@ -1,4 +1,8 @@
-import type { EventConsumerHandler, EventEnvelope, EventPublisher } from '@mycli/enterprise-core';
+import type {
+  EventConsumerHandler,
+  EventEnvelope,
+  EventPublisher,
+} from '@mycli-cli/enterprise-core';
 import { DeadLetterQueue } from './dead-letter.js';
 import { withRetry } from './retry.js';
 import { JsonEventSerializer } from './serializer.js';

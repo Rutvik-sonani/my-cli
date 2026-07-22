@@ -1,4 +1,4 @@
-# @mycli/cicd-manager
+# @mycli-cli/cicd-manager
 
 Generates CI/CD pipeline configuration for GitHub Actions, GitLab CI, Azure Pipelines, Bitbucket Pipelines, and Jenkins.
 
@@ -30,7 +30,7 @@ Templates: `apps/cli/templates/features/cicd/`.
 ## Tests
 
 ```bash
-pnpm --filter @mycli/cicd-manager test
+pnpm --filter @mycli-cli/cicd-manager test
 ```
 
 See [GIT_CICD_GUIDE.md](../../GIT_CICD_GUIDE.md).

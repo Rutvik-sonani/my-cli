@@ -6,7 +6,7 @@ import type {
   SecurityFinding,
   SecurityScanReport,
   SecurityScanSummary,
-} from '@mycli/enterprise-core';
+} from '@mycli-cli/enterprise-core';
 
 const SECRET_PATTERNS: Array<{ id: string; pattern: RegExp; title: string }> = [
   {

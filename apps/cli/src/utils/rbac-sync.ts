@@ -1,6 +1,6 @@
-import { createConfigManager } from '@mycli/config-manager';
-import { createFileSystem } from '@mycli/filesystem';
-import type { RbacManager } from '@mycli/rbac-manager';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import type { RbacManager } from '@mycli-cli/rbac-manager';
 
 export async function syncRbacStoreToDatabase(
   cwd: string,

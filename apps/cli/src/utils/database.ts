@@ -1,6 +1,6 @@
-import type { DatabaseManager } from '@mycli/database-manager';
-import { type DatabaseEngine, registerDatabasePlugin } from '@mycli/database-manager';
-import type { TemplateEngine } from '@mycli/template-engine';
+import type { DatabaseManager } from '@mycli-cli/database-manager';
+import { type DatabaseEngine, registerDatabasePlugin } from '@mycli-cli/database-manager';
+import type { TemplateEngine } from '@mycli-cli/template-engine';
 
 export function wireDatabasePlugin(
   db: DatabaseManager,

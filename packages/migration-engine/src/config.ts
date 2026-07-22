@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import type { UpgradeScope } from '@mycli/enterprise-core';
+import type { UpgradeScope } from '@mycli-cli/enterprise-core';
 
 export interface MigrationPathConfig {
   migration?: string;

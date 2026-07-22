@@ -1,7 +1,7 @@
 import { join } from 'node:path';
-import type { TenancyStrategy, TenantModel } from '@mycli/enterprise-core';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
-import { type TemplateEngine, createTemplateEngine } from '@mycli/template-engine';
+import type { TenancyStrategy, TenantModel } from '@mycli-cli/enterprise-core';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
+import { type TemplateEngine, createTemplateEngine } from '@mycli-cli/template-engine';
 import { type TenancyPathConfig, getTenancyEnvLines, resolveTenancyPaths } from './config.js';
 
 export interface TenancySetupOptions {

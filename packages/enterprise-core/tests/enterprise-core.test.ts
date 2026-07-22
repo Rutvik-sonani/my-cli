@@ -16,7 +16,7 @@ import type {
   UpgradeReport,
 } from '../src/index.js';
 
-describe('@mycli/enterprise-core', () => {
+describe('@mycli-cli/enterprise-core', () => {
   it('exports architecture style union values usable at runtime checks', () => {
     const styles: ArchitectureStyle[] = [
       'mvc',

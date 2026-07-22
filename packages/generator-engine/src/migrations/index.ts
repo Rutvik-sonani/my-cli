@@ -1,5 +1,5 @@
-import type { ConfigManager } from '@mycli/config-manager';
-import type { FileSystem } from '@mycli/filesystem';
+import type { ConfigManager } from '@mycli-cli/config-manager';
+import type { FileSystem } from '@mycli-cli/filesystem';
 import type { MappedField, NameVariants } from '../types.js';
 import {
   type DrizzleDialect,

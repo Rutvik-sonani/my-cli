@@ -212,13 +212,13 @@ These are applied automatically during project generation.
 
 | Plugin | Command equivalent |
 |--------|-------------------|
-| `@mycli/auth` | `my add auth` |
-| `@mycli/rbac` | `my add rbac` |
-| `@mycli/prisma` | `my add database --orm prisma` |
-| `@mycli/postgres` | `my add database --database postgresql` |
-| `@mycli/swagger` | `my add swagger` |
+| `@mycli-cli/auth` | `my add auth` |
+| `@mycli-cli/rbac` | `my add rbac` |
+| `@mycli-cli/prisma` | `my add database --orm prisma` |
+| `@mycli-cli/postgres` | `my add database --database postgresql` |
+| `@mycli-cli/swagger` | `my add swagger` |
 
-Install via `my plugin install @mycli/auth`.
+Install via `my plugin install @mycli-cli/auth`.
 
 ---
 

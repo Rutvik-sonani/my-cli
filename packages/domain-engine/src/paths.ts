@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import type { DomainEntityPaths } from '@mycli/enterprise-core';
+import type { DomainEntityPaths } from '@mycli-cli/enterprise-core';
 
 export interface DomainPathConfig {
   domain?: string;

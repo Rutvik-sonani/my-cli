@@ -1,4 +1,4 @@
-import type { FileSystem } from '@mycli/filesystem';
+import type { FileSystem } from '@mycli-cli/filesystem';
 import type { MappedField, NameVariants, RegistrationResult } from '../types.js';
 
 /**

@@ -1,6 +1,6 @@
 import { join } from 'node:path';
-import type { MigrationFile } from '@mycli/enterprise-core';
-import type { FileSystem } from '@mycli/filesystem';
+import type { MigrationFile } from '@mycli-cli/enterprise-core';
+import type { FileSystem } from '@mycli-cli/filesystem';
 import { MIGRATIONS_DIR } from '../config.js';
 
 /**

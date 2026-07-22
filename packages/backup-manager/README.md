@@ -1,4 +1,4 @@
-# @mycli/backup-manager
+# @mycli-cli/backup-manager
 
 Plans and runs database backups for generated MyCLI projects (PostgreSQL, MySQL, MongoDB, SQLite).
 
@@ -20,7 +20,7 @@ Plans and runs database backups for generated MyCLI projects (PostgreSQL, MySQL,
 ## API
 
 ```ts
-import { createBackupManager } from '@mycli/backup-manager';
+import { createBackupManager } from '@mycli-cli/backup-manager';
 
 const backup = createBackupManager({ cwd: process.cwd(), templatesRoot: 'templates' });
 await backup.run({ database: 'postgresql', outputDir: 'backups', dryRun: true });
@@ -29,7 +29,7 @@ await backup.run({ database: 'postgresql', outputDir: 'backups', dryRun: true })
 ## Tests
 
 ```bash
-pnpm --filter @mycli/backup-manager test
+pnpm --filter @mycli-cli/backup-manager test
 ```
 
 See [SERVICES_GUIDE.md](../../SERVICES_GUIDE.md).

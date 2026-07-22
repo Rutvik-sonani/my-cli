@@ -1,9 +1,9 @@
 import { join } from 'node:path';
-import type { CliEngine } from '@mycli/cli-engine';
-import { defineCommand } from '@mycli/command-engine';
-import { createMarketplaceManager } from '@mycli/marketplace-manager';
-import { createPluginScaffold, npmPackageFromName } from '@mycli/plugin-sdk';
-import { createRegistryManager } from '@mycli/registry-manager';
+import type { CliEngine } from '@mycli-cli/cli-engine';
+import { defineCommand } from '@mycli-cli/command-engine';
+import { createMarketplaceManager } from '@mycli-cli/marketplace-manager';
+import { createPluginScaffold, npmPackageFromName } from '@mycli-cli/plugin-sdk';
+import { createRegistryManager } from '@mycli-cli/registry-manager';
 import { resolveRepoRoot } from '../paths.js';
 
 function createMarketplace(engine: CliEngine) {
@@ -19,9 +19,10 @@ function createMarketplace(engine: CliEngine) {
 }
 
 function normalizePluginName(name: string): string {
-  if (name.startsWith('@mycli/')) return name;
-  if (name.startsWith('@mycli/plugin-')) return `@mycli/${name.replace('@mycli/plugin-', '')}`;
-  return `@mycli/${name}`;
+  if (name.startsWith('@mycli-cli/')) return name;
+  if (name.startsWith('@mycli-cli/plugin-'))
+    return `@mycli-cli/${name.replace('@mycli-cli/plugin-', '')}`;
+  return `@mycli-cli/${name}`;
 }
 
 export function pluginCommand(engine: CliEngine) {
@@ -46,9 +47,9 @@ export function pluginCommand(engine: CliEngine) {
       'my plugin list',
       'my plugin search docker',
       'my plugin search mycli --registry npm',
-      'my plugin install @mycli/docker',
-      'my plugin install @mycli/ai --from npm --dry-run',
-      'my plugin create @mycli/plugin-billing',
+      'my plugin install @mycli-cli/docker',
+      'my plugin install @mycli-cli/ai --from npm --dry-run',
+      'my plugin create @mycli-cli/plugin-billing',
       'my plugin publish ./my-plugin --dry-run',
       'my plugin publish ./my-plugin --npm',
     ],
@@ -100,7 +101,7 @@ export function pluginCommand(engine: CliEngine) {
         }
         case 'create': {
           if (!name)
-            throw new Error('Plugin name is required: my plugin create @mycli/plugin-name');
+            throw new Error('Plugin name is required: my plugin create @mycli-cli/plugin-name');
           const pluginName = normalizePluginName(name);
           const slug = pluginName.replace(/^@mycli\//, '').replace(/^plugin-/, '');
           const outputDir = join(engine.app.cwd, 'plugins', 'community', slug);

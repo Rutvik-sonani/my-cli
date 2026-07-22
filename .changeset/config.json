@@ -5,21 +5,21 @@
   "fixed": [],
   "linked": [
     [
-      "@mycli/cli",
-      "@mycli/core",
-      "@mycli/cli-engine",
-      "@mycli/command-engine",
-      "@mycli/prompt-engine",
-      "@mycli/template-engine",
-      "@mycli/generator-engine",
-      "@mycli/filesystem",
-      "@mycli/dependency-manager",
-      "@mycli/plugin-system",
-      "@mycli/config-manager"
+      "@mycli-cli/cli",
+      "@mycli-cli/core",
+      "@mycli-cli/cli-engine",
+      "@mycli-cli/command-engine",
+      "@mycli-cli/prompt-engine",
+      "@mycli-cli/template-engine",
+      "@mycli-cli/generator-engine",
+      "@mycli-cli/filesystem",
+      "@mycli-cli/dependency-manager",
+      "@mycli-cli/plugin-system",
+      "@mycli-cli/config-manager"
     ]
   ],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@mycli/website"]
+  "ignore": ["@mycli-cli/website"]
 }

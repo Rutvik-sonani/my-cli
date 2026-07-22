@@ -1,6 +1,6 @@
-import { ValidationError } from '@mycli/core';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
-import { type TemplateEngine, createTemplateEngine } from '@mycli/template-engine';
+import { ValidationError } from '@mycli-cli/core';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
+import { type TemplateEngine, createTemplateEngine } from '@mycli-cli/template-engine';
 import { buildEslintArchitectureConfig } from './eslint-config.js';
 import { setupLegacyArchitecture } from './legacy.js';
 import {

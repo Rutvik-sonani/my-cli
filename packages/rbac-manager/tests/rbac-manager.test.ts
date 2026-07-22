@@ -1,7 +1,7 @@
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { createFileSystem } from '@mycli/filesystem';
+import { createFileSystem } from '@mycli-cli/filesystem';
 import { afterEach, describe, expect, it } from 'vitest';
 import { createRbacManager } from '../src/index.js';
 import { assertTypeScriptParses, featureTemplatesRoot } from './helpers.js';

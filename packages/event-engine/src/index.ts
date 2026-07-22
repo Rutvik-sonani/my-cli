@@ -25,4 +25,4 @@ export {
   type EventSystemSetupResult,
 } from './manager.js';
 export { createIntegrationEventGenerator } from './generators.js';
-export type { EventSystemProvider } from '@mycli/enterprise-core';
+export type { EventSystemProvider } from '@mycli-cli/enterprise-core';

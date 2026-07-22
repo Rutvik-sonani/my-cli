@@ -1,5 +1,5 @@
 {
-  "name": "@mycli/migration-engine",
+  "name": "@mycli-cli/migration-engine",
   "version": "1.0.0",
   "description": "Enterprise migration and upgrade engine — safe backups, reports, and multi-scope upgrades",
   "type": "module",
@@ -24,12 +24,12 @@
   },
   "engines": { "node": ">=22.0.0" },
   "dependencies": {
-    "@mycli/core": "workspace:*",
-    "@mycli/enterprise-core": "workspace:*",
-    "@mycli/config-manager": "workspace:*",
-    "@mycli/filesystem": "workspace:*",
-    "@mycli/template-engine": "workspace:*",
-    "@mycli/upgrade-manager": "workspace:*"
+    "@mycli-cli/core": "workspace:*",
+    "@mycli-cli/enterprise-core": "workspace:*",
+    "@mycli-cli/config-manager": "workspace:*",
+    "@mycli-cli/filesystem": "workspace:*",
+    "@mycli-cli/template-engine": "workspace:*",
+    "@mycli-cli/upgrade-manager": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.10.5",

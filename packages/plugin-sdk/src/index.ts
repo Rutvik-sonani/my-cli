@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
 import {
   type PluginScaffoldOptions,
   type PluginScaffoldResult,
@@ -26,7 +26,7 @@ export async function createPluginScaffold(
   return {
     files: written,
     slug,
-    npmPackage: options.name.startsWith('@mycli/') ? `@mycli/plugin-${slug}` : options.name,
+    npmPackage: options.name.startsWith('@mycli-cli/') ? `@mycli-cli/plugin-${slug}` : options.name,
   };
 }
 
@@ -38,11 +38,11 @@ export {
 } from './scaffold.js';
 export type { PluginScaffoldOptions, PluginScaffoldResult } from './scaffold.js';
 
-export { definePlugin, createPluginManager } from '@mycli/plugin-system';
+export { definePlugin, createPluginManager } from '@mycli-cli/plugin-system';
 export type {
   Plugin,
   PluginContext,
   PluginHooks,
   PluginManifest,
   LoadedPlugin,
-} from '@mycli/plugin-system';
+} from '@mycli-cli/plugin-system';

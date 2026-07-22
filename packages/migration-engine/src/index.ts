@@ -43,4 +43,4 @@ export type {
   UpgradeReport,
   UpgradeReportSummary,
   UpgradeScope,
-} from '@mycli/enterprise-core';
+} from '@mycli-cli/enterprise-core';

@@ -1,8 +1,8 @@
-import type { CliEngine } from '@mycli/cli-engine';
-import { defineCommand } from '@mycli/command-engine';
-import { createConfigManager } from '@mycli/config-manager';
-import { createFileSystem } from '@mycli/filesystem';
-import { createOrganizationManager } from '@mycli/organization-engine';
+import type { CliEngine } from '@mycli-cli/cli-engine';
+import { defineCommand } from '@mycli-cli/command-engine';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { createOrganizationManager } from '@mycli-cli/organization-engine';
 import { resolveTemplatesRoot } from '../paths.js';
 
 export function organizationCommand(engine: CliEngine) {

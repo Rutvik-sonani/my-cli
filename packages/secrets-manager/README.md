@@ -1,4 +1,4 @@
-# @mycli/secrets-manager
+# @mycli-cli/secrets-manager
 
 Plans and syncs environment secrets from `.env` files to cloud provider secret stores.
 
@@ -24,7 +24,7 @@ Templates: `apps/cli/templates/features/secrets/`.
 ## Tests
 
 ```bash
-pnpm --filter @mycli/secrets-manager test
+pnpm --filter @mycli-cli/secrets-manager test
 ```
 
 See [CLOUD_DEPLOY_GUIDE.md](../../CLOUD_DEPLOY_GUIDE.md).

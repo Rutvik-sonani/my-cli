@@ -1,11 +1,11 @@
 {
-  "name": "@mycli/aws",
+  "name": "@mycli-cli/aws",
   "version": "1.0.0",
   "description": "Official MyCLI aws plugin",
   "main": "dist/index.js",
   "compatibility": ">=1.0.0",
   "author": "MyCLI",
   "slug": "aws",
-  "npmPackage": "@mycli/plugin-aws",
+  "npmPackage": "@mycli-cli/plugin-aws",
   "keywords": ["aws", "mycli"]
 }

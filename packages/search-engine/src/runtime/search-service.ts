@@ -5,7 +5,7 @@ import type {
   SearchProviderId,
   SearchQueryOptions,
   SearchResult,
-} from '@mycli/enterprise-core';
+} from '@mycli-cli/enterprise-core';
 
 function tokenize(text: string): string[] {
   return text

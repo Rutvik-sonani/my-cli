@@ -1,5 +1,5 @@
-import { defineCommand } from '@mycli/command-engine';
-import { createI18n } from '@mycli/prompt-engine';
+import { defineCommand } from '@mycli-cli/command-engine';
+import { createI18n } from '@mycli-cli/prompt-engine';
 import { describe, expect, it, vi } from 'vitest';
 import { createCliEngine } from '../src/index.js';
 

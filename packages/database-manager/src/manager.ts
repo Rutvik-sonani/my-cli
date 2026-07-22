@@ -1,6 +1,6 @@
-import { ConfigurationError } from '@mycli/core';
-import { createFileSystem } from '@mycli/filesystem';
-import { type TemplateEngine, createTemplateEngine } from '@mycli/template-engine';
+import { ConfigurationError } from '@mycli-cli/core';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { type TemplateEngine, createTemplateEngine } from '@mycli-cli/template-engine';
 import { isOrmSupported } from './compatibility.js';
 import { buildTemplateData, environmentFor } from './env.js';
 import { createOrmGenerators, getOrmGenerator } from './orm/index.js';

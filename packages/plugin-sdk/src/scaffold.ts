@@ -1,5 +1,5 @@
-import { ConfigurationError } from '@mycli/core';
-import type { PluginManifest } from '@mycli/plugin-system';
+import { ConfigurationError } from '@mycli-cli/core';
+import type { PluginManifest } from '@mycli-cli/plugin-system';
 
 const REQUIRED = ['name', 'version'] as const;
 
@@ -13,7 +13,7 @@ export function validatePluginManifest(manifest: Partial<PluginManifest>): Plugi
   }
 
   if (!/^@[^/]+\/[^/]+/.test(manifest.name!)) {
-    throw new ConfigurationError('plugin name should be scoped, e.g. @mycli/plugin-example', {
+    throw new ConfigurationError('plugin name should be scoped, e.g. @mycli-cli/plugin-example', {
       code: 'PLUGIN_INVALID',
     });
   }
@@ -22,12 +22,12 @@ export function validatePluginManifest(manifest: Partial<PluginManifest>): Plugi
 }
 
 export function pluginSlugFromName(name: string): string {
-  return name.replace(/^@mycli\//, '').replace(/^plugin-/, '');
+  return name.replace(/^@[^/]+\//, '').replace(/^plugin-/, '');
 }
 
 export function npmPackageFromName(name: string): string {
   const slug = pluginSlugFromName(name);
-  return name.startsWith('@mycli/') ? `@mycli/plugin-${slug}` : name;
+  return name.startsWith('@') ? `@mycli-cli/plugin-${slug}` : name;
 }
 
 export interface PluginScaffoldOptions {
@@ -92,7 +92,7 @@ export function buildPluginScaffoldFiles(
             test: 'vitest run --passWithNoTests',
           },
           dependencies: {
-            '@mycli/plugin-sdk': 'workspace:*',
+            '@mycli-cli/plugin-sdk': 'workspace:*',
           },
           devDependencies: {
             typescript: '^5.7.3',
@@ -106,7 +106,7 @@ export function buildPluginScaffoldFiles(
     },
     {
       path: 'src/index.ts',
-      content: `import { definePlugin } from '@mycli/plugin-sdk';
+      content: `import { definePlugin } from '@mycli-cli/plugin-sdk';
 
 export default definePlugin({
   name: '${manifest.name}',

@@ -1,4 +1,4 @@
-# @mycli/generator-engine
+# @mycli-cli/generator-engine
 
 Laravel Artisan-style generators with EJS templates and automatic registration.
 
@@ -17,7 +17,7 @@ Laravel Artisan-style generators with EJS templates and automatic registration.
 ## Usage
 
 ```ts
-import { createGeneratorEngine, createTemplateGenerator, parseFields } from '@mycli/generator-engine';
+import { createGeneratorEngine, createTemplateGenerator, parseFields } from '@mycli-cli/generator-engine';
 
 engine.register(createTemplateGenerator({
   name: 'module',

@@ -1,4 +1,4 @@
-import type { TemplateEngine } from '@mycli/template-engine';
+import type { TemplateEngine } from '@mycli-cli/template-engine';
 
 export interface DatabaseSetupOptions {
   cwd?: string;

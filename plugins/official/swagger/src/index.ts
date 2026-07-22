@@ -1,10 +1,10 @@
-import { createApiManager } from '@mycli/api-manager';
-import { createFileSystem } from '@mycli/filesystem';
-import { definePlugin } from '@mycli/plugin-system';
-import { resolveFeatureTemplatesRoot } from '@mycli/template-engine';
+import { createApiManager } from '@mycli-cli/api-manager';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { definePlugin } from '@mycli-cli/plugin-system';
+import { resolveFeatureTemplatesRoot } from '@mycli-cli/template-engine';
 
 export default definePlugin({
-  name: '@mycli/swagger',
+  name: '@mycli-cli/swagger',
   version: '1.0.0',
   description: 'Swagger / OpenAPI documentation',
   async install(ctx) {

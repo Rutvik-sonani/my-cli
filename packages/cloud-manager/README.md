@@ -1,4 +1,4 @@
-# @mycli/cloud-manager
+# @mycli-cli/cloud-manager
 
 Runtime cloud deployment operations via provider CLI adapters (Railway, Fly.io, AWS, GCP, Azure).
 
@@ -26,7 +26,7 @@ Templates: `apps/cli/templates/features/cloud/`.
 ## Tests
 
 ```bash
-pnpm --filter @mycli/cloud-manager test
+pnpm --filter @mycli-cli/cloud-manager test
 ```
 
 See [CLOUD_DEPLOY_GUIDE.md](../../CLOUD_DEPLOY_GUIDE.md).

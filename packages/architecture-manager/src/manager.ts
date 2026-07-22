@@ -1,5 +1,5 @@
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
-import { type TemplateEngine, createTemplateEngine } from '@mycli/template-engine';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
+import { type TemplateEngine, createTemplateEngine } from '@mycli-cli/template-engine';
 import type {
   ArchitectureSetupOptions,
   ArchitectureSetupResult,

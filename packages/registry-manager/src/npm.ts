@@ -30,7 +30,7 @@ export class NpmRegistryClient {
 
     return (payload.objects ?? [])
       .map((item) => item.package)
-      .filter((pkg) => pkg.name.includes('mycli') || pkg.name.startsWith('@mycli/'))
+      .filter((pkg) => pkg.name.includes('mycli') || pkg.name.startsWith('@mycli-cli/'))
       .map((pkg) => ({
         name: pkg.name,
         version: pkg.version,

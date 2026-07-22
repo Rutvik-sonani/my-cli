@@ -1,4 +1,4 @@
-# @mycli/project-health-engine
+# @mycli-cli/project-health-engine
 
 Enterprise project health analysis for MyCLI (Phase 18).
 

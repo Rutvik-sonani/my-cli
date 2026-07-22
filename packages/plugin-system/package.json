@@ -1,5 +1,5 @@
 {
-  "name": "@mycli/plugin-system",
+  "name": "@mycli-cli/plugin-system",
   "version": "1.0.0",
   "description": "MyCLI plugin-system package",
   "type": "module",
@@ -28,10 +28,10 @@
     "node": ">=22.0.0"
   },
   "dependencies": {
-    "@mycli/core": "workspace:*",
-    "@mycli/filesystem": "workspace:*",
-    "@mycli/config-manager": "workspace:*",
-    "@mycli/command-engine": "workspace:*"
+    "@mycli-cli/core": "workspace:*",
+    "@mycli-cli/filesystem": "workspace:*",
+    "@mycli-cli/config-manager": "workspace:*",
+    "@mycli-cli/command-engine": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.7.3",

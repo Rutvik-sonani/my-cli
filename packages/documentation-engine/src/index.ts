@@ -28,4 +28,4 @@ export type {
   DocumentationGenerateResultItem,
   DocumentationGenerateStatus,
   DocumentationKind,
-} from '@mycli/enterprise-core';
+} from '@mycli-cli/enterprise-core';

@@ -1,5 +1,5 @@
 {
-  "name": "@mycli/ui-manager",
+  "name": "@mycli-cli/ui-manager",
   "version": "1.0.0",
   "description": "MyCLI ui-manager package",
   "type": "module",
@@ -28,10 +28,10 @@
     "node": ">=22.0.0"
   },
   "dependencies": {
-    "@mycli/core": "workspace:*",
-    "@mycli/filesystem": "workspace:*",
-    "@mycli/dependency-manager": "workspace:*",
-    "@mycli/template-engine": "workspace:*",
+    "@mycli-cli/core": "workspace:*",
+    "@mycli-cli/filesystem": "workspace:*",
+    "@mycli-cli/dependency-manager": "workspace:*",
+    "@mycli-cli/template-engine": "workspace:*",
     "execa": "^9.5.2"
   },
   "devDependencies": {

@@ -1,5 +1,5 @@
 /**
- * @deprecated Import parseFields from @mycli/generator-engine instead.
+ * @deprecated Import parseFields from @mycli-cli/generator-engine instead.
  * Re-exported for backward compatibility with existing CLI tests.
  */
 export {
@@ -9,4 +9,4 @@ export {
   defaultFields,
   type FieldDefinition,
   type MappedField,
-} from '@mycli/generator-engine';
+} from '@mycli-cli/generator-engine';

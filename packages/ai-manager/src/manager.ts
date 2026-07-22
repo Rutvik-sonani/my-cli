@@ -1,6 +1,6 @@
-import { MyCliError } from '@mycli/core';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
-import { type TemplateEngine, createTemplateEngine } from '@mycli/template-engine';
+import { MyCliError } from '@mycli-cli/core';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
+import { type TemplateEngine, createTemplateEngine } from '@mycli-cli/template-engine';
 import type {
   AiGenerateOptions,
   AiGenerateResult,

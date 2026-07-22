@@ -343,7 +343,7 @@ Prioritized work derived from the full spec audit. Each item includes **acceptan
 | Task | Files |
 |------|-------|
 | Add “Other” option → package name prompt | `create.ts` |
-| Reuse ui-manager npm registry check | `@mycli/ui-manager` |
+| Reuse ui-manager npm registry check | `@mycli-cli/ui-manager` |
 
 **Accept:** Create flow installs custom npm UI package when registry exists.
 

@@ -1,10 +1,10 @@
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import type { CommandDefinition } from '@mycli/command-engine';
-import type { ConfigManager, PluginConfigEntry } from '@mycli/config-manager';
-import type { ApplicationContext } from '@mycli/core';
-import { PluginError, invariant } from '@mycli/core';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
+import type { CommandDefinition } from '@mycli-cli/command-engine';
+import type { ConfigManager, PluginConfigEntry } from '@mycli-cli/config-manager';
+import type { ApplicationContext } from '@mycli-cli/core';
+import { PluginError, invariant } from '@mycli-cli/core';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
 
 export interface PluginManifest {
   name: string;
@@ -102,7 +102,7 @@ export class PluginManager {
       const entries = await this.fs.list(base);
       for (const entry of entries.filter((e) => e.isDirectory)) {
         const name = entry.relativePath.split(/[\\/]/).pop();
-        if (!name || this.loaded.has(name) || this.loaded.has(`@mycli/${name}`)) {
+        if (!name || this.loaded.has(name) || this.loaded.has(`@mycli-cli/${name}`)) {
           continue;
         }
         try {
@@ -304,9 +304,9 @@ export class PluginManager {
         description?: string;
       };
       const slug = pluginPath.split(/[\\/]/).pop() ?? 'plugin';
-      const name = pkg.name?.startsWith('@mycli/plugin-')
-        ? `@mycli/${pkg.name.replace('@mycli/plugin-', '')}`
-        : `@mycli/${slug}`;
+      const name = pkg.name?.startsWith('@mycli-cli/plugin-')
+        ? `@mycli-cli/${pkg.name.replace('@mycli-cli/plugin-', '')}`
+        : `@mycli-cli/${slug}`;
       invariant(pkg.version, 'package.json must include version');
       return {
         name,

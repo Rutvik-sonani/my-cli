@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import type { GovernancePolicy, GovernanceRule } from '@mycli/enterprise-core';
+import type { GovernancePolicy, GovernanceRule } from '@mycli-cli/enterprise-core';
 
 export interface GovernancePathConfig {
   governance?: string;

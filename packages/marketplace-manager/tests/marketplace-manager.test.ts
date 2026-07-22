@@ -1,11 +1,11 @@
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { createConfigManager } from '@mycli/config-manager';
-import { ApplicationContext } from '@mycli/core';
-import { createFileSystem } from '@mycli/filesystem';
-import { createPluginManager } from '@mycli/plugin-system';
-import { createRegistryManager } from '@mycli/registry-manager';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import { ApplicationContext } from '@mycli-cli/core';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { createPluginManager } from '@mycli-cli/plugin-system';
+import { createRegistryManager } from '@mycli-cli/registry-manager';
 import { afterEach, describe, expect, it } from 'vitest';
 import { createMarketplaceManager } from '../src/index.js';
 
@@ -44,9 +44,9 @@ describe('MarketplaceManager', () => {
     await fs.writeJson('package.json', { name: 'shop', version: '1.0.0', type: 'module' });
 
     const marketplace = await createMarketplace(dir);
-    const result = await marketplace.install({ name: '@mycli/docker' });
+    const result = await marketplace.install({ name: '@mycli-cli/docker' });
 
-    expect(result.name).toBe('@mycli/docker');
+    expect(result.name).toBe('@mycli-cli/docker');
     expect(result.path).toContain('plugins/installed/docker');
   });
 
@@ -56,7 +56,7 @@ describe('MarketplaceManager', () => {
     await fs.writeJson('.myclirc.json', { version: '1.0.0', projectName: 'shop' });
 
     const marketplace = await createMarketplace(dir);
-    const result = await marketplace.install({ name: '@mycli/github', dryRun: true });
+    const result = await marketplace.install({ name: '@mycli-cli/github', dryRun: true });
     expect(result.message).toContain('Would install');
   });
 });

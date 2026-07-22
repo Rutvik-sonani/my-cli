@@ -2,14 +2,19 @@ import {
   type CommandDefinition,
   type CommandRegistry,
   createCommandRegistry,
-} from '@mycli/command-engine';
-import { type ConfigManager, createConfigManager } from '@mycli/config-manager';
-import { ApplicationContext, isMyCliError } from '@mycli/core';
-import type { ApplicationContextOptions } from '@mycli/core';
-import { createFileSystem } from '@mycli/filesystem';
-import { type PluginManager, createPluginManager } from '@mycli/plugin-system';
-import { type I18n, type PromptEngine, createI18n, createPromptEngine } from '@mycli/prompt-engine';
-import { type TelemetryManager, createTelemetryManager } from '@mycli/telemetry-manager';
+} from '@mycli-cli/command-engine';
+import { type ConfigManager, createConfigManager } from '@mycli-cli/config-manager';
+import { ApplicationContext, isMyCliError } from '@mycli-cli/core';
+import type { ApplicationContextOptions } from '@mycli-cli/core';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { type PluginManager, createPluginManager } from '@mycli-cli/plugin-system';
+import {
+  type I18n,
+  type PromptEngine,
+  createI18n,
+  createPromptEngine,
+} from '@mycli-cli/prompt-engine';
+import { type TelemetryManager, createTelemetryManager } from '@mycli-cli/telemetry-manager';
 import pc from 'picocolors';
 
 export interface CliEngineOptions extends ApplicationContextOptions {

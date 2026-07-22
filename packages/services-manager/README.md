@@ -1,4 +1,4 @@
-# @mycli/services-manager
+# @mycli-cli/services-manager
 
 Generates infrastructure service modules: cache, queue, events, mail, storage, and payment.
 

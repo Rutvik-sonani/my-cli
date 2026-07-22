@@ -7,7 +7,7 @@ import type {
   GovernanceReport,
   GovernanceReportSummary,
   GovernanceRule,
-} from '@mycli/enterprise-core';
+} from '@mycli-cli/enterprise-core';
 import { createDefaultCompanyPolicy } from '../config.js';
 
 export interface ProjectSnapshot {

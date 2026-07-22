@@ -1,5 +1,5 @@
 {
-  "name": "@mycli/registry-manager",
+  "name": "@mycli-cli/registry-manager",
   "version": "1.0.0",
   "description": "MyCLI registry-manager — plugin catalog search and publish",
   "type": "module",
@@ -24,7 +24,7 @@
   },
   "engines": { "node": ">=22.0.0" },
   "dependencies": {
-    "@mycli/core": "workspace:*"
+    "@mycli-cli/core": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.7.3",

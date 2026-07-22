@@ -1,4 +1,4 @@
-# @mycli/security-engine
+# @mycli-cli/security-engine
 
 Enterprise security platform for MyCLI (Phase 12).
 

@@ -1,4 +1,4 @@
-# @mycli/audit-engine
+# @mycli-cli/audit-engine
 
 Enterprise audit platform for MyCLI (Phase 7).
 

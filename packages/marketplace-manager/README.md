@@ -1,4 +1,4 @@
-# @mycli/marketplace-manager
+# @mycli-cli/marketplace-manager
 
 Orchestrates plugin install, update, uninstall, and publish via the registry and plugin system.
 
@@ -6,24 +6,24 @@ Orchestrates plugin install, update, uninstall, and publish via the registry and
 
 | Command | Description |
 |---------|-------------|
-| `my plugin install @mycli/docker` | Install from local catalog or npm |
-| `my plugin install @mycli/docker --from npm` | Force npm install |
-| `my plugin update @mycli/docker` | Reinstall latest version |
-| `my plugin remove @mycli/docker` | Uninstall plugin |
+| `my plugin install @mycli-cli/docker` | Install from local catalog or npm |
+| `my plugin install @mycli-cli/docker --from npm` | Force npm install |
+| `my plugin update @mycli-cli/docker` | Reinstall latest version |
+| `my plugin remove @mycli-cli/docker` | Uninstall plugin |
 | `my plugin publish ./my-plugin` | Publish to community registry |
 
 ## Behavior
 
-1. Resolves plugin entry via `@mycli/registry-manager`
+1. Resolves plugin entry via `@mycli-cli/registry-manager`
 2. Validates CLI compatibility semver
 3. Copies to `plugins/installed/<slug>/` or runs `npm install`
-4. Runs plugin `install()` hook through `@mycli/plugin-system`
+4. Runs plugin `install()` hook through `@mycli-cli/plugin-system`
 5. Persists plugin metadata in `.myclirc.json`
 
 ## Tests
 
 ```bash
-pnpm --filter @mycli/marketplace-manager test
+pnpm --filter @mycli-cli/marketplace-manager test
 ```
 
 See [MARKETPLACE_GUIDE.md](../../MARKETPLACE_GUIDE.md).

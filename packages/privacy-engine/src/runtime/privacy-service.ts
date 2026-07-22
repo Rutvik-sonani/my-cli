@@ -10,7 +10,7 @@ import type {
   PrivacyUserStore,
   UserDataDeletionResult,
   UserDataExport,
-} from '@mycli/enterprise-core';
+} from '@mycli-cli/enterprise-core';
 
 export class InMemoryPrivacyUserStore implements PrivacyUserStore {
   private readonly profiles = new Map<string, Record<string, unknown>>();

@@ -1,4 +1,4 @@
-# @mycli/template-marketplace-engine
+# @mycli-cli/template-marketplace-engine
 
 Enterprise template marketplace for MyCLI (Phase 16).
 

@@ -1,10 +1,10 @@
-import { createFileSystem } from '@mycli/filesystem';
-import { definePlugin } from '@mycli/plugin-system';
-import { createRbacManager } from '@mycli/rbac-manager';
-import { resolveFeatureTemplatesRoot } from '@mycli/template-engine';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { definePlugin } from '@mycli-cli/plugin-system';
+import { createRbacManager } from '@mycli-cli/rbac-manager';
+import { resolveFeatureTemplatesRoot } from '@mycli-cli/template-engine';
 
 export default definePlugin({
-  name: '@mycli/rbac',
+  name: '@mycli-cli/rbac',
   version: '1.0.0',
   description: 'RBAC module generator',
   async install(ctx) {
@@ -25,7 +25,7 @@ export default definePlugin({
     return [
       {
         name: 'rbac',
-        description: 'RBAC helpers (provided by @mycli/rbac)',
+        description: 'RBAC helpers (provided by @mycli-cli/rbac)',
         async handler(commandCtx) {
           commandCtx.app.logger.info('Use `my add rbac` or `my role` / `my permission` commands');
         },

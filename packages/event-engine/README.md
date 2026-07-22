@@ -1,4 +1,4 @@
-# @mycli/event-engine
+# @mycli-cli/event-engine
 
 Enterprise event-driven system for MyCLI (Phase 4).
 

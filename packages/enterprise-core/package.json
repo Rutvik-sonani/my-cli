@@ -1,5 +1,5 @@
 {
-  "name": "@mycli/enterprise-core",
+  "name": "@mycli-cli/enterprise-core",
   "version": "1.0.0",
   "description": "Shared enterprise platform types and contracts for MyCLI",
   "type": "module",

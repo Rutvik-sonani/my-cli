@@ -1,5 +1,5 @@
-import type { ApplicationContext } from '@mycli/core';
-import { CommandError, ValidationError } from '@mycli/core';
+import type { ApplicationContext } from '@mycli-cli/core';
+import { CommandError, ValidationError } from '@mycli-cli/core';
 
 export type ArgumentType = 'string' | 'number' | 'boolean';
 

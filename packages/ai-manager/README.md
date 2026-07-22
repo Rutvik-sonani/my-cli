@@ -1,4 +1,4 @@
-# @mycli/ai-manager
+# @mycli-cli/ai-manager
 
 AI-assisted scaffolding: client setup, prompts, and generation planning for OpenAI, Anthropic, and Ollama.
 
@@ -26,7 +26,7 @@ Templates: `apps/cli/templates/features/ai/`.
 ## Tests
 
 ```bash
-pnpm --filter @mycli/ai-manager test
+pnpm --filter @mycli-cli/ai-manager test
 ```
 
 See [PLUGIN_GUIDE.md](../../PLUGIN_GUIDE.md).

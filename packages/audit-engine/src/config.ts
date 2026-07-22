@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import type { AuditStorageBackend } from '@mycli/enterprise-core';
+import type { AuditStorageBackend } from '@mycli-cli/enterprise-core';
 
 export interface AuditPathConfig {
   audit?: string;

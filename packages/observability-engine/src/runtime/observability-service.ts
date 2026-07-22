@@ -9,7 +9,7 @@ import type {
   MetricLabels,
   StructuredLogger,
   TraceSpan,
-} from '@mycli/enterprise-core';
+} from '@mycli-cli/enterprise-core';
 
 export interface CorrelationState {
   correlationId: string;

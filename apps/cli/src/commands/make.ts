@@ -1,11 +1,11 @@
 import { join } from 'node:path';
-import type { CliEngine } from '@mycli/cli-engine';
-import { defineCommand } from '@mycli/command-engine';
-import { createConfigManager } from '@mycli/config-manager';
-import { createCommandGenerator, createQueryGenerator } from '@mycli/cqrs-engine';
-import { createDomainGenerator } from '@mycli/domain-engine';
-import { createIntegrationEventGenerator } from '@mycli/event-engine';
-import { createFileSystem } from '@mycli/filesystem';
+import type { CliEngine } from '@mycli-cli/cli-engine';
+import { defineCommand } from '@mycli-cli/command-engine';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import { createCommandGenerator, createQueryGenerator } from '@mycli-cli/cqrs-engine';
+import { createDomainGenerator } from '@mycli-cli/domain-engine';
+import { createIntegrationEventGenerator } from '@mycli-cli/event-engine';
+import { createFileSystem } from '@mycli-cli/filesystem';
 import {
   type FieldDefinition,
   type GeneratorEngine,
@@ -16,8 +16,8 @@ import {
   createMigrationGenerator,
   createTemplateGenerator,
   parseFields,
-} from '@mycli/generator-engine';
-import { createTemplateEngine } from '@mycli/template-engine';
+} from '@mycli-cli/generator-engine';
+import { createTemplateEngine } from '@mycli-cli/template-engine';
 import { resolveTemplatesRoot } from '../paths.js';
 
 const GENERATOR_TYPES = [

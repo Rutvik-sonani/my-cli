@@ -1,4 +1,4 @@
-# @mycli/compliance-engine
+# @mycli-cli/compliance-engine
 
 Enterprise compliance engine for MyCLI (Phase 8).
 

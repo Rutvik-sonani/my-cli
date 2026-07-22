@@ -1,4 +1,4 @@
-# @mycli/kubernetes-manager
+# @mycli-cli/kubernetes-manager
 
 Generates Kubernetes manifests and Helm charts for containerized MyCLI applications.
 
@@ -22,7 +22,7 @@ Templates: `apps/cli/templates/features/kubernetes/`, `features/helm/`.
 ## Tests
 
 ```bash
-pnpm --filter @mycli/kubernetes-manager test
+pnpm --filter @mycli-cli/kubernetes-manager test
 ```
 
 See [INFRA_GUIDE.md](../../INFRA_GUIDE.md).

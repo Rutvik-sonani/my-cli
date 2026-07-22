@@ -1,11 +1,11 @@
 {
-  "name": "@mycli/mysql",
+  "name": "@mycli-cli/mysql",
   "version": "1.0.0",
   "description": "Official MyCLI MySQL database plugin",
   "main": "dist/index.js",
   "compatibility": ">=1.0.0",
   "author": "MyCLI",
   "slug": "mysql",
-  "npmPackage": "@mycli/plugin-mysql",
+  "npmPackage": "@mycli-cli/plugin-mysql",
   "keywords": ["mysql", "database", "mycli"]
 }

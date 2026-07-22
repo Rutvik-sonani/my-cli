@@ -1,5 +1,5 @@
 {
-  "name": "@mycli/plugin-sdk",
+  "name": "@mycli-cli/plugin-sdk",
   "version": "1.0.0",
   "description": "MyCLI Plugin SDK — authoring utilities for community plugins",
   "type": "module",
@@ -24,10 +24,10 @@
   },
   "engines": { "node": ">=22.0.0" },
   "dependencies": {
-    "@mycli/core": "workspace:*",
-    "@mycli/filesystem": "workspace:*",
-    "@mycli/plugin-system": "workspace:*",
-    "@mycli/command-engine": "workspace:*"
+    "@mycli-cli/core": "workspace:*",
+    "@mycli-cli/filesystem": "workspace:*",
+    "@mycli-cli/plugin-system": "workspace:*",
+    "@mycli-cli/command-engine": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.7.3",

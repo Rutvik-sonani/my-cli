@@ -1,4 +1,4 @@
-# @mycli/github-manager
+# @mycli-cli/github-manager
 
 Generates GitHub community files, workflows, Dependabot, Renovate, and label automation.
 
@@ -30,7 +30,7 @@ Templates: `apps/cli/templates/features/github/`.
 ## Tests
 
 ```bash
-pnpm --filter @mycli/github-manager test
+pnpm --filter @mycli-cli/github-manager test
 ```
 
 See [GIT_CICD_GUIDE.md](../../GIT_CICD_GUIDE.md).

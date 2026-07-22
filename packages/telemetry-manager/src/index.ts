@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import type { ConfigManager } from '@mycli/config-manager';
+import type { ConfigManager } from '@mycli-cli/config-manager';
 import { type TelemetryTransport, createTelemetryTransport } from './transport.js';
 
 export interface TelemetryEvent {

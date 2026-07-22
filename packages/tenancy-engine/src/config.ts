@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import type { TenancyStrategy, TenantModel } from '@mycli/enterprise-core';
+import type { TenancyStrategy, TenantModel } from '@mycli-cli/enterprise-core';
 
 export interface TenancyPathConfig {
   tenancy?: string;

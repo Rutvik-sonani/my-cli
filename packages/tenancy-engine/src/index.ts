@@ -21,4 +21,4 @@ export {
   strategyRequiresResolver,
   withTenantId,
 } from './runtime/resolvers.js';
-export type { TenantModel, TenancyStrategy } from '@mycli/enterprise-core';
+export type { TenantModel, TenancyStrategy } from '@mycli-cli/enterprise-core';

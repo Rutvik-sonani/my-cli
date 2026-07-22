@@ -1,5 +1,5 @@
 {
-  "name": "@mycli/compliance-engine",
+  "name": "@mycli-cli/compliance-engine",
   "version": "1.0.0",
   "description": "Enterprise compliance scaffolding and runtime for MyCLI",
   "type": "module",
@@ -24,13 +24,13 @@
   },
   "engines": { "node": ">=22.0.0" },
   "dependencies": {
-    "@mycli/core": "workspace:*",
-    "@mycli/enterprise-core": "workspace:*",
-    "@mycli/filesystem": "workspace:*",
-    "@mycli/template-engine": "workspace:*"
+    "@mycli-cli/core": "workspace:*",
+    "@mycli-cli/enterprise-core": "workspace:*",
+    "@mycli-cli/filesystem": "workspace:*",
+    "@mycli-cli/template-engine": "workspace:*"
   },
   "devDependencies": {
-    "@mycli/config-manager": "workspace:*",
+    "@mycli-cli/config-manager": "workspace:*",
     "@types/node": "^22.10.5",
     "typescript": "^5.7.3",
     "vitest": "^2.1.8"

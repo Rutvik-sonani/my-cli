@@ -1,4 +1,4 @@
-# @mycli/migration-engine
+# @mycli-cli/migration-engine
 
 Enterprise migration and upgrade engine for MyCLI (Phase 17).
 

@@ -4,8 +4,8 @@ import type {
   HealthFinding,
   ProjectHealthReport,
   ProjectHealthSummary,
-} from '@mycli/enterprise-core';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
+} from '@mycli-cli/enterprise-core';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
 import { ALL_HEALTH_CATEGORIES, HEALTH_REPORT_FILE } from '../config.js';
 
 export interface ProjectSnapshot {

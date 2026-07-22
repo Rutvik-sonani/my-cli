@@ -1,5 +1,5 @@
-import type { FileSystem } from '@mycli/filesystem';
-import type { TemplateEngine } from '@mycli/template-engine';
+import type { FileSystem } from '@mycli-cli/filesystem';
+import type { TemplateEngine } from '@mycli-cli/template-engine';
 
 export type NodeToolchain = 'nvm' | 'volta' | 'asdf' | 'none';
 

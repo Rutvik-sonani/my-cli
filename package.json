@@ -25,7 +25,7 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "pnpm build && changeset publish",
-    "my": "pnpm --filter @mycli/cli start",
+    "my": "pnpm --filter @mycli-cli/cli start",
     "prepare": "husky || true"
   },
   "devDependencies": {

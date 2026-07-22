@@ -7,7 +7,7 @@ import type {
   ComplianceReport,
   ComplianceReportSummary,
   DataRetentionRule,
-} from '@mycli/enterprise-core';
+} from '@mycli-cli/enterprise-core';
 
 export interface ComplianceCatalogEntry {
   id: string;

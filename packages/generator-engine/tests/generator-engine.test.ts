@@ -2,10 +2,10 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createConfigManager } from '@mycli/config-manager';
-import { ApplicationContext } from '@mycli/core';
-import { createFileSystem } from '@mycli/filesystem';
-import { createTemplateEngine } from '@mycli/template-engine';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import { ApplicationContext } from '@mycli-cli/core';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { createTemplateEngine } from '@mycli-cli/template-engine';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
   type GeneratorEngine,

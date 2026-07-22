@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { createFileSystem } from '@mycli/filesystem';
+import { createFileSystem } from '@mycli-cli/filesystem';
 
 const DB_PLUGIN_DATABASE: Record<string, string> = {
   postgres: 'postgresql',

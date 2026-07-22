@@ -1,8 +1,8 @@
-import { type AiGenerateTarget, createAiManager } from '@mycli/ai-manager';
-import type { CliEngine } from '@mycli/cli-engine';
-import { defineCommand } from '@mycli/command-engine';
-import { createConfigManager } from '@mycli/config-manager';
-import { createFileSystem } from '@mycli/filesystem';
+import { type AiGenerateTarget, createAiManager } from '@mycli-cli/ai-manager';
+import type { CliEngine } from '@mycli-cli/cli-engine';
+import { defineCommand } from '@mycli-cli/command-engine';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import { createFileSystem } from '@mycli-cli/filesystem';
 import { resolveTemplatesRoot } from '../paths.js';
 
 const TARGETS = new Set(['module', 'crud', 'service', 'controller', 'test']);

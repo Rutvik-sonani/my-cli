@@ -1,11 +1,11 @@
 import { join } from 'node:path';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
 import {
   buildNames,
   ensureFeatureRouteRegistration,
   ensureModuleBarrelExport,
-} from '@mycli/generator-engine';
-import { type TemplateEngine, createTemplateEngine } from '@mycli/template-engine';
+} from '@mycli-cli/generator-engine';
+import { type TemplateEngine, createTemplateEngine } from '@mycli-cli/template-engine';
 import { authDependencies, authEnvLines, buildAuthTemplateData } from './config.js';
 import { patchPrismaSchemaForAuth } from './schema-patch.js';
 import type { AuthSetupOptions, AuthSetupResult } from './types.js';

@@ -5,7 +5,7 @@ import type {
   FeatureFlagEvaluation,
   FeatureFlagProvider,
   FeatureFlagProviderId,
-} from '@mycli/enterprise-core';
+} from '@mycli-cli/enterprise-core';
 
 /**
  * Stable 0–99 bucket for percentage rollout based on flag key + user id.

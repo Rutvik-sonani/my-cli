@@ -3,7 +3,7 @@ import type {
   CommandMessage,
   IntegrationEvent,
   QueryMessage,
-} from '@mycli/enterprise-core';
+} from '@mycli-cli/enterprise-core';
 
 export interface LoggerLike {
   info(message: string, meta?: Record<string, unknown>): void;

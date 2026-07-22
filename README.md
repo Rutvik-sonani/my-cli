@@ -3,9 +3,9 @@
 **Laravel Artisan for Node.js** — a production-grade application development platform.
 
 ```bash
-npm i -g @mycli/cli
+npm i -g @mycli-cli/cli
 # or
-pnpm add -g @mycli/cli
+pnpm add -g @mycli-cli/cli
 
 my create
 my make module user
@@ -24,7 +24,7 @@ my add cicd --provider gitlab
 my add release
 my deploy terraform --provider aws
 my plugin search docker
-my plugin install @mycli/docker
+my plugin install @mycli-cli/docker
 my doctor
 my deploy setup
 my deploy push --provider railway
@@ -39,7 +39,7 @@ my deploy secrets sync --dry-run
 ## Monorepo
 
 ```
-apps/cli          → `my` executable (@mycli/cli)
+apps/cli          → `my` executable (@mycli-cli/cli)
 apps/website      → documentation site
 packages/*        → engines and managers
 templates/        → shared project templates

@@ -1,10 +1,10 @@
-import { createDeploymentManager } from '@mycli/deployment-manager';
-import { createFileSystem } from '@mycli/filesystem';
-import { definePlugin } from '@mycli/plugin-system';
-import { resolveFeatureTemplatesRoot } from '@mycli/template-engine';
+import { createDeploymentManager } from '@mycli-cli/deployment-manager';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { definePlugin } from '@mycli-cli/plugin-system';
+import { resolveFeatureTemplatesRoot } from '@mycli-cli/template-engine';
 
 export default definePlugin({
-  name: '@mycli/gcp',
+  name: '@mycli-cli/gcp',
   version: '1.0.0',
   description: 'GCP deployment via Terraform (Cloud Run)',
   async install(ctx) {
@@ -27,7 +27,7 @@ export default definePlugin({
     return [
       {
         name: 'gcp',
-        description: 'GCP deployment helpers (provided by @mycli/gcp)',
+        description: 'GCP deployment helpers (provided by @mycli-cli/gcp)',
         async handler(commandCtx) {
           commandCtx.app.logger.info(
             'Use `my add terraform --provider gcp` or `my deploy terraform --provider gcp`',

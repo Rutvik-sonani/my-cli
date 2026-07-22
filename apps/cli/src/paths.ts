@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { resolveFeatureTemplatesRoot } from '@mycli/template-engine';
+import { resolveFeatureTemplatesRoot } from '@mycli-cli/template-engine';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 

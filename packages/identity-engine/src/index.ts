@@ -18,4 +18,4 @@ export {
   type EnterpriseAuthSetupResult,
 } from './manager.js';
 export { IdentityProviderRegistry } from './runtime/registry.js';
-export type { IdentityProviderId, IdentityProtocol } from '@mycli/enterprise-core';
+export type { IdentityProviderId, IdentityProtocol } from '@mycli-cli/enterprise-core';

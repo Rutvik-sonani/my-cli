@@ -1,5 +1,5 @@
-import type { FileSystem } from '@mycli/filesystem';
-import { upsertMarkedBlock } from '@mycli/generator-engine';
+import type { FileSystem } from '@mycli-cli/filesystem';
+import { upsertMarkedBlock } from '@mycli-cli/generator-engine';
 
 const EXPORT_BEGIN = '// <mycli:exports>';
 const EXPORT_END = '// </mycli:exports>';

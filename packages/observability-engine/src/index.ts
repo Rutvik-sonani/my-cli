@@ -25,4 +25,4 @@ export {
   getCorrelation,
   runWithCorrelation,
 } from './runtime/observability-service.js';
-export type { ObservabilityLoggerId } from '@mycli/enterprise-core';
+export type { ObservabilityLoggerId } from '@mycli-cli/enterprise-core';

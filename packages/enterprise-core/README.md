@@ -1,4 +1,4 @@
-# @mycli/enterprise-core
+# @mycli-cli/enterprise-core
 
 Shared TypeScript contracts for the MyCLI enterprise platform extension.
 
@@ -9,11 +9,11 @@ Shared TypeScript contracts for the MyCLI enterprise platform extension.
 
 ## Consumers
 
-- `@mycli/architecture-engine` — Phase 1 architecture styles
-- `@mycli/domain-engine` — Phase 2 DDD generators
+- `@mycli-cli/architecture-engine` — Phase 1 architecture styles
+- `@mycli-cli/domain-engine` — Phase 2 DDD generators
 
 ## Tests
 
 ```bash
-pnpm --filter @mycli/enterprise-core test
+pnpm --filter @mycli-cli/enterprise-core test
 ```

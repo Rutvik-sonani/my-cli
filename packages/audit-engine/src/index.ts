@@ -19,4 +19,4 @@ export {
   computeStateDiff,
   type AuditEventInput,
 } from './runtime/audit-service.js';
-export type { AuditStorageBackend } from '@mycli/enterprise-core';
+export type { AuditStorageBackend } from '@mycli-cli/enterprise-core';

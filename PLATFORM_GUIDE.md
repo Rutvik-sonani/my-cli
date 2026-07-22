@@ -61,6 +61,6 @@ my add flags              # alias
 
 | Package | Responsibility |
 |---------|----------------|
-| `@mycli/platform-manager` | Observability, security, tenancy, feature-flags, search |
+| `@mycli-cli/platform-manager` | Observability, security, tenancy, feature-flags, search |
 
 Templates live in `apps/cli/templates/features/platform/`.

@@ -1,11 +1,11 @@
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { createConfigManager } from '@mycli/config-manager';
-import type { ApplicationContext } from '@mycli/core';
-import { createFileSystem } from '@mycli/filesystem';
-import type { GeneratorContext } from '@mycli/generator-engine';
-import { createTemplateEngine } from '@mycli/template-engine';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import type { ApplicationContext } from '@mycli-cli/core';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import type { GeneratorContext } from '@mycli-cli/generator-engine';
+import { createTemplateEngine } from '@mycli-cli/template-engine';
 import { afterEach, describe, expect, it } from 'vitest';
 import { createDomainGenerator } from '../src/generator.js';
 import { resolveDomainEntityPaths } from '../src/paths.js';

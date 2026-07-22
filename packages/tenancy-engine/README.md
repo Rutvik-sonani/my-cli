@@ -1,4 +1,4 @@
-# @mycli/tenancy-engine
+# @mycli-cli/tenancy-engine
 
 Enterprise multi-tenancy for MyCLI (Phase 5).
 
@@ -39,5 +39,5 @@ TENANCY.md
 
 ## Note
 
-`my add tenancy` via `@mycli/tenancy-engine` is the **enterprise** Phase 5 implementation under `src/tenancy/`.
+`my add tenancy` via `@mycli-cli/tenancy-engine` is the **enterprise** Phase 5 implementation under `src/tenancy/`.
 Legacy platform scaffolding remains at `src/platform/tenancy/` when using older platform flows.

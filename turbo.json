@@ -7,7 +7,7 @@
       "inputs": ["src/**", "tsconfig.json", "package.json"],
       "outputs": ["dist/**"]
     },
-    "@mycli/cli#build": {
+    "@mycli-cli/cli#build": {
       "dependsOn": ["^build"],
       "inputs": [
         "src/**",
@@ -19,7 +19,7 @@
       ],
       "outputs": ["dist/**"]
     },
-    "@mycli/website#build": {
+    "@mycli-cli/website#build": {
       "dependsOn": [],
       "inputs": [
         "scripts/**",

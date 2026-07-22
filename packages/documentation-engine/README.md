@@ -1,4 +1,4 @@
-# @mycli/documentation-engine
+# @mycli-cli/documentation-engine
 
 Enterprise documentation generation for MyCLI (Phase 19).
 

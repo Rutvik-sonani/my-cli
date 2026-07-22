@@ -1,5 +1,5 @@
-import { createFileSystem } from '@mycli/filesystem';
-import { definePlugin } from '@mycli/plugin-system';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { definePlugin } from '@mycli-cli/plugin-system';
 
 export default definePlugin({
   name: '@community/hello-mycli',

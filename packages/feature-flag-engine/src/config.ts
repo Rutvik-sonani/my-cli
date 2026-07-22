@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import type { FeatureFlagProviderId } from '@mycli/enterprise-core';
+import type { FeatureFlagProviderId } from '@mycli-cli/enterprise-core';
 
 export interface FeatureFlagPathConfig {
   featureFlags?: string;

@@ -1,8 +1,8 @@
 import { access, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { createFileSystem } from '@mycli/filesystem';
-import { createTemplateEngine } from '@mycli/template-engine';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { createTemplateEngine } from '@mycli-cli/template-engine';
 import { afterEach, describe, expect, it } from 'vitest';
 import {
   ALL_UPGRADE_SCOPES,

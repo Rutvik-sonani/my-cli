@@ -1,7 +1,7 @@
 import { join } from 'node:path';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
-import { ensureFeatureRouteRegistration } from '@mycli/generator-engine';
-import { type TemplateEngine, createTemplateEngine } from '@mycli/template-engine';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
+import { ensureFeatureRouteRegistration } from '@mycli-cli/generator-engine';
+import { type TemplateEngine, createTemplateEngine } from '@mycli-cli/template-engine';
 
 export type ApiDocsProvider = 'swagger' | 'openapi' | 'scalar' | 'redoc';
 

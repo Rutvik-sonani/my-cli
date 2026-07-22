@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import type { AuditContext, AuditRecord, AuditStorage } from '@mycli/enterprise-core';
+import type { AuditContext, AuditRecord, AuditStorage } from '@mycli-cli/enterprise-core';
 
 export class InMemoryAuditStorage implements AuditStorage {
   private readonly records: AuditRecord[] = [];

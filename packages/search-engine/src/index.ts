@@ -21,4 +21,4 @@ export {
   createSearchProvider,
   createSearchService,
 } from './runtime/search-service.js';
-export type { SearchProviderId } from '@mycli/enterprise-core';
+export type { SearchProviderId } from '@mycli-cli/enterprise-core';

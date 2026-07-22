@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import type { EventEnvelope, EventSerializer } from '@mycli/enterprise-core';
+import type { EventEnvelope, EventSerializer } from '@mycli-cli/enterprise-core';
 
 export interface SerializedEvent {
   id: string;

@@ -2,7 +2,7 @@ import type {
   ArchitectureModulePaths,
   ArchitectureStyle,
   DependencyRule,
-} from '@mycli/enterprise-core';
+} from '@mycli-cli/enterprise-core';
 
 export type {
   ArchitectureDependencyRulesFile,
@@ -12,7 +12,7 @@ export type {
   DependencyRule,
   EnterpriseArchitectureStyle,
   LegacyArchitectureStyle,
-} from '@mycli/enterprise-core';
+} from '@mycli-cli/enterprise-core';
 
 export interface ArchitectureTemplateFile {
   template: string;

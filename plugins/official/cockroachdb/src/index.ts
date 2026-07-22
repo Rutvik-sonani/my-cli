@@ -1,10 +1,10 @@
-import { createDatabaseManager, registerDatabasePlugin } from '@mycli/database-manager';
-import { createFileSystem } from '@mycli/filesystem';
-import { definePlugin } from '@mycli/plugin-system';
-import { createTemplateEngine, resolveFeatureTemplatesRoot } from '@mycli/template-engine';
+import { createDatabaseManager, registerDatabasePlugin } from '@mycli-cli/database-manager';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { definePlugin } from '@mycli-cli/plugin-system';
+import { createTemplateEngine, resolveFeatureTemplatesRoot } from '@mycli-cli/template-engine';
 
 export default definePlugin({
-  name: '@mycli/cockroachdb',
+  name: '@mycli-cli/cockroachdb',
   version: '1.0.0',
   description: 'CockroachDB database plugin',
   async install(ctx) {

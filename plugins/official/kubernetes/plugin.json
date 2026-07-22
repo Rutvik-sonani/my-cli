@@ -1,11 +1,11 @@
 {
-  "name": "@mycli/kubernetes",
+  "name": "@mycli-cli/kubernetes",
   "version": "1.0.0",
   "description": "Official MyCLI kubernetes plugin",
   "main": "dist/index.js",
   "compatibility": ">=1.0.0",
   "author": "MyCLI",
   "slug": "kubernetes",
-  "npmPackage": "@mycli/plugin-kubernetes",
+  "npmPackage": "@mycli-cli/plugin-kubernetes",
   "keywords": ["kubernetes", "mycli"]
 }

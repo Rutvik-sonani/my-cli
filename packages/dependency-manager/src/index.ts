@@ -1,5 +1,5 @@
-import { DependencyError } from '@mycli/core';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
+import { DependencyError } from '@mycli-cli/core';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
 import { execa } from 'execa';
 
 export type PackageManagerName = 'npm' | 'pnpm' | 'yarn' | 'bun';

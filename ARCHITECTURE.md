@@ -11,12 +11,12 @@ MyCLI is a pnpm + Turborepo monorepo of independent TypeScript packages.
 | **`packages/*-manager`** | Domain logic consumed by command handlers (auth, docker, git, …). Managers render templates; they do not parse argv. |
 | **`packages/command-engine`** | argv parsing and command registration primitives used by both `cli-engine` and plugins. |
 
-There is **no** `packages/cli` package. The executable lives in `apps/cli`; library consumers import `@mycli/cli-engine` and individual managers.
+There is **no** `packages/cli` package. The executable lives in `apps/cli`; library consumers import `@mycli-cli/cli-engine` and individual managers.
 
 ```
-apps/cli/src/commands/*.ts  →  @mycli/*-manager  →  @mycli/template-engine  →  apps/cli/templates/
+apps/cli/src/commands/*.ts  →  @mycli-cli/*-manager  →  @mycli-cli/template-engine  →  apps/cli/templates/
          ↓
-  @mycli/cli-engine (orchestration)
+  @mycli-cli/cli-engine (orchestration)
 ```
 
 ## Layering
@@ -29,26 +29,26 @@ Command → Handler → Service/Manager → Generator → TemplateEngine → Fil
 
 | Package | Responsibility |
 |---------|----------------|
-| `@mycli/core` | Context, DI, events, logger, errors, utilities |
-| `@mycli/cli-engine` | CLI orchestration |
-| `@mycli/command-engine` | Command registry & argv parsing |
-| `@mycli/prompt-engine` | Interactive prompts |
-| `@mycli/template-engine` | EJS template rendering |
-| `@mycli/generator-engine` | Artisan-style generators |
-| `@mycli/filesystem` | Safe filesystem I/O |
-| `@mycli/config-manager` | `.myclirc.json` configuration |
-| `@mycli/plugin-system` | Plugin discovery & lifecycle |
-| `@mycli/dependency-manager` | npm/pnpm/yarn/bun |
+| `@mycli-cli/core` | Context, DI, events, logger, errors, utilities |
+| `@mycli-cli/cli-engine` | CLI orchestration |
+| `@mycli-cli/command-engine` | Command registry & argv parsing |
+| `@mycli-cli/prompt-engine` | Interactive prompts |
+| `@mycli-cli/template-engine` | EJS template rendering |
+| `@mycli-cli/generator-engine` | Artisan-style generators |
+| `@mycli-cli/filesystem` | Safe filesystem I/O |
+| `@mycli-cli/config-manager` | `.myclirc.json` configuration |
+| `@mycli-cli/plugin-system` | Plugin discovery & lifecycle |
+| `@mycli-cli/dependency-manager` | npm/pnpm/yarn/bun |
 
 ## Feature managers (Phase 3)
 
 | Package | Responsibility |
 |---------|----------------|
-| `@mycli/auth-manager` | JWT/OAuth/session auth modules via EJS templates |
-| `@mycli/rbac-manager` | Roles, permissions, middleware, CLI store |
-| `@mycli/database-manager` | Prisma/Drizzle schemas, env, postgres plugin |
-| `@mycli/api-manager` | Swagger/Scalar/Redoc, Postman/Bruno clients |
-| `@mycli/testing-manager` | Vitest/Jest, Supertest, Playwright/Cypress |
+| `@mycli-cli/auth-manager` | JWT/OAuth/session auth modules via EJS templates |
+| `@mycli-cli/rbac-manager` | Roles, permissions, middleware, CLI store |
+| `@mycli-cli/database-manager` | Prisma/Drizzle schemas, env, postgres plugin |
+| `@mycli-cli/api-manager` | Swagger/Scalar/Redoc, Postman/Bruno clients |
+| `@mycli-cli/testing-manager` | Vitest/Jest, Supertest, Playwright/Cypress |
 
 Templates live in `apps/cli/templates/features/{auth,rbac,database,api-docs,testing}/`.
 
@@ -56,9 +56,9 @@ Templates live in `apps/cli/templates/features/{auth,rbac,database,api-docs,test
 
 | Package | Responsibility |
 |---------|----------------|
-| `@mycli/docker-manager` | Dockerfile, Compose, nginx via EJS templates |
-| `@mycli/kubernetes-manager` | K8s manifests and Helm charts |
-| `@mycli/deployment-manager` | Terraform (AWS/GCP/Azure) and PaaS configs |
+| `@mycli-cli/docker-manager` | Dockerfile, Compose, nginx via EJS templates |
+| `@mycli-cli/kubernetes-manager` | K8s manifests and Helm charts |
+| `@mycli-cli/deployment-manager` | Terraform (AWS/GCP/Azure) and PaaS configs |
 
 Templates live in `apps/cli/templates/features/{docker,kubernetes,helm,terraform,deploy}/`.
 
@@ -68,15 +68,15 @@ See [INFRA_GUIDE.md](./INFRA_GUIDE.md) for commands and output paths.
 
 | Package | Responsibility |
 |---------|----------------|
-| `@mycli/github-manager` | GitHub workflows, dependabot, SECURITY, PR template |
-| `@mycli/cicd-manager` | CI/CD for GitHub, GitLab, Azure, Bitbucket, Jenkins |
-| `@mycli/release-manager` | Changesets, changelog, semantic-release config |
-| `@mycli/git-manager` | Local git init, remotes, provider automation (`gh`/`glab`) |
-| `@mycli/ide-manager` | DevContainer, VS Code, and Cursor IDE scaffolding |
-| `@mycli/services-manager` | Cache, queue, events, mail, storage, payment services |
-| `@mycli/platform-manager` | Observability, security, tenancy, feature-flags, search |
-| `@mycli/ai-manager` | AI-assisted scaffolding and generation |
-| `@mycli/plugin-sdk` | Community plugin authoring utilities |
+| `@mycli-cli/github-manager` | GitHub workflows, dependabot, SECURITY, PR template |
+| `@mycli-cli/cicd-manager` | CI/CD for GitHub, GitLab, Azure, Bitbucket, Jenkins |
+| `@mycli-cli/release-manager` | Changesets, changelog, semantic-release config |
+| `@mycli-cli/git-manager` | Local git init, remotes, provider automation (`gh`/`glab`) |
+| `@mycli-cli/ide-manager` | DevContainer, VS Code, and Cursor IDE scaffolding |
+| `@mycli-cli/services-manager` | Cache, queue, events, mail, storage, payment services |
+| `@mycli-cli/platform-manager` | Observability, security, tenancy, feature-flags, search |
+| `@mycli-cli/ai-manager` | AI-assisted scaffolding and generation |
+| `@mycli-cli/plugin-sdk` | Community plugin authoring utilities |
 
 Templates live in `apps/cli/templates/features/{github,cicd,release}/`.
 
@@ -86,9 +86,9 @@ See [GIT_CICD_GUIDE.md](./GIT_CICD_GUIDE.md) for commands and output paths.
 
 | Package | Responsibility |
 |---------|----------------|
-| `@mycli/cloud-manager` | Runtime deploy push, status, logs, rollback, destroy |
-| `@mycli/secrets-manager` | Environment secrets planning and sync |
-| `@mycli/deployment-manager` | Static config + `validateSetup()` |
+| `@mycli-cli/cloud-manager` | Runtime deploy push, status, logs, rollback, destroy |
+| `@mycli-cli/secrets-manager` | Environment secrets planning and sync |
+| `@mycli-cli/deployment-manager` | Static config + `validateSetup()` |
 
 Templates live in `apps/cli/templates/features/cloud/`.
 
@@ -98,9 +98,9 @@ See [CLOUD_DEPLOY_GUIDE.md](./CLOUD_DEPLOY_GUIDE.md) for runtime deploy commands
 
 | Package | Responsibility |
 |---------|----------------|
-| `@mycli/registry-manager` | Plugin catalog search, get, publish, path resolution |
-| `@mycli/marketplace-manager` | Install, update, uninstall, publish orchestration |
-| `@mycli/plugin-system` | Plugin discovery, load, lifecycle, command registration |
+| `@mycli-cli/registry-manager` | Plugin catalog search, get, publish, path resolution |
+| `@mycli-cli/marketplace-manager` | Install, update, uninstall, publish orchestration |
+| `@mycli-cli/plugin-system` | Plugin discovery, load, lifecycle, command registration |
 
 See [MARKETPLACE_GUIDE.md](./MARKETPLACE_GUIDE.md) and [PLUGIN_GUIDE.md](./PLUGIN_GUIDE.md).
 
@@ -108,9 +108,9 @@ See [MARKETPLACE_GUIDE.md](./MARKETPLACE_GUIDE.md) and [PLUGIN_GUIDE.md](./PLUGI
 
 | Package | Responsibility |
 |---------|----------------|
-| `@mycli/frontend-manager` | React, Next.js, Vue, Nuxt, Angular scaffolds via EJS |
-| `@mycli/ui-manager` | UI library install + config (Tailwind, Shadcn, MUI, …) |
-| `@mycli/architecture-manager` | Monolith, modular-monolith, microservice, monorepo, polyrepo layouts |
+| `@mycli-cli/frontend-manager` | React, Next.js, Vue, Nuxt, Angular scaffolds via EJS |
+| `@mycli-cli/ui-manager` | UI library install + config (Tailwind, Shadcn, MUI, …) |
+| `@mycli-cli/architecture-manager` | Monolith, modular-monolith, microservice, monorepo, polyrepo layouts |
 
 Templates live in `apps/cli/templates/features/frontend/`, `features/ui/`, and `architecture/`.
 
@@ -120,7 +120,7 @@ CLI: `my add ui`, `my dev`, `my test`, `my lint`, `my build`, `my create --app-t
 
 | Package | Responsibility |
 |---------|----------------|
-| `@mycli/database-manager` | All ORMs (Prisma, Drizzle, TypeORM, Mongoose, Sequelize, MikroORM) |
+| `@mycli-cli/database-manager` | All ORMs (Prisma, Drizzle, TypeORM, Mongoose, Sequelize, MikroORM) |
 | Database plugins | Per-engine docs + env for PostgreSQL, MySQL, MongoDB, Redis, … |
 
 See [DATABASE_GUIDE.md](./DATABASE_GUIDE.md).

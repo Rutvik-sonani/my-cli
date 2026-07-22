@@ -1,4 +1,4 @@
-# @mycli/telemetry-manager
+# @mycli-cli/telemetry-manager
 
 Opt-in, anonymous telemetry for MyCLI. **Disabled by default.**
 
@@ -43,7 +43,7 @@ During `my create`, answer **Help improve MyCLI?** or set in `.myclirc.json`:
 Programmatically:
 
 ```typescript
-import { createTelemetryManager } from '@mycli/telemetry-manager';
+import { createTelemetryManager } from '@mycli-cli/telemetry-manager';
 
 const telemetry = createTelemetryManager({ enabled: true });
 telemetry.track('create', { applicationType: 'api' });

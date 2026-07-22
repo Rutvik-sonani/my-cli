@@ -1,5 +1,5 @@
-import type { FileSystem } from '@mycli/filesystem';
-import type { TemplateEngine } from '@mycli/template-engine';
+import type { FileSystem } from '@mycli-cli/filesystem';
+import type { TemplateEngine } from '@mycli-cli/template-engine';
 import type { AuthTemplateData } from './types.js';
 
 const USER_AUTH_FIELDS = `

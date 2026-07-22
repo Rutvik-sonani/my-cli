@@ -74,6 +74,6 @@ All workflow commands auto-detect npm/pnpm/yarn/bun and support `--dry-run`.
 
 | Package | Responsibility |
 |---------|----------------|
-| `@mycli/ide-manager` | DevContainer, VS Code, and Cursor scaffolding |
+| `@mycli-cli/ide-manager` | DevContainer, VS Code, and Cursor scaffolding |
 
 Templates live in `apps/cli/templates/features/ide/`.

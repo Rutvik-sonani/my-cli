@@ -1,8 +1,8 @@
-import type { ConfigManager } from '@mycli/config-manager';
-import { GeneratorError } from '@mycli/core';
-import type { ApplicationContext } from '@mycli/core';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
-import { type TemplateEngine, createTemplateEngine } from '@mycli/template-engine';
+import type { ConfigManager } from '@mycli-cli/config-manager';
+import { GeneratorError } from '@mycli-cli/core';
+import type { ApplicationContext } from '@mycli-cli/core';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
+import { type TemplateEngine, createTemplateEngine } from '@mycli-cli/template-engine';
 import { buildNames } from './names.js';
 import { runAutoRegistration } from './registration/index.js';
 import type { Generator, GeneratorContext, GeneratorHook, GeneratorResult } from './types.js';

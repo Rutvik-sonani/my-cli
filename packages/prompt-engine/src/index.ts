@@ -1,5 +1,5 @@
 import * as p from '@clack/prompts';
-import { ValidationError } from '@mycli/core';
+import { ValidationError } from '@mycli-cli/core';
 import pc from 'picocolors';
 import type { I18n } from './i18n.js';
 

@@ -1,10 +1,10 @@
-import { createAuthManager } from '@mycli/auth-manager';
-import { createFileSystem } from '@mycli/filesystem';
-import { definePlugin } from '@mycli/plugin-system';
-import { resolveFeatureTemplatesRoot } from '@mycli/template-engine';
+import { createAuthManager } from '@mycli-cli/auth-manager';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { definePlugin } from '@mycli-cli/plugin-system';
+import { resolveFeatureTemplatesRoot } from '@mycli-cli/template-engine';
 
 export default definePlugin({
-  name: '@mycli/auth',
+  name: '@mycli-cli/auth',
   version: '1.0.0',
   description: 'Authentication module generator',
   async install(ctx) {
@@ -26,7 +26,7 @@ export default definePlugin({
     return [
       {
         name: 'auth',
-        description: 'Authentication helpers (provided by @mycli/auth)',
+        description: 'Authentication helpers (provided by @mycli-cli/auth)',
         async handler(commandCtx) {
           commandCtx.app.logger.info('Use `my add auth` to scaffold authentication');
         },

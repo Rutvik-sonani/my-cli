@@ -1,4 +1,4 @@
-import { ValidationError } from '@mycli/core';
+import { ValidationError } from '@mycli-cli/core';
 import type { FieldDefinition, MappedField } from './types.js';
 
 /**

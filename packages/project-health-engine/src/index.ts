@@ -25,4 +25,4 @@ export type {
   ProjectHealthAnalyzeOptions,
   ProjectHealthReport,
   ProjectHealthSummary,
-} from '@mycli/enterprise-core';
+} from '@mycli-cli/enterprise-core';

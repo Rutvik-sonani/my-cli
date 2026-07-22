@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import type { IdentityProtocol, IdentityProviderId } from '@mycli/enterprise-core';
+import type { IdentityProtocol, IdentityProviderId } from '@mycli-cli/enterprise-core';
 
 export interface IdentityPathConfig {
   identity?: string;

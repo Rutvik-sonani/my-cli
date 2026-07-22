@@ -1,4 +1,4 @@
-# @mycli/core
+# @mycli-cli/core
 
 Foundation package for MyCLI: dependency injection, application context, events, logging, errors, and shared utilities.
 
@@ -15,7 +15,7 @@ Foundation package for MyCLI: dependency injection, application context, events,
 ## Usage
 
 ```ts
-import { ApplicationContext } from '@mycli/core';
+import { ApplicationContext } from '@mycli-cli/core';
 
 const ctx = new ApplicationContext({ cwd: process.cwd(), version: '1.0.0' });
 await ctx.boot();

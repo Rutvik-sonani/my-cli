@@ -1,4 +1,4 @@
-import type { EventEnvelope } from '@mycli/enterprise-core';
+import type { EventEnvelope } from '@mycli-cli/enterprise-core';
 
 export interface DeadLetterRecord {
   envelope: EventEnvelope;

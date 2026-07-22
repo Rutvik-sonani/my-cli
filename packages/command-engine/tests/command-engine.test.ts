@@ -1,4 +1,4 @@
-import { ApplicationContext } from '@mycli/core';
+import { ApplicationContext } from '@mycli-cli/core';
 import { describe, expect, it } from 'vitest';
 import { createCommandRegistry, defineCommand } from '../src/index.js';
 

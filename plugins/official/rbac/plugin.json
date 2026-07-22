@@ -1,11 +1,11 @@
 {
-  "name": "@mycli/rbac",
+  "name": "@mycli-cli/rbac",
   "version": "1.0.0",
   "description": "Official MyCLI rbac plugin",
   "main": "dist/index.js",
   "compatibility": ">=1.0.0",
   "author": "MyCLI",
   "slug": "rbac",
-  "npmPackage": "@mycli/plugin-rbac",
+  "npmPackage": "@mycli-cli/plugin-rbac",
   "keywords": ["rbac", "mycli"]
 }

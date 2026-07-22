@@ -1,6 +1,6 @@
-import { createArchitectureEngine } from '@mycli/architecture-engine';
-import type { CliEngine } from '@mycli/cli-engine';
-import { defineCommand } from '@mycli/command-engine';
+import { createArchitectureEngine } from '@mycli-cli/architecture-engine';
+import type { CliEngine } from '@mycli-cli/cli-engine';
+import { defineCommand } from '@mycli-cli/command-engine';
 import pc from 'picocolors';
 import { resolveTemplatesRoot } from '../paths.js';
 

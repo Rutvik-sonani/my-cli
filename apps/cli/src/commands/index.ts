@@ -1,5 +1,5 @@
-import type { CliEngine } from '@mycli/cli-engine';
-import type { CommandDefinition } from '@mycli/command-engine';
+import type { CliEngine } from '@mycli-cli/cli-engine';
+import type { CommandDefinition } from '@mycli-cli/command-engine';
 import { addCommand } from './add.js';
 import { aiCommand } from './ai.js';
 import { analyticsCommand } from './analytics.js';

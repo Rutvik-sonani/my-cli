@@ -4,8 +4,8 @@ import type {
   Generator,
   GeneratorContext,
   GeneratorResult,
-} from '@mycli/generator-engine';
-import { buildNames } from '@mycli/generator-engine';
+} from '@mycli-cli/generator-engine';
+import { buildNames } from '@mycli-cli/generator-engine';
 import { resolveEventSystemPaths } from './config.js';
 
 function readPathConfig(ctx: GeneratorContext) {

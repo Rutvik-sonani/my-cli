@@ -1,4 +1,4 @@
-# @mycli/domain-engine
+# @mycli-cli/domain-engine
 
 Phase 2 **DDD domain generator** for MyCLI.
 
@@ -39,5 +39,5 @@ Reads `.myclirc.json` paths (`domain`, `application`, `infrastructure`) from Pha
 ## Tests
 
 ```bash
-pnpm --filter @mycli/domain-engine test
+pnpm --filter @mycli-cli/domain-engine test
 ```

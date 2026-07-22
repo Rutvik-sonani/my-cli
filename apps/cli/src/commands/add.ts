@@ -1,65 +1,71 @@
 import { join } from 'node:path';
-import { createAiManager } from '@mycli/ai-manager';
-import { createApiManager } from '@mycli/api-manager';
+import { createAiManager } from '@mycli-cli/ai-manager';
+import { createApiManager } from '@mycli-cli/api-manager';
 import {
   type AuditStorageBackend,
   createAuditManager,
   normalizeAuditStorage,
-} from '@mycli/audit-engine';
-import { createAuthManager } from '@mycli/auth-manager';
-import { createCicdManager } from '@mycli/cicd-manager';
-import type { CliEngine } from '@mycli/cli-engine';
-import { defineCommand } from '@mycli/command-engine';
-import { createComplianceManager, normalizeComplianceFrameworks } from '@mycli/compliance-engine';
-import { createConfigManager } from '@mycli/config-manager';
-import { createCqrsManager } from '@mycli/cqrs-engine';
-import { createDatabaseManager } from '@mycli/database-manager';
-import type { DatabaseEngine, OrmEngine } from '@mycli/database-manager';
-import { createDependencyManager } from '@mycli/dependency-manager';
-import { createDeploymentManager } from '@mycli/deployment-manager';
-import { createDockerManager } from '@mycli/docker-manager';
+} from '@mycli-cli/audit-engine';
+import { createAuthManager } from '@mycli-cli/auth-manager';
+import { createCicdManager } from '@mycli-cli/cicd-manager';
+import type { CliEngine } from '@mycli-cli/cli-engine';
+import { defineCommand } from '@mycli-cli/command-engine';
+import {
+  createComplianceManager,
+  normalizeComplianceFrameworks,
+} from '@mycli-cli/compliance-engine';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import { createCqrsManager } from '@mycli-cli/cqrs-engine';
+import { createDatabaseManager } from '@mycli-cli/database-manager';
+import type { DatabaseEngine, OrmEngine } from '@mycli-cli/database-manager';
+import { createDependencyManager } from '@mycli-cli/dependency-manager';
+import { createDeploymentManager } from '@mycli-cli/deployment-manager';
+import { createDockerManager } from '@mycli-cli/docker-manager';
 import {
   type EventSystemProvider,
   createEventSystemManager,
   normalizeEventProvider,
-} from '@mycli/event-engine';
-import { createFeatureFlagManager, normalizeFeatureFlagProvider } from '@mycli/feature-flag-engine';
-import { createFileSystem } from '@mycli/filesystem';
-import { createFrontendManager } from '@mycli/frontend-manager';
-import type { FrontendFramework } from '@mycli/frontend-manager';
-import { createGithubManager } from '@mycli/github-manager';
-import { createIdeManager } from '@mycli/ide-manager';
+} from '@mycli-cli/event-engine';
+import {
+  createFeatureFlagManager,
+  normalizeFeatureFlagProvider,
+} from '@mycli-cli/feature-flag-engine';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { createFrontendManager } from '@mycli-cli/frontend-manager';
+import type { FrontendFramework } from '@mycli-cli/frontend-manager';
+import { createGithubManager } from '@mycli-cli/github-manager';
+import { createIdeManager } from '@mycli-cli/ide-manager';
 import {
   type IdentityProviderId,
   createEnterpriseAuthManager,
   normalizeIdentityProviders,
-} from '@mycli/identity-engine';
-import { createKubernetesManager } from '@mycli/kubernetes-manager';
+} from '@mycli-cli/identity-engine';
+import { createKubernetesManager } from '@mycli-cli/kubernetes-manager';
 import {
   createObservabilityManager,
   normalizeObservabilityLogger,
-} from '@mycli/observability-engine';
+} from '@mycli-cli/observability-engine';
 import {
   type PlatformFeature,
   type TenancyMode,
   createPlatformManager,
-} from '@mycli/platform-manager';
-import { createPrivacyManager } from '@mycli/privacy-engine';
-import { createRbacManager } from '@mycli/rbac-manager';
-import { createReleaseManager } from '@mycli/release-manager';
-import { createSearchManager, normalizeSearchProvider } from '@mycli/search-engine';
-import { createSecurityManager } from '@mycli/security-engine';
-import { type ServiceKind, createServicesManager } from '@mycli/services-manager';
-import { createTemplateEngine } from '@mycli/template-engine';
+} from '@mycli-cli/platform-manager';
+import { createPrivacyManager } from '@mycli-cli/privacy-engine';
+import { createRbacManager } from '@mycli-cli/rbac-manager';
+import { createReleaseManager } from '@mycli-cli/release-manager';
+import { createSearchManager, normalizeSearchProvider } from '@mycli-cli/search-engine';
+import { createSecurityManager } from '@mycli-cli/security-engine';
+import { type ServiceKind, createServicesManager } from '@mycli-cli/services-manager';
+import { createTemplateEngine } from '@mycli-cli/template-engine';
 import {
   type TenancyStrategy,
   type TenantModel,
   createTenancyManager,
   normalizeTenancyStrategy,
   normalizeTenantModel,
-} from '@mycli/tenancy-engine';
-import { createTestingManager } from '@mycli/testing-manager';
-import { createUiManager } from '@mycli/ui-manager';
+} from '@mycli-cli/tenancy-engine';
+import { createTestingManager } from '@mycli-cli/testing-manager';
+import { createUiManager } from '@mycli-cli/ui-manager';
 import { resolveTemplatesRoot } from '../paths.js';
 import { wireDatabasePlugin } from '../utils/database.js';
 import { mergeDepsIntoPackageJson } from '../utils/deps.js';

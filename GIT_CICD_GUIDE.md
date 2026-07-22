@@ -126,15 +126,15 @@ JavaScript projects skip `tsconfig.json`, use `src/index.js`, and generate `.js`
 
 ## Official plugin
 
-- `@mycli/github` — GitHub scaffolding via `my plugin install @mycli/github`
+- `@mycli-cli/github` — GitHub scaffolding via `my plugin install @mycli-cli/github`
 
 ## Managers
 
 | Package | Responsibility |
 |---------|----------------|
-| `@mycli/github-manager` | GitHub community files and workflows |
-| `@mycli/cicd-manager` | Multi-provider CI/CD pipelines |
-| `@mycli/release-manager` | Changesets and semantic-release setup |
-| `@mycli/git-manager` | Local git lifecycle, provider adapters (`gh`/`glab`/`az`) |
+| `@mycli-cli/github-manager` | GitHub community files and workflows |
+| `@mycli-cli/cicd-manager` | Multi-provider CI/CD pipelines |
+| `@mycli-cli/release-manager` | Changesets and semantic-release setup |
+| `@mycli-cli/git-manager` | Local git lifecycle, provider adapters (`gh`/`glab`/`az`) |
 
 Templates live in `apps/cli/templates/features/{github,cicd,release}/`.

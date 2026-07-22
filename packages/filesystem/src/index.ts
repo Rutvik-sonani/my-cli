@@ -11,7 +11,7 @@ import {
   writeFile,
 } from 'node:fs/promises';
 import { dirname, join, relative, resolve, sep } from 'node:path';
-import { FilesystemError } from '@mycli/core';
+import { FilesystemError } from '@mycli-cli/core';
 
 export interface WriteFileOptions {
   overwrite?: boolean;

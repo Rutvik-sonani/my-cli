@@ -1,4 +1,4 @@
-# @mycli/governance-engine
+# @mycli-cli/governance-engine
 
 Enterprise company governance for MyCLI (Phase 15).
 

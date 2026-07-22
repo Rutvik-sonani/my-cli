@@ -1,9 +1,9 @@
-import type { CliEngine } from '@mycli/cli-engine';
-import { defineCommand } from '@mycli/command-engine';
-import { createConfigManager } from '@mycli/config-manager';
-import { createDependencyManager } from '@mycli/dependency-manager';
-import { createFileSystem } from '@mycli/filesystem';
-import { createSecurityManager } from '@mycli/security-engine';
+import type { CliEngine } from '@mycli-cli/cli-engine';
+import { defineCommand } from '@mycli-cli/command-engine';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import { createDependencyManager } from '@mycli-cli/dependency-manager';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { createSecurityManager } from '@mycli-cli/security-engine';
 import pc from 'picocolors';
 import { resolveTemplatesRoot } from '../paths.js';
 import { runDependencyAudit, scanSecrets } from '../utils/health-checks.js';

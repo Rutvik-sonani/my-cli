@@ -19,7 +19,7 @@ describe('NpmRegistryClient', () => {
           objects: [
             {
               package: {
-                name: '@mycli/plugin-demo',
+                name: '@mycli-cli/plugin-demo',
                 version: '1.0.0',
                 description: 'Demo plugin',
               },
@@ -31,7 +31,7 @@ describe('NpmRegistryClient', () => {
 
     const client = new NpmRegistryClient();
     const results = await client.search('demo');
-    expect(results[0]?.name).toBe('@mycli/plugin-demo');
+    expect(results[0]?.name).toBe('@mycli-cli/plugin-demo');
   });
 
   it('merges npm results in registry search', async () => {
@@ -43,7 +43,7 @@ describe('NpmRegistryClient', () => {
           objects: [
             {
               package: {
-                name: '@mycli/plugin-extra',
+                name: '@mycli-cli/plugin-extra',
                 version: '2.0.0',
                 description: 'Extra plugin',
               },
@@ -56,6 +56,6 @@ describe('NpmRegistryClient', () => {
     const registry = createRegistryManager({ repoRoot: REPO_ROOT });
 
     const result = await registry.search({ query: 'extra', registry: 'all', limit: 10 });
-    expect(result.entries.some((e) => e.npmPackage === '@mycli/plugin-extra')).toBe(true);
+    expect(result.entries.some((e) => e.npmPackage === '@mycli-cli/plugin-extra')).toBe(true);
   });
 });

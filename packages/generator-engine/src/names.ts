@@ -1,4 +1,11 @@
-import { camelCase, kebabCase, pascalCase, pluralize, singularize, snakeCase } from '@mycli/core';
+import {
+  camelCase,
+  kebabCase,
+  pascalCase,
+  pluralize,
+  singularize,
+  snakeCase,
+} from '@mycli-cli/core';
 import type { NameVariants } from './types.js';
 
 export function buildNames(raw: string): NameVariants {

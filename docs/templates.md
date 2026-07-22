@@ -15,7 +15,7 @@ The root `templates/` directory documents architecture categories only. See [tem
 
 ## Rendering
 
-Managers use `@mycli/template-engine`:
+Managers use `@mycli-cli/template-engine`:
 
 ```ts
 const templates = createTemplateEngine({

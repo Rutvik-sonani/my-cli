@@ -1,5 +1,5 @@
-import { createDependencyManager } from '@mycli/dependency-manager';
-import { createFileSystem } from '@mycli/filesystem';
+import { createDependencyManager } from '@mycli-cli/dependency-manager';
+import { createFileSystem } from '@mycli-cli/filesystem';
 
 export interface DependencyRecords {
   dependencies?: Record<string, string>;

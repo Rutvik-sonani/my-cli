@@ -1,10 +1,10 @@
-import type { CliEngine } from '@mycli/cli-engine';
-import { type CloudProvider, createCloudManager } from '@mycli/cloud-manager';
-import { defineCommand } from '@mycli/command-engine';
-import { createConfigManager } from '@mycli/config-manager';
-import { createDeploymentManager } from '@mycli/deployment-manager';
-import { createFileSystem } from '@mycli/filesystem';
-import { createSecretsManager } from '@mycli/secrets-manager';
+import type { CliEngine } from '@mycli-cli/cli-engine';
+import { type CloudProvider, createCloudManager } from '@mycli-cli/cloud-manager';
+import { defineCommand } from '@mycli-cli/command-engine';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import { createDeploymentManager } from '@mycli-cli/deployment-manager';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { createSecretsManager } from '@mycli-cli/secrets-manager';
 import { resolveTemplatesRoot } from '../paths.js';
 
 const CLOUD_PROVIDERS = [

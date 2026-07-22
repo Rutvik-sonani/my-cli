@@ -1,15 +1,15 @@
 import { randomUUID } from 'node:crypto';
 import { join } from 'node:path';
-import { createConfigManager } from '@mycli/config-manager';
+import { createConfigManager } from '@mycli-cli/config-manager';
 import type {
   UpgradeAction,
   UpgradeEngineOptions,
   UpgradeReport,
   UpgradeReportSummary,
   UpgradeScope,
-} from '@mycli/enterprise-core';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
-import { createUpgradeManager } from '@mycli/upgrade-manager';
+} from '@mycli-cli/enterprise-core';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
+import { createUpgradeManager } from '@mycli-cli/upgrade-manager';
 import { ALL_UPGRADE_SCOPES } from '../config.js';
 import { createUpgradeBackupService } from './backup-service.js';
 import { createMigrationFileService } from './migration-file-service.js';
@@ -159,7 +159,8 @@ export class UpgradeService {
         dependencies?: Record<string, string>;
         devDependencies?: Record<string, string>;
       }>('package.json');
-      packageCliHint = pkg.dependencies?.['@mycli/cli'] ?? pkg.devDependencies?.['@mycli/cli'];
+      packageCliHint =
+        pkg.dependencies?.['@mycli-cli/cli'] ?? pkg.devDependencies?.['@mycli-cli/cli'];
     } catch {
       /* optional */
     }
@@ -169,7 +170,7 @@ export class UpgradeService {
 
 - Current CLI runtime: ${this.cliVersion}
 - Target: ${options.targetVersion}
-- Declared @mycli/cli: ${packageCliHint ?? 'not declared in package.json'}
+- Declared @mycli-cli/cli: ${packageCliHint ?? 'not declared in package.json'}
 
 Keep the CLI and generated project config versions aligned.
 Run \`my upgrade --scope project\` after updating the CLI package.

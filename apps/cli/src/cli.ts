@@ -1,8 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { type CliEngine, createCliEngine } from '@mycli/cli-engine';
-import { createI18nFromDir } from '@mycli/prompt-engine';
+import { type CliEngine, createCliEngine } from '@mycli-cli/cli-engine';
+import { createI18nFromDir } from '@mycli-cli/prompt-engine';
 import { createCommands } from './commands/index.js';
 import { resolveLocalesRoot } from './paths.js';
 

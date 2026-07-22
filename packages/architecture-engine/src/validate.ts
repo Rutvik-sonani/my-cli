@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { join, relative } from 'node:path';
-import type { ArchitectureDependencyRulesFile, DependencyRule } from '@mycli/enterprise-core';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
+import type { ArchitectureDependencyRulesFile, DependencyRule } from '@mycli-cli/enterprise-core';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
 
 export interface ArchitectureViolation {
   file: string;

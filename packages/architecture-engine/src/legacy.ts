@@ -1,4 +1,4 @@
-import { createArchitectureManager } from '@mycli/architecture-manager';
+import { createArchitectureManager } from '@mycli-cli/architecture-manager';
 import type { LegacyArchitectureStyle } from './types.js';
 import type { ArchitectureEngineSetupOptions, ArchitectureEngineSetupResult } from './types.js';
 
@@ -15,7 +15,7 @@ const LEGACY_MODULE_PATHS: Record<LegacyArchitectureStyle, string> = {
 };
 
 /**
- * Delegates monolith / monorepo / polyrepo to @mycli/architecture-manager for backward compatibility.
+ * Delegates monolith / monorepo / polyrepo to @mycli-cli/architecture-manager for backward compatibility.
  */
 export async function setupLegacyArchitecture(
   options: ArchitectureEngineSetupOptions & { style: LegacyArchitectureStyle },

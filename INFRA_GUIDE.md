@@ -82,18 +82,18 @@ Cloud providers (`aws`, `gcp`, `azure`) route through Terraform generation.
 
 ## Official plugins
 
-- `@mycli/docker` — Docker scaffolding via plugin install
-- `@mycli/kubernetes` — K8s + Helm via plugin install
-- `@mycli/aws` — AWS Terraform via plugin install
-- `@mycli/azure` — Azure Terraform via plugin install
-- `@mycli/gcp` — GCP Terraform via plugin install
+- `@mycli-cli/docker` — Docker scaffolding via plugin install
+- `@mycli-cli/kubernetes` — K8s + Helm via plugin install
+- `@mycli-cli/aws` — AWS Terraform via plugin install
+- `@mycli-cli/azure` — Azure Terraform via plugin install
+- `@mycli-cli/gcp` — GCP Terraform via plugin install
 
 ## Managers
 
 | Package | Responsibility |
 |---------|----------------|
-| `@mycli/docker-manager` | Dockerfile, Compose, nginx |
-| `@mycli/kubernetes-manager` | K8s manifests, Helm charts |
-| `@mycli/deployment-manager` | Terraform (AWS/GCP/Azure), PaaS configs |
+| `@mycli-cli/docker-manager` | Dockerfile, Compose, nginx |
+| `@mycli-cli/kubernetes-manager` | K8s manifests, Helm charts |
+| `@mycli-cli/deployment-manager` | Terraform (AWS/GCP/Azure), PaaS configs |
 
 All managers use EJS templates from `apps/cli/templates/features/`.

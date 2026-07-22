@@ -1,5 +1,5 @@
 {
-  "name": "@mycli/ai-manager",
+  "name": "@mycli-cli/ai-manager",
   "version": "1.0.0",
   "description": "MyCLI ai-manager — AI-assisted code generation scaffolding",
   "type": "module",
@@ -24,9 +24,9 @@
   },
   "engines": { "node": ">=22.0.0" },
   "dependencies": {
-    "@mycli/core": "workspace:*",
-    "@mycli/filesystem": "workspace:*",
-    "@mycli/template-engine": "workspace:*"
+    "@mycli-cli/core": "workspace:*",
+    "@mycli-cli/filesystem": "workspace:*",
+    "@mycli-cli/template-engine": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.7.3",

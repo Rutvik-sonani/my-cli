@@ -1,7 +1,7 @@
-import type { ConfigManager } from '@mycli/config-manager';
-import type { ApplicationContext } from '@mycli/core';
-import type { FileSystem } from '@mycli/filesystem';
-import type { TemplateEngine } from '@mycli/template-engine';
+import type { ConfigManager } from '@mycli-cli/config-manager';
+import type { ApplicationContext } from '@mycli-cli/core';
+import type { FileSystem } from '@mycli-cli/filesystem';
+import type { TemplateEngine } from '@mycli-cli/template-engine';
 
 export type GeneratedFileAction = 'create' | 'update' | 'skip';
 

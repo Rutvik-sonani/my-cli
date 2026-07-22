@@ -1,10 +1,10 @@
-import { createDatabaseManager } from '@mycli/database-manager';
-import { createFileSystem } from '@mycli/filesystem';
-import { definePlugin } from '@mycli/plugin-system';
-import { resolveFeatureTemplatesRoot } from '@mycli/template-engine';
+import { createDatabaseManager } from '@mycli-cli/database-manager';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { definePlugin } from '@mycli-cli/plugin-system';
+import { resolveFeatureTemplatesRoot } from '@mycli-cli/template-engine';
 
 export default definePlugin({
-  name: '@mycli/prisma',
+  name: '@mycli-cli/prisma',
   version: '1.0.0',
   description: 'Prisma ORM integration',
   async install(ctx) {

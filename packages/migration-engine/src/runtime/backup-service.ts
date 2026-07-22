@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { join } from 'node:path';
-import type { UpgradeBackupManifest } from '@mycli/enterprise-core';
-import type { FileSystem } from '@mycli/filesystem';
+import type { UpgradeBackupManifest } from '@mycli-cli/enterprise-core';
+import type { FileSystem } from '@mycli-cli/filesystem';
 import { BACKUP_ROOT, DEFAULT_BACKUP_TARGETS } from '../config.js';
 
 /**

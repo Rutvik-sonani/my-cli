@@ -1,9 +1,9 @@
 import { cp, mkdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { PluginError } from '@mycli/core';
-import { createFileSystem } from '@mycli/filesystem';
-import type { PluginManager } from '@mycli/plugin-system';
-import type { RegistryEntry, RegistryManager } from '@mycli/registry-manager';
+import { PluginError } from '@mycli-cli/core';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import type { PluginManager } from '@mycli-cli/plugin-system';
+import type { RegistryEntry, RegistryManager } from '@mycli-cli/registry-manager';
 import { execa } from 'execa';
 import type {
   MarketplaceInstallOptions,

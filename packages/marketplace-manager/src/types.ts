@@ -1,4 +1,4 @@
-import type { RegistryEntry } from '@mycli/registry-manager';
+import type { RegistryEntry } from '@mycli-cli/registry-manager';
 
 export interface MarketplaceInstallOptions {
   name: string;

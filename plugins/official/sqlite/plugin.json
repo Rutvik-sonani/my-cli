@@ -1,11 +1,11 @@
 {
-  "name": "@mycli/sqlite",
+  "name": "@mycli-cli/sqlite",
   "version": "1.0.0",
   "description": "Official MyCLI sqlite plugin",
   "main": "dist/index.js",
   "compatibility": ">=1.0.0",
   "author": "MyCLI",
   "slug": "sqlite",
-  "npmPackage": "@mycli/plugin-sqlite",
+  "npmPackage": "@mycli-cli/plugin-sqlite",
   "keywords": ["sqlite", "mycli", "database"]
 }

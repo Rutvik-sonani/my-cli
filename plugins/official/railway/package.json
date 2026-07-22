@@ -1,5 +1,5 @@
 {
-  "name": "@mycli/plugin-railway",
+  "name": "@mycli-cli/plugin-railway",
   "version": "1.0.0",
   "description": "Official MyCLI Railway deployment plugin",
   "type": "module",
@@ -14,11 +14,11 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@mycli/plugin-system": "workspace:*",
-    "@mycli/deployment-manager": "workspace:*",
-    "@mycli/cloud-manager": "workspace:*",
-    "@mycli/filesystem": "workspace:*",
-    "@mycli/template-engine": "workspace:*"
+    "@mycli-cli/plugin-system": "workspace:*",
+    "@mycli-cli/deployment-manager": "workspace:*",
+    "@mycli-cli/cloud-manager": "workspace:*",
+    "@mycli-cli/filesystem": "workspace:*",
+    "@mycli-cli/template-engine": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.7.3",

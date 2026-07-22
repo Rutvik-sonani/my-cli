@@ -1,4 +1,4 @@
-# @mycli/release-manager
+# @mycli-cli/release-manager
 
 MyCLI release-manager package. See ARCHITECTURE.md for system design.
 

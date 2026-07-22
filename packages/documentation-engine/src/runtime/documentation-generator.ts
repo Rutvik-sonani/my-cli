@@ -4,9 +4,9 @@ import type {
   DocumentationGenerateReport,
   DocumentationGenerateResultItem,
   DocumentationKind,
-} from '@mycli/enterprise-core';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
-import { type TemplateEngine, createTemplateEngine } from '@mycli/template-engine';
+} from '@mycli-cli/enterprise-core';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
+import { type TemplateEngine, createTemplateEngine } from '@mycli-cli/template-engine';
 import { listDocumentationDocuments, templatePathForKind } from '../config.js';
 
 export interface DocumentationContext {

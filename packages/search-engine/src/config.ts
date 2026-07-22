@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import type { SearchProviderId } from '@mycli/enterprise-core';
+import type { SearchProviderId } from '@mycli-cli/enterprise-core';
 
 export interface SearchPathConfig {
   search?: string;

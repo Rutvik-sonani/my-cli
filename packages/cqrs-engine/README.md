@@ -1,4 +1,4 @@
-# @mycli/cqrs-engine
+# @mycli-cli/cqrs-engine
 
 CQRS scaffolding and runtime buses for MyCLI (Phase 3).
 

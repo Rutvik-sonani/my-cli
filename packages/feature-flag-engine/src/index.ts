@@ -24,4 +24,4 @@ export {
   evaluateDefinition,
   percentageBucket,
 } from './runtime/feature-flag-service.js';
-export type { FeatureFlagProviderId } from '@mycli/enterprise-core';
+export type { FeatureFlagProviderId } from '@mycli-cli/enterprise-core';

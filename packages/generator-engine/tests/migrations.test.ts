@@ -1,9 +1,9 @@
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { createConfigManager } from '@mycli/config-manager';
-import { ApplicationContext } from '@mycli/core';
-import { createFileSystem } from '@mycli/filesystem';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import { ApplicationContext } from '@mycli-cli/core';
+import { createFileSystem } from '@mycli-cli/filesystem';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
   applyMigrationPlan,

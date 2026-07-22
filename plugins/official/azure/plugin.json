@@ -1,11 +1,11 @@
 {
-  "name": "@mycli/azure",
+  "name": "@mycli-cli/azure",
   "version": "1.0.0",
   "description": "Official MyCLI azure plugin",
   "main": "dist/index.js",
   "compatibility": ">=1.0.0",
   "author": "MyCLI",
   "slug": "azure",
-  "npmPackage": "@mycli/plugin-azure",
+  "npmPackage": "@mycli-cli/plugin-azure",
   "keywords": ["azure", "mycli"]
 }

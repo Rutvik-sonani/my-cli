@@ -1,5 +1,5 @@
 /**
- * @mycli/core
+ * @mycli-cli/core
  *
  * Application context, dependency injection, events, logging, and error handling.
  * All other MyCLI packages depend on this foundation.

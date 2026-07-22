@@ -1,4 +1,4 @@
-# @mycli/search-engine
+# @mycli-cli/search-engine
 
 Enterprise search platform for MyCLI (Phase 13).
 

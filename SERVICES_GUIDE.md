@@ -57,6 +57,6 @@ Configure `STRIPE_WEBHOOK_SECRET` in `.env`.
 
 | Package | Responsibility |
 |---------|----------------|
-| `@mycli/services-manager` | Cache, queue, events, mail, storage, payment scaffolding |
+| `@mycli-cli/services-manager` | Cache, queue, events, mail, storage, payment scaffolding |
 
 Templates live in `apps/cli/templates/features/services/`.

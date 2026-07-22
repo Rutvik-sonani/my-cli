@@ -7,12 +7,12 @@ MyCLI includes a plugin marketplace for discovering, installing, and publishing 
 ```bash
 my plugin search docker          # Search local registry
 my plugin search mycli --registry npm   # Search npm registry
-my plugin install @mycli/docker  # Install from marketplace
-my plugin install @mycli/docker --from npm --dry-run  # Plan npm install
-my plugin create @mycli/plugin-billing  # Scaffold with Plugin SDK
+my plugin install @mycli-cli/docker  # Install from marketplace
+my plugin install @mycli-cli/docker --from npm --dry-run  # Plan npm install
+my plugin create @mycli-cli/plugin-billing  # Scaffold with Plugin SDK
 my plugin list                     # List loaded plugins
-my plugin update @mycli/docker     # Reinstall latest
-my plugin remove @mycli/docker     # Uninstall
+my plugin update @mycli-cli/docker     # Reinstall latest
+my plugin remove @mycli-cli/docker     # Uninstall
 my plugin publish ./my-plugin    # Publish to community registry
 my plugin publish ./my-plugin --npm  # Include npm publish plan
 ```
@@ -24,7 +24,7 @@ The local catalog lives at **`plugins/plugins.json`** at the monorepo root (or b
 ```
 plugins/
   plugins.json       ← RegistryManager catalogPath (default: join(repoRoot, 'plugins', 'plugins.json'))
-  official/<slug>/   ← source for @mycli/* plugins
+  official/<slug>/   ← source for @mycli-cli/* plugins
   community/<slug>/  ← my plugin publish destination
 ```
 
@@ -32,9 +32,9 @@ Each entry includes:
 
 | Field | Purpose |
 |-------|---------|
-| `name` | Plugin identifier (`@mycli/docker`) |
+| `name` | Plugin identifier (`@mycli-cli/docker`) |
 | `slug` | Directory name (`docker`) |
-| `npmPackage` | npm package name (`@mycli/plugin-docker`) |
+| `npmPackage` | npm package name (`@mycli-cli/plugin-docker`) |
 | `version` | Semver |
 | `compatibility` | Minimum CLI version |
 | `downloads` | Popularity ranking |
@@ -50,7 +50,7 @@ Each entry includes:
 
 ## npm marketplace (Phase 14)
 
-- `my plugin search <query> --registry npm|all` queries registry.npmjs.org for `@mycli/*` packages
+- `my plugin search <query> --registry npm|all` queries registry.npmjs.org for `@mycli-cli/*` packages
 - `my plugin install <name> --from npm` installs via npm into `plugins/installed/<slug>/`
 - `my plugin publish <dir> --npm` prints npm publish commands alongside catalog update
 
@@ -75,9 +75,9 @@ my plugin publish ./packages/my-plugin
 
 | Package | Responsibility |
 |---------|----------------|
-| `@mycli/registry-manager` | Catalog load, search, get, publish, path resolution |
-| `@mycli/marketplace-manager` | Install, update, uninstall, publish orchestration |
-| `@mycli/plugin-system` | Plugin lifecycle, load, hooks, commands |
+| `@mycli-cli/registry-manager` | Catalog load, search, get, publish, path resolution |
+| `@mycli-cli/marketplace-manager` | Install, update, uninstall, publish orchestration |
+| `@mycli-cli/plugin-system` | Plugin lifecycle, load, hooks, commands |
 
 ## Authoring plugins
 

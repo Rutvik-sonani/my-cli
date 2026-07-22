@@ -16,7 +16,7 @@ plugin-stripe/
 
 ```json
 {
-  "name": "@mycli/plugin-stripe",
+  "name": "@mycli-cli/plugin-stripe",
   "version": "1.0.0",
   "description": "Stripe payments",
   "main": "dist/index.js",
@@ -27,10 +27,10 @@ plugin-stripe/
 ## Implementing a plugin
 
 ```ts
-import { definePlugin } from '@mycli/plugin-system';
+import { definePlugin } from '@mycli-cli/plugin-system';
 
 export default definePlugin({
-  name: '@mycli/plugin-stripe',
+  name: '@mycli-cli/plugin-stripe',
   version: '1.0.0',
   async install(ctx) {
     // generate files, update config
@@ -57,14 +57,14 @@ export default definePlugin({
 
 ```bash
 my plugin search stripe
-my plugin install @mycli/plugin-stripe
+my plugin install @mycli-cli/plugin-stripe
 my plugin list
-my plugin update @mycli/docker
-my plugin remove @mycli/plugin-stripe
+my plugin update @mycli-cli/docker
+my plugin remove @mycli-cli/plugin-stripe
 my plugin publish ./my-plugin --dry-run
-my plugin create @mycli/plugin-billing
+my plugin create @mycli-cli/plugin-billing
 my plugin search mycli --registry npm
-my plugin install @mycli/docker --from npm
+my plugin install @mycli-cli/docker --from npm
 my add ai
 my ai generate module user --dry-run
 ```
@@ -77,7 +77,7 @@ The **local marketplace catalog** is a JSON file at the repository root:
 mycli/
   plugins/
     plugins.json          ← catalog (name, slug, version, compatibility, downloads)
-    official/             ← first-party plugins (@mycli/*)
+    official/             ← first-party plugins (@mycli-cli/*)
     community/            ← published community plugins
     installed/            ← per-project installs (generated projects)
 ```
@@ -87,12 +87,12 @@ mycli/
 | Monorepo development | `<repoRoot>/plugins/plugins.json` |
 | CLI runtime (bundled) | Resolved via `apps/cli` paths helper alongside copied templates |
 
-`@mycli/registry-manager` loads and searches this catalog. `@mycli/marketplace-manager` orchestrates install/publish and updates the catalog on `my plugin publish`.
+`@mycli-cli/registry-manager` loads and searches this catalog. `@mycli-cli/marketplace-manager` orchestrates install/publish and updates the catalog on `my plugin publish`.
 
 See [MARKETPLACE_GUIDE.md](./MARKETPLACE_GUIDE.md) for the full Phase 7 marketplace reference.
 
 ## Official categories
 
-`@mycli/auth`, `@mycli/rbac`, `@mycli/docker`, `@mycli/prisma`, `@mycli/postgres`, `@mycli/mysql`, `@mycli/mongodb`, `@mycli/mariadb`, `@mycli/sqlite`, `@mycli/redis`, `@mycli/sqlserver`, `@mycli/cockroachdb`, `@mycli/swagger`, `@mycli/kubernetes`, `@mycli/aws`, `@mycli/azure`, `@mycli/gcp`, `@mycli/github`, `@mycli/railway`, `@mycli/fly`, `@mycli/ai`
+`@mycli-cli/auth`, `@mycli-cli/rbac`, `@mycli-cli/docker`, `@mycli-cli/prisma`, `@mycli-cli/postgres`, `@mycli-cli/mysql`, `@mycli-cli/mongodb`, `@mycli-cli/mariadb`, `@mycli-cli/sqlite`, `@mycli-cli/redis`, `@mycli-cli/sqlserver`, `@mycli-cli/cockroachdb`, `@mycli-cli/swagger`, `@mycli-cli/kubernetes`, `@mycli-cli/aws`, `@mycli-cli/azure`, `@mycli-cli/gcp`, `@mycli-cli/github`, `@mycli-cli/railway`, `@mycli-cli/fly`, `@mycli-cli/ai`
 
 Community example: `@community/hello-mycli` in `plugins/community/hello-mycli/`.

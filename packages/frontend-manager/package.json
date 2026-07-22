@@ -1,5 +1,5 @@
 {
-  "name": "@mycli/frontend-manager",
+  "name": "@mycli-cli/frontend-manager",
   "version": "1.0.0",
   "description": "MyCLI frontend-manager package",
   "type": "module",
@@ -28,9 +28,9 @@
     "node": ">=22.0.0"
   },
   "dependencies": {
-    "@mycli/core": "workspace:*",
-    "@mycli/filesystem": "workspace:*",
-    "@mycli/template-engine": "workspace:*"
+    "@mycli-cli/core": "workspace:*",
+    "@mycli-cli/filesystem": "workspace:*",
+    "@mycli-cli/template-engine": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.7.3",

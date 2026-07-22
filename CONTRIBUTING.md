@@ -43,7 +43,7 @@ Every package under `packages/` should have a `README.md` describing CLI command
 
 ## Templates
 
-Never generate files with string concatenation in generators. Add an `.ejs` template under `apps/cli/templates/` (or a plugin template directory) and render via `@mycli/template-engine`.
+Never generate files with string concatenation in generators. Add an `.ejs` template under `apps/cli/templates/` (or a plugin template directory) and render via `@mycli-cli/template-engine`.
 
 ## Plugins
 

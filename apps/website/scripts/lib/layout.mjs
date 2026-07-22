@@ -51,7 +51,7 @@ export function homeBody() {
 <p>${SITE_TAGLINE}</p>
 <p>Generate production-ready applications, infrastructure, and workflows with a single CLI.</p>
 </section>
-<pre><code>npm i -g @mycli/cli
+<pre><code>npm i -g @mycli-cli/cli
 my create my-app --yes
 my make module user
 my add auth</code></pre>

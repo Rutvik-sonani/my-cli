@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import type { HealthCategory } from '@mycli/enterprise-core';
+import type { HealthCategory } from '@mycli-cli/enterprise-core';
 
 export interface ProjectHealthPathConfig {
   projectHealth?: string;

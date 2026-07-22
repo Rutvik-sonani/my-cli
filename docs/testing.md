@@ -8,7 +8,7 @@ Packages and the CLI use **Vitest** (`vitest run`). Prefer package-local `tests/
 
 ```bash
 pnpm test                 # workspace tests (as configured)
-pnpm --filter @mycli/cli test
+pnpm --filter @mycli-cli/cli test
 ```
 
 ## Generated-app E2E (Node script)

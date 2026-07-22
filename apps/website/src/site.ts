@@ -19,7 +19,7 @@ export const PAGES: SitePage[] = [
     body: `
       <p>${SITE_TAGLINE}</p>
       <p>Generate production-ready applications, infrastructure, and workflows with a single CLI.</p>
-      <pre><code>npm i -g @mycli/cli
+      <pre><code>npm i -g @mycli-cli/cli
 my create
 my make module user
 my add auth</code></pre>

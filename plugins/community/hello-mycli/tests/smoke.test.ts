@@ -1,10 +1,10 @@
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { createConfigManager } from '@mycli/config-manager';
-import { ApplicationContext } from '@mycli/core';
-import { createFileSystem } from '@mycli/filesystem';
-import { createPluginManager } from '@mycli/plugin-system';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import { ApplicationContext } from '@mycli-cli/core';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { createPluginManager } from '@mycli-cli/plugin-system';
 import { afterEach, describe, expect, it } from 'vitest';
 
 const PLUGIN_PATH = join(import.meta.dirname, '..');

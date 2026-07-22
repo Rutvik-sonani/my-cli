@@ -1,4 +1,4 @@
-import type { TenancyStrategy } from '@mycli/enterprise-core';
+import type { TenancyStrategy } from '@mycli-cli/enterprise-core';
 
 /** Map tenant id to a safe PostgreSQL schema name. */
 export function resolveTenantSchema(

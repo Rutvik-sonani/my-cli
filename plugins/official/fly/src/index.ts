@@ -1,11 +1,11 @@
-import { createCloudManager } from '@mycli/cloud-manager';
-import { createDeploymentManager } from '@mycli/deployment-manager';
-import { createFileSystem } from '@mycli/filesystem';
-import { definePlugin } from '@mycli/plugin-system';
-import { resolveFeatureTemplatesRoot } from '@mycli/template-engine';
+import { createCloudManager } from '@mycli-cli/cloud-manager';
+import { createDeploymentManager } from '@mycli-cli/deployment-manager';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { definePlugin } from '@mycli-cli/plugin-system';
+import { resolveFeatureTemplatesRoot } from '@mycli-cli/template-engine';
 
 export default definePlugin({
-  name: '@mycli/fly',
+  name: '@mycli-cli/fly',
   version: '1.0.0',
   description: 'Fly.io cloud deployment',
   async install(ctx) {
@@ -24,7 +24,7 @@ export default definePlugin({
     return [
       {
         name: 'fly',
-        description: 'Fly.io deployment (provided by @mycli/fly)',
+        description: 'Fly.io deployment (provided by @mycli-cli/fly)',
         async handler(commandCtx) {
           commandCtx.app.logger.info('Use `my deploy setup --provider fly` or `my deploy push`');
         },

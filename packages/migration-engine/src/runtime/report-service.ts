@@ -1,5 +1,5 @@
-import type { UpgradeReport } from '@mycli/enterprise-core';
-import type { FileSystem } from '@mycli/filesystem';
+import type { UpgradeReport } from '@mycli-cli/enterprise-core';
+import type { FileSystem } from '@mycli-cli/filesystem';
 import { UPGRADE_REPORT_FILE } from '../config.js';
 
 /**

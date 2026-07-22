@@ -1,7 +1,7 @@
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { createFileSystem } from '@mycli/filesystem';
+import { createFileSystem } from '@mycli-cli/filesystem';
 import { describe, expect, it } from 'vitest';
 import { createTemplateEngine } from '../src/index.js';
 

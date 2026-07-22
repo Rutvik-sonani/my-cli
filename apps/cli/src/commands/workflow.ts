@@ -1,7 +1,7 @@
-import type { CliEngine } from '@mycli/cli-engine';
-import { defineCommand } from '@mycli/command-engine';
-import { createDependencyManager } from '@mycli/dependency-manager';
-import { createFileSystem } from '@mycli/filesystem';
+import type { CliEngine } from '@mycli-cli/cli-engine';
+import { defineCommand } from '@mycli-cli/command-engine';
+import { createDependencyManager } from '@mycli-cli/dependency-manager';
+import { createFileSystem } from '@mycli-cli/filesystem';
 
 type PackageManager = 'npm' | 'pnpm' | 'yarn' | 'bun';
 

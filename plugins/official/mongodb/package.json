@@ -1,5 +1,5 @@
 {
-  "name": "@mycli/plugin-mongodb",
+  "name": "@mycli-cli/plugin-mongodb",
   "version": "1.0.0",
   "description": "Official MyCLI MongoDB database plugin",
   "type": "module",
@@ -14,10 +14,10 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@mycli/plugin-system": "workspace:*",
-    "@mycli/database-manager": "workspace:*",
-    "@mycli/filesystem": "workspace:*",
-    "@mycli/template-engine": "workspace:*"
+    "@mycli-cli/plugin-system": "workspace:*",
+    "@mycli-cli/database-manager": "workspace:*",
+    "@mycli-cli/filesystem": "workspace:*",
+    "@mycli-cli/template-engine": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.7.3",

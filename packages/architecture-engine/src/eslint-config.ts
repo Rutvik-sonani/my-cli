@@ -1,4 +1,4 @@
-import type { ArchitectureDependencyRulesFile, DependencyRule } from '@mycli/enterprise-core';
+import type { ArchitectureDependencyRulesFile, DependencyRule } from '@mycli-cli/enterprise-core';
 
 export interface EslintArchitectureConfig {
   filename: string;

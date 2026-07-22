@@ -1,6 +1,6 @@
-import { MyCliError } from '@mycli/core';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
-import { createTemplateEngine } from '@mycli/template-engine';
+import { MyCliError } from '@mycli-cli/core';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
+import { createTemplateEngine } from '@mycli-cli/template-engine';
 import { execa } from 'execa';
 import {
   COMMUNITY_FILES,

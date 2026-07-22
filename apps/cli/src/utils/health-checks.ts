@@ -1,5 +1,5 @@
 import { connect } from 'node:net';
-import { createDependencyManager } from '@mycli/dependency-manager';
+import { createDependencyManager } from '@mycli-cli/dependency-manager';
 import { execa } from 'execa';
 
 export interface DatabasePingResult {

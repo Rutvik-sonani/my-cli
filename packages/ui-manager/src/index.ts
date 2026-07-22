@@ -1,7 +1,7 @@
-import { DependencyError } from '@mycli/core';
-import { type DependencyManager, createDependencyManager } from '@mycli/dependency-manager';
-import { type FileSystem, createFileSystem } from '@mycli/filesystem';
-import { type TemplateEngine, createTemplateEngine } from '@mycli/template-engine';
+import { DependencyError } from '@mycli-cli/core';
+import { type DependencyManager, createDependencyManager } from '@mycli-cli/dependency-manager';
+import { type FileSystem, createFileSystem } from '@mycli-cli/filesystem';
+import { type TemplateEngine, createTemplateEngine } from '@mycli-cli/template-engine';
 import { execa } from 'execa';
 
 export type UiLibrary = 'mui' | 'shadcn' | 'antd' | 'chakra' | 'mantine' | 'tailwind' | 'other';

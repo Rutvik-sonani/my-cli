@@ -1,4 +1,4 @@
-# @mycli/platform-manager
+# @mycli-cli/platform-manager
 
 Generates platform modules: observability, security, tenancy, feature-flags, and search.
 

@@ -1,30 +1,30 @@
 import { join } from 'node:path';
-import { createApiManager } from '@mycli/api-manager';
-import { createArchitectureEngine } from '@mycli/architecture-engine';
-import { createAuthManager } from '@mycli/auth-manager';
-import { createCicdManager } from '@mycli/cicd-manager';
-import type { CliEngine } from '@mycli/cli-engine';
-import { defineCommand } from '@mycli/command-engine';
-import { createDatabaseManager } from '@mycli/database-manager';
-import type { DatabaseEngine, OrmEngine } from '@mycli/database-manager';
-import { createDependencyManager } from '@mycli/dependency-manager';
-import { createDockerManager } from '@mycli/docker-manager';
-import { createFileSystem } from '@mycli/filesystem';
-import { createFrontendManager } from '@mycli/frontend-manager';
+import { createApiManager } from '@mycli-cli/api-manager';
+import { createArchitectureEngine } from '@mycli-cli/architecture-engine';
+import { createAuthManager } from '@mycli-cli/auth-manager';
+import { createCicdManager } from '@mycli-cli/cicd-manager';
+import type { CliEngine } from '@mycli-cli/cli-engine';
+import { defineCommand } from '@mycli-cli/command-engine';
+import { createDatabaseManager } from '@mycli-cli/database-manager';
+import type { DatabaseEngine, OrmEngine } from '@mycli-cli/database-manager';
+import { createDependencyManager } from '@mycli-cli/dependency-manager';
+import { createDockerManager } from '@mycli-cli/docker-manager';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { createFrontendManager } from '@mycli-cli/frontend-manager';
 import {
   type BranchStrategy,
   type CommitConvention,
   type GitProvider,
   createGitManager,
-} from '@mycli/git-manager';
-import { createGithubManager } from '@mycli/github-manager';
-import { createIdeManager } from '@mycli/ide-manager';
-import { createRbacManager } from '@mycli/rbac-manager';
-import { type VersionStrategy, createReleaseManager } from '@mycli/release-manager';
-import { createTelemetryManager } from '@mycli/telemetry-manager';
-import { createTemplateEngine } from '@mycli/template-engine';
-import { createTestingManager } from '@mycli/testing-manager';
-import { createUiManager } from '@mycli/ui-manager';
+} from '@mycli-cli/git-manager';
+import { createGithubManager } from '@mycli-cli/github-manager';
+import { createIdeManager } from '@mycli-cli/ide-manager';
+import { createRbacManager } from '@mycli-cli/rbac-manager';
+import { type VersionStrategy, createReleaseManager } from '@mycli-cli/release-manager';
+import { createTelemetryManager } from '@mycli-cli/telemetry-manager';
+import { createTemplateEngine } from '@mycli-cli/template-engine';
+import { createTestingManager } from '@mycli-cli/testing-manager';
+import { createUiManager } from '@mycli-cli/ui-manager';
 import pc from 'picocolors';
 import { resolveTemplatesRoot } from '../paths.js';
 import { wireDatabasePlugin } from '../utils/database.js';

@@ -2,10 +2,10 @@ import { readFile } from 'node:fs/promises';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { createConfigManager } from '@mycli/config-manager';
-import { ApplicationContext } from '@mycli/core';
-import { createFileSystem } from '@mycli/filesystem';
-import { createPluginManager } from '@mycli/plugin-system';
+import { createConfigManager } from '@mycli-cli/config-manager';
+import { ApplicationContext } from '@mycli-cli/core';
+import { createFileSystem } from '@mycli-cli/filesystem';
+import { createPluginManager } from '@mycli-cli/plugin-system';
 import { afterEach, describe, expect, it } from 'vitest';
 import { scaffoldProject } from './helpers.js';
 
@@ -36,27 +36,27 @@ const OFFICIAL_SLUGS = [
 ] as const;
 
 const PLUGIN_NAMES: Record<(typeof OFFICIAL_SLUGS)[number], string> = {
-  ai: '@mycli/ai',
-  auth: '@mycli/auth',
-  aws: '@mycli/aws',
-  azure: '@mycli/azure',
-  cockroachdb: '@mycli/cockroachdb',
-  docker: '@mycli/docker',
-  fly: '@mycli/fly',
-  gcp: '@mycli/gcp',
-  github: '@mycli/github',
-  kubernetes: '@mycli/kubernetes',
-  mariadb: '@mycli/mariadb',
-  mongodb: '@mycli/mongodb',
-  mysql: '@mycli/mysql',
-  postgres: '@mycli/postgres',
-  prisma: '@mycli/prisma',
-  railway: '@mycli/railway',
-  rbac: '@mycli/rbac',
-  redis: '@mycli/redis',
-  sqlite: '@mycli/sqlite',
-  sqlserver: '@mycli/sqlserver',
-  swagger: '@mycli/swagger',
+  ai: '@mycli-cli/ai',
+  auth: '@mycli-cli/auth',
+  aws: '@mycli-cli/aws',
+  azure: '@mycli-cli/azure',
+  cockroachdb: '@mycli-cli/cockroachdb',
+  docker: '@mycli-cli/docker',
+  fly: '@mycli-cli/fly',
+  gcp: '@mycli-cli/gcp',
+  github: '@mycli-cli/github',
+  kubernetes: '@mycli-cli/kubernetes',
+  mariadb: '@mycli-cli/mariadb',
+  mongodb: '@mycli-cli/mongodb',
+  mysql: '@mycli-cli/mysql',
+  postgres: '@mycli-cli/postgres',
+  prisma: '@mycli-cli/prisma',
+  railway: '@mycli-cli/railway',
+  rbac: '@mycli-cli/rbac',
+  redis: '@mycli-cli/redis',
+  sqlite: '@mycli-cli/sqlite',
+  sqlserver: '@mycli-cli/sqlserver',
+  swagger: '@mycli-cli/swagger',
 };
 
 describe('official plugins', () => {
@@ -67,7 +67,7 @@ describe('official plugins', () => {
   });
 
   for (const slug of OFFICIAL_SLUGS) {
-    it(`installs @mycli/${slug} from official path`, async () => {
+    it(`installs @mycli-cli/${slug} from official path`, async () => {
       dir = await mkdtemp(join(tmpdir(), `mycli-plugin-${slug}-`));
       await scaffoldProject(dir, slug);
 

@@ -1,6 +1,6 @@
-import type { ConfigManager } from '@mycli/config-manager';
-import type { FileSystem } from '@mycli/filesystem';
-import type { TemplateEngine } from '@mycli/template-engine';
+import type { ConfigManager } from '@mycli-cli/config-manager';
+import type { FileSystem } from '@mycli-cli/filesystem';
+import type { TemplateEngine } from '@mycli-cli/template-engine';
 
 export interface UpgradeContext {
   cwd: string;

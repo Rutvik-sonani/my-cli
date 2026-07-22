@@ -1,5 +1,5 @@
 {
-  "name": "@mycli/architecture-engine",
+  "name": "@mycli-cli/architecture-engine",
   "version": "1.0.0",
   "description": "Enterprise architecture style engine — MVC, Clean, Hexagonal, DDD, and more",
   "type": "module",
@@ -24,11 +24,11 @@
   },
   "engines": { "node": ">=22.0.0" },
   "dependencies": {
-    "@mycli/enterprise-core": "workspace:*",
-    "@mycli/architecture-manager": "workspace:*",
-    "@mycli/core": "workspace:*",
-    "@mycli/filesystem": "workspace:*",
-    "@mycli/template-engine": "workspace:*"
+    "@mycli-cli/enterprise-core": "workspace:*",
+    "@mycli-cli/architecture-manager": "workspace:*",
+    "@mycli-cli/core": "workspace:*",
+    "@mycli-cli/filesystem": "workspace:*",
+    "@mycli-cli/template-engine": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.10.5",
