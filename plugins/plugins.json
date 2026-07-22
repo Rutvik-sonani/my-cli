@@ -30,7 +30,7 @@
       "version": "1.0.0",
       "author": "MyCLI",
       "description": "Docker and Compose generation",
-      "downloads": 2104,
+      "downloads": 2105,
       "compatibility": ">=1.0.0",
       "keywords": ["docker", "containers"]
     },
