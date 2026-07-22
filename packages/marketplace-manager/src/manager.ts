@@ -95,7 +95,7 @@ export class MarketplaceManager {
     entry: RegistryEntry,
     options: MarketplaceInstallOptions,
   ): Promise<MarketplaceInstallResult> {
-    const slug = entry.slug ?? entry.name.replace(/^@mycli\//, '');
+    const slug = entry.slug ?? entry.name.replace(/^@[^/]+\//, '');
     const targetDir = join(this.cwd, 'plugins', 'installed', slug);
     const npmPackage = entry.npmPackage ?? entry.name;
     const commands = this.registry.planNpmInstall(entry, targetDir);
@@ -150,8 +150,7 @@ export class MarketplaceManager {
     }
 
     const manifest = JSON.parse(await readFile(manifestPath, 'utf8')) as RegistryEntry;
-    const slug =
-      manifest.slug ?? manifest.name.replace(/^@mycli\//, '').replace(/^@mycli\/plugin-/, '');
+    const slug = manifest.slug ?? manifest.name.replace(/^@[^/]+\//, '').replace(/^plugin-/, '');
     const communityPath = join(this.repoRoot, 'plugins', 'community', slug);
 
     if (!options.dryRun) {
@@ -189,7 +188,7 @@ export class MarketplaceManager {
     sourcePath: string,
     dryRun?: boolean,
   ): Promise<string> {
-    const slug = entry.slug ?? entry.name.replace(/^@mycli\//, '');
+    const slug = entry.slug ?? entry.name.replace(/^@[^/]+\//, '');
     const targetPath = join(this.cwd, 'plugins', 'installed', slug);
 
     if (sourcePath.startsWith(join(this.cwd, 'plugins', 'installed'))) {

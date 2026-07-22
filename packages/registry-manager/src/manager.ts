@@ -92,7 +92,7 @@ export class RegistryManager {
     return catalog.plugins.find(
       (entry) =>
         entry.name.toLowerCase() === normalized ||
-        entry.slug?.toLowerCase() === normalized.replace(/^@mycli\//, '') ||
+        entry.slug?.toLowerCase() === normalized.replace(/^@[^/]+\//, '') ||
         entry.npmPackage?.toLowerCase() === normalized,
     );
   }
@@ -115,7 +115,7 @@ export class RegistryManager {
   }
 
   resolvePluginPath(entry: RegistryEntry): string | undefined {
-    const slug = entry.slug ?? entry.name.replace(/^@mycli\//, '');
+    const slug = entry.slug ?? entry.name.replace(/^@[^/]+\//, '');
     const candidates = [
       join(this.repoRoot, 'plugins', 'official', slug),
       join(this.repoRoot, 'plugins', 'community', slug),
@@ -157,7 +157,7 @@ export class RegistryManager {
   async resolveFromNpm(name: string): Promise<RegistryEntry | undefined> {
     const npmName = name.startsWith('@')
       ? name
-      : `@mycli-cli/plugin-${name.replace(/^@mycli\//, '')}`;
+      : `@mycli-cli/plugin-${name.replace(/^@[^/]+\//, '')}`;
     const meta = await this.npm.getMetadata(npmName);
     if (!meta) return undefined;
 
@@ -166,7 +166,7 @@ export class RegistryManager {
       npmPackage: meta.name,
       version: meta.version,
       description: meta.description,
-      slug: name.replace(/^@mycli\//, ''),
+      slug: name.replace(/^@[^/]+\//, ''),
       compatibility: '>=1.0.0',
       keywords: meta.keywords,
       downloads: 0,

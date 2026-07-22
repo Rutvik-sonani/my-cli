@@ -103,7 +103,7 @@ export function pluginCommand(engine: CliEngine) {
           if (!name)
             throw new Error('Plugin name is required: my plugin create @mycli-cli/plugin-name');
           const pluginName = normalizePluginName(name);
-          const slug = pluginName.replace(/^@mycli\//, '').replace(/^plugin-/, '');
+          const slug = pluginName.replace(/^@[^/]+\//, '').replace(/^plugin-/, '');
           const outputDir = join(engine.app.cwd, 'plugins', 'community', slug);
           const result = await createPluginScaffold({
             name: pluginName,

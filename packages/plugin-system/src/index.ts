@@ -240,7 +240,7 @@ export class PluginManager {
   }
 
   private async resolvePluginPath(name: string): Promise<string> {
-    const slug = name.replace(/^@mycli\//, '');
+    const slug = name.replace(/^@[^/]+\//, '');
     const candidates = [
       join(this.app.cwd, 'plugins', 'installed', slug),
       join(this.app.cwd, 'plugins', 'official', slug),
