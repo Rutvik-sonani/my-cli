@@ -68,10 +68,16 @@ export class GitManager {
     const branch = options.defaultBranch ?? 'main';
     const initWithBranch = await execa('git', ['init', '-b', branch], { cwd, reject: false });
     if (initWithBranch.exitCode !== 0) {
-      await execa('git', ['init'], { cwd });
+      const initFallback = await execa('git', ['init'], { cwd, reject: false });
+      if (initFallback.exitCode !== 0) {
+        throw new MyCliError(
+          `git init failed: ${initFallback.stderr || initFallback.stdout || 'unknown error'}`,
+          { code: 'GIT_ERROR' },
+        );
+      }
       const checkout = await execa('git', ['checkout', '-b', branch], { cwd, reject: false });
       if (checkout.exitCode !== 0) {
-        await execa('git', ['branch', '-M', branch], { cwd });
+        await execa('git', ['branch', '-M', branch], { cwd, reject: false });
       }
     }
     await this.ensureLocalIdentity(cwd);

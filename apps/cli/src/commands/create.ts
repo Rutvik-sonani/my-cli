@@ -912,15 +912,123 @@ export function createCommand(engine: CliEngine) {
           });
           checklist.push({ label: 'Release Automation Configured', ok: true });
 
-          await git.init({ cwd: targetDir, defaultBranch });
-          await git.generateIgnore(
-            [frontend !== 'none' ? 'react' : '', withDocker ? 'docker' : ''].filter(Boolean),
-            targetDir,
-          );
-          await git.generateAttributes(targetDir);
+          try {
+            await git.init({ cwd: targetDir, defaultBranch });
+            await git.generateIgnore(
+              [frontend !== 'none' ? 'react' : '', withDocker ? 'docker' : ''].filter(Boolean),
+              targetDir,
+            );
+            await git.generateAttributes(targetDir);
 
-          if (withCicd) {
-            if (gitProvider === 'github' || gitProvider === 'skip') {
+            if (withCicd) {
+              if (gitProvider === 'github' || gitProvider === 'skip') {
+                const github = createGithubManager({
+                  cwd: targetDir,
+                  filesystem: projectFs,
+                  templatesRoot,
+                });
+                await github.setup({
+                  appName: projectName,
+                  packageManager,
+                  branch: defaultBranch,
+                  includeDeployWorkflow: true,
+                  includeRenovate: true,
+                });
+              } else {
+                const cicdProvider = gitProvider === 'azure-devops' ? 'azure' : gitProvider;
+                const cicd = createCicdManager({
+                  cwd: targetDir,
+                  filesystem: projectFs,
+                  templatesRoot,
+                });
+                await cicd.setup({
+                  provider: cicdProvider,
+                  appName: projectName,
+                  packageManager,
+                  branch: defaultBranch,
+                });
+              }
+              checklist.push({ label: 'CI/CD Configured', ok: true });
+            }
+
+            if (withGitHooks) {
+              const hooks = await git.setupHooks({
+                cwd: targetDir,
+                appName: projectName,
+                templatesRoot,
+                convention: commitConvention,
+                packageManager,
+              });
+              const pkg = await projectFs.readJson<{
+                devDependencies?: Record<string, string>;
+                scripts?: Record<string, string>;
+                config?: Record<string, unknown>;
+              }>('package.json');
+              await projectFs.writeJson('package.json', {
+                ...pkg,
+                devDependencies: { ...pkg.devDependencies, ...hooks.devDependencies },
+                scripts: { ...pkg.scripts, ...hooks.scripts },
+                config: {
+                  ...pkg.config,
+                  commitizen: { path: 'cz-conventional-changelog' },
+                },
+              });
+              if (!ctx.options.skipInstall) {
+                const deps = createDependencyManager({ cwd: targetDir });
+                await deps.install([], { cwd: targetDir, dev: true });
+              }
+              checklist.push({ label: 'Git Hooks Configured', ok: true });
+            }
+
+            try {
+              await git.addAll(targetDir);
+              await git.commit('Initial commit', targetDir);
+              await git.setupBranchStrategy(branchStrategy, targetDir);
+              checklist.push({ label: 'Initial Commit Created', ok: true });
+            } catch {
+              checklist.push({ label: 'Initial Commit Created', ok: false });
+            }
+            checklist.push({ label: 'Git Initialized', ok: true });
+
+            if (gitProvider !== 'skip') {
+              const publishResult = await git.publishToRemote({
+                provider: gitProvider,
+                name: projectName,
+                cwd: targetDir,
+                private: Boolean(ctx.options.gitPrivate),
+                owner: ctx.options.gitOwner as string | undefined,
+                organization: ctx.options.gitOrg as string | undefined,
+                project: ctx.options.gitProject as string | undefined,
+                branch: defaultBranch,
+                commitMessage: 'Initial commit',
+                ensureCommit: false,
+              });
+              checklist.push({
+                label: 'Remote Repository',
+                ok: publishResult.executed || Boolean(publishResult.url),
+              });
+
+              if (
+                gitProvider === 'github' &&
+                Boolean(ctx.options.labels) &&
+                (publishResult.executed || publishResult.pushed)
+              ) {
+                const github = createGithubManager({
+                  cwd: targetDir,
+                  filesystem: projectFs,
+                  templatesRoot,
+                });
+                const labels = await github.createLabels({ cwd: targetDir });
+                checklist.push({
+                  label: 'GitHub Labels',
+                  ok: labels.created > 0 || labels.commands.length > 0,
+                });
+              }
+            }
+          } catch {
+            checklist.push({ label: 'Git Initialized', ok: false });
+            // Still write CI/CD + hooks when git init is blocked (restricted sandboxes).
+            if (withCicd && (gitProvider === 'github' || gitProvider === 'skip')) {
               const github = createGithubManager({
                 cwd: targetDir,
                 filesystem: projectFs,
@@ -933,95 +1041,31 @@ export function createCommand(engine: CliEngine) {
                 includeDeployWorkflow: true,
                 includeRenovate: true,
               });
-            } else {
-              const cicdProvider = gitProvider === 'azure-devops' ? 'azure' : gitProvider;
-              const cicd = createCicdManager({
+              checklist.push({ label: 'CI/CD Configured', ok: true });
+            }
+            if (withGitHooks) {
+              const hooks = await git.setupHooks({
                 cwd: targetDir,
-                filesystem: projectFs,
-                templatesRoot,
-              });
-              await cicd.setup({
-                provider: cicdProvider,
                 appName: projectName,
-                packageManager,
-                branch: defaultBranch,
-              });
-            }
-            checklist.push({ label: 'CI/CD Configured', ok: true });
-          }
-
-          if (withGitHooks) {
-            const hooks = await git.setupHooks({
-              cwd: targetDir,
-              appName: projectName,
-              templatesRoot,
-              convention: commitConvention,
-              packageManager,
-            });
-            const pkg = await projectFs.readJson<{
-              devDependencies?: Record<string, string>;
-              scripts?: Record<string, string>;
-              config?: Record<string, unknown>;
-            }>('package.json');
-            await projectFs.writeJson('package.json', {
-              ...pkg,
-              devDependencies: { ...pkg.devDependencies, ...hooks.devDependencies },
-              scripts: { ...pkg.scripts, ...hooks.scripts },
-              config: {
-                ...pkg.config,
-                commitizen: { path: 'cz-conventional-changelog' },
-              },
-            });
-            if (!ctx.options.skipInstall) {
-              const deps = createDependencyManager({ cwd: targetDir });
-              await deps.install([], { cwd: targetDir, dev: true });
-            }
-            checklist.push({ label: 'Git Hooks Configured', ok: true });
-          }
-
-          await git.addAll(targetDir);
-          try {
-            await git.commit('Initial commit', targetDir);
-            await git.setupBranchStrategy(branchStrategy, targetDir);
-            checklist.push({ label: 'Initial Commit Created', ok: true });
-          } catch {
-            checklist.push({ label: 'Initial Commit Created', ok: false });
-          }
-          checklist.push({ label: 'Git Initialized', ok: true });
-
-          if (gitProvider !== 'skip') {
-            const publishResult = await git.publishToRemote({
-              provider: gitProvider,
-              name: projectName,
-              cwd: targetDir,
-              private: Boolean(ctx.options.gitPrivate),
-              owner: ctx.options.gitOwner as string | undefined,
-              organization: ctx.options.gitOrg as string | undefined,
-              project: ctx.options.gitProject as string | undefined,
-              branch: defaultBranch,
-              commitMessage: 'Initial commit',
-              ensureCommit: false,
-            });
-            checklist.push({
-              label: 'Remote Repository',
-              ok: publishResult.executed || Boolean(publishResult.url),
-            });
-
-            if (
-              gitProvider === 'github' &&
-              Boolean(ctx.options.labels) &&
-              (publishResult.executed || publishResult.pushed)
-            ) {
-              const github = createGithubManager({
-                cwd: targetDir,
-                filesystem: projectFs,
                 templatesRoot,
+                convention: commitConvention,
+                packageManager,
               });
-              const labels = await github.createLabels({ cwd: targetDir });
-              checklist.push({
-                label: 'GitHub Labels',
-                ok: labels.created > 0 || labels.commands.length > 0,
+              const pkg = await projectFs.readJson<{
+                devDependencies?: Record<string, string>;
+                scripts?: Record<string, string>;
+                config?: Record<string, unknown>;
+              }>('package.json');
+              await projectFs.writeJson('package.json', {
+                ...pkg,
+                devDependencies: { ...pkg.devDependencies, ...hooks.devDependencies },
+                scripts: { ...pkg.scripts, ...hooks.scripts },
+                config: {
+                  ...pkg.config,
+                  commitizen: { path: 'cz-conventional-changelog' },
+                },
               });
+              checklist.push({ label: 'Git Hooks Configured', ok: true });
             }
           }
         }
