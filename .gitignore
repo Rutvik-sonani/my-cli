@@ -35,11 +35,6 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Changesets
-.changeset/*.md
-!.changeset/README.md
-!.changeset/config.json
-
 # Generated
 *.local
 .cache/
