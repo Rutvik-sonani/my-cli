@@ -1,0 +1,8 @@
+-- Example migration: add tenant_id to shared tables (shared-db strategy)
+-- Apply to each tenant-scoped table in your schema.
+
+ALTER TABLE IF EXISTS orders ADD COLUMN IF NOT EXISTS tenant_id TEXT NOT NULL DEFAULT 'default';
+CREATE INDEX IF NOT EXISTS idx_orders_tenant_id ON orders (tenant_id);
+
+ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS tenant_id TEXT NOT NULL DEFAULT 'default';
+CREATE INDEX IF NOT EXISTS idx_users_tenant_id ON users (tenant_id);

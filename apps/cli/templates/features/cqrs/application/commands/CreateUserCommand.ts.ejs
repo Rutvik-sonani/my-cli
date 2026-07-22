@@ -1,0 +1,17 @@
+<% if (language === 'javascript') { %>
+export class CreateUserCommand {
+  static type = 'user.create';
+
+  constructor(email) {
+    this.type = CreateUserCommand.type;
+    this.email = email;
+  }
+}
+<% } else { %>
+export class CreateUserCommand {
+  static readonly type = 'user.create' as const;
+  readonly type = CreateUserCommand.type;
+
+  constructor(public readonly email: string) {}
+}
+<% } %>

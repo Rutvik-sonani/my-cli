@@ -1,0 +1,17 @@
+<% if (language === 'javascript') { %>
+import { OrganizationPlatform } from './organization.platform.js';
+
+export const organizationPlatform = new OrganizationPlatform();
+
+export function registerOrganization() {
+  return organizationPlatform;
+}
+<% } else { %>
+import { OrganizationPlatform } from './organization.platform.js';
+
+export const organizationPlatform = new OrganizationPlatform();
+
+export function registerOrganization(): OrganizationPlatform {
+  return organizationPlatform;
+}
+<% } %>

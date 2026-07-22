@@ -1,0 +1,147 @@
+import {
+  Facebook,
+  GitHub,
+  Google,
+  generateCodeVerifier,
+  generateState,
+  type OAuth2Tokens,
+} from 'arctic';
+import { OAuthStateStore } from './oauth-state.store.js';
+
+export type OAuthProvider = 'google' | 'github' | 'facebook';
+
+export interface OAuthUserProfile {
+  provider: OAuthProvider;
+  providerUserId: string;
+  email: string;
+  name?: string;
+}
+
+export class OAuthService {
+  private readonly states = new OAuthStateStore();
+  private readonly appUrl = process.env.APP_URL ?? 'http://localhost:3000';
+
+  private client(provider: OAuthProvider) {
+    const redirectUri =
+      process.env[`${provider.toUpperCase()}_REDIRECT_URI`] ??
+      `${this.appUrl}/auth/${provider}/callback`;
+    const clientId = process.env[`${provider.toUpperCase()}_CLIENT_ID`];
+    const clientSecret = process.env[`${provider.toUpperCase()}_CLIENT_SECRET`];
+    if (!clientId || !clientSecret) {
+      throw Object.assign(new Error(`OAuth not configured for ${provider}`), { status: 503 });
+    }
+    switch (provider) {
+      case 'google':
+        return new Google(clientId, clientSecret, redirectUri);
+      case 'github':
+        return new GitHub(clientId, clientSecret, redirectUri);
+      case 'facebook':
+        return new Facebook(clientId, clientSecret, redirectUri);
+    }
+  }
+
+  async createAuthorizationUrl(provider: OAuthProvider): Promise<string> {
+    const state = generateState();
+    const codeVerifier = generateCodeVerifier();
+    await this.states.save(state, { provider, codeVerifier, expiresAt: Date.now() + 600_000 });
+
+    const client = this.client(provider);
+    const scopes =
+      provider === 'google'
+        ? ['openid', 'profile', 'email']
+        : provider === 'github'
+          ? ['user:email']
+          : ['email', 'public_profile'];
+
+    return client.createAuthorizationURL(state, codeVerifier, scopes).toString();
+  }
+
+  async handleCallback(
+    provider: OAuthProvider,
+    code: string,
+    state: string,
+  ): Promise<{ tokens: OAuth2Tokens; profile: OAuthUserProfile }> {
+    const stored = await this.states.consume(state);
+    if (!stored || stored.provider !== provider || stored.expiresAt < Date.now()) {
+      throw Object.assign(new Error('Invalid or expired OAuth state'), { status: 400 });
+    }
+
+    const client = this.client(provider);
+    const tokens = await client.validateAuthorizationCode(code, stored.codeVerifier);
+    const profile = await this.fetchProfile(provider, tokens);
+    return { tokens, profile };
+  }
+
+  private async fetchProfile(
+    provider: OAuthProvider,
+    tokens: OAuth2Tokens,
+  ): Promise<OAuthUserProfile> {
+    if (provider === 'google') {
+      const res = await fetch('https://openidconnect.googleapis.com/v1/userinfo', {
+        headers: { Authorization: `Bearer ${tokens.accessToken()}` },
+      });
+      if (!res.ok) {
+        throw Object.assign(new Error('Failed to fetch Google profile'), { status: 502 });
+      }
+      const data = (await res.json()) as { sub: string; email: string; name?: string };
+      return {
+        provider,
+        providerUserId: data.sub,
+        email: data.email,
+        name: data.name,
+      };
+    }
+
+    if (provider === 'github') {
+      const res = await fetch('https://api.github.com/user', {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken()}`,
+          Accept: 'application/vnd.github+json',
+          'User-Agent': 'mycli-app',
+        },
+      });
+      if (!res.ok) {
+        throw Object.assign(new Error('Failed to fetch GitHub profile'), { status: 502 });
+      }
+      const data = (await res.json()) as { id: number; login: string; name?: string; email?: string };
+      let email = data.email;
+      if (!email) {
+        const emailsRes = await fetch('https://api.github.com/user/emails', {
+          headers: {
+            Authorization: `Bearer ${tokens.accessToken()}`,
+            Accept: 'application/vnd.github+json',
+            'User-Agent': 'mycli-app',
+          },
+        });
+        const emails = (await emailsRes.json()) as Array<{ email: string; primary: boolean }>;
+        email = emails.find((e) => e.primary)?.email ?? emails[0]?.email;
+      }
+      if (!email) {
+        throw Object.assign(new Error('GitHub account has no public email'), { status: 400 });
+      }
+      return {
+        provider,
+        providerUserId: String(data.id),
+        email,
+        name: data.name ?? data.login,
+      };
+    }
+
+    const res = await fetch(
+      `https://graph.facebook.com/me?fields=id,name,email&access_token=${tokens.accessToken()}`,
+    );
+    if (!res.ok) {
+      throw Object.assign(new Error('Failed to fetch Facebook profile'), { status: 502 });
+    }
+    const data = (await res.json()) as { id: string; email?: string; name?: string };
+    if (!data.email) {
+      throw Object.assign(new Error('Facebook account has no email permission'), { status: 400 });
+    }
+    return {
+      provider,
+      providerUserId: data.id,
+      email: data.email,
+      name: data.name,
+    };
+  }
+}

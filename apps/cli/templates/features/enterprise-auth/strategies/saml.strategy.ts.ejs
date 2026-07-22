@@ -1,0 +1,17 @@
+<% if (language === 'javascript') { %>
+export async function authenticateSaml(provider, { samlResponse }) {
+  return provider.validateResponse(samlResponse);
+}
+<% } else { %>
+export interface SamlInput {
+  samlResponse: string;
+}
+
+export interface SamlValidator {
+  validateResponse(input: SamlInput): Promise<{ id: string; email?: string; name?: string; claims: Record<string, unknown> }>;
+}
+
+export async function authenticateSaml(provider: SamlValidator, input: SamlInput) {
+  return provider.validateResponse(input);
+}
+<% } %>

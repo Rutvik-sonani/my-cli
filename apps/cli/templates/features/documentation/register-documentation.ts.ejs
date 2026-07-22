@@ -1,0 +1,20 @@
+<% if (language === 'javascript') { %>
+import { createDocumentationService } from './documentation.service.js';
+
+export const documentationService = createDocumentationService();
+
+export function registerDocumentation() {
+  return documentationService;
+}
+<% } else { %>
+import {
+  createDocumentationService,
+  type DocumentationService,
+} from './documentation.service.js';
+
+export const documentationService = createDocumentationService();
+
+export function registerDocumentation(): DocumentationService {
+  return documentationService;
+}
+<% } %>

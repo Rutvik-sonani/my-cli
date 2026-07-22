@@ -1,0 +1,46 @@
+import { describe, expect, it } from 'vitest';
+import {
+  privacyService,
+  privacyUserStore,
+  dataExporter,
+  dataDeleter,
+} from '../../src/privacy/index.js';
+
+describe('privacy platform', () => {
+  it('manages consent, cookies, and processing records', async () => {
+    privacyUserStore.setProfile('user-1', { email: 'a@b.com', name: 'Ada' });
+    await privacyService.consentService.grant('user-1', 'marketing', { source: 'banner' });
+    await privacyService.cookies.track('analytics', '_ga', 'set', { userId: 'user-1' });
+    await privacyService.processing.record(
+      'user-1',
+      'account',
+      'contract',
+      ['email', 'name'],
+      { processor: '<%= appName %>' },
+    );
+
+    const exported = await privacyService.exportUserData('user-1');
+    expect(exported.profile.email).toBe('a@b.com');
+    expect(exported.consents).toHaveLength(1);
+    expect(exported.cookies).toHaveLength(1);
+    expect(exported.processingRecords).toHaveLength(1);
+  });
+
+  it('exports and deletes user data', async () => {
+    privacyUserStore.setProfile('user-2', { email: 'c@d.com' });
+    await privacyService.consentService.grant('user-2', 'analytics');
+    await privacyService.cookies.track('preferences', 'theme', 'set', { userId: 'user-2' });
+
+    const viaExporter = await dataExporter.export('user-2');
+    expect(viaExporter.userId).toBe('user-2');
+
+    const deleted = await dataDeleter.delete('user-2');
+    expect(deleted.removedConsents).toBe(1);
+    expect(deleted.removedCookies).toBe(1);
+    expect(deleted.tombstone).toBe(true);
+
+    const after = await privacyService.exportUserData('user-2');
+    expect(after.consents).toHaveLength(0);
+    expect(after.cookies).toHaveLength(0);
+  });
+});

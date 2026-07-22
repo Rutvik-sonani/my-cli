@@ -1,0 +1,8 @@
+export interface <%= pascal %> {
+  id: string;
+<% fields.forEach(function(field) { %>
+  <%= field.propertyName %><%= field.optional ? '?' : '' %>: <%= field.tsType %>;
+<% }); %>
+  createdAt: Date;
+  updatedAt: Date;
+}

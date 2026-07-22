@@ -1,0 +1,50 @@
+import { describe, expect, it } from 'vitest';
+import { Tenant } from '../../src/tenancy/entities/Tenant.js';
+import { tenantRepository } from '../../src/tenancy/repositories/tenant.repository.js';
+import { runWithTenant, getTenantId<% if (model === 'multi-tenant-saas' && strategy === 'shared-db') { %>, getTenantSlug<% } %> } from '../../src/tenancy/tenant.context.js';
+<% if (model === 'multi-tenant-saas' && strategy === 'shared-db') { %>
+import { applyTenantFilter, withTenantId } from '../../src/tenancy/tenant-filter.js';
+<% } %>
+<% if (model === 'multi-tenant-saas' && strategy === 'schema-per-tenant') { %>
+import { resolveTenantSchema } from '../../src/tenancy/tenant.resolver.js';
+<% } %>
+import { bootstrapTenancy } from '../../src/tenancy/register-tenancy.js';
+
+describe('tenancy', () => {
+  it('creates and stores tenant entities', async () => {
+    const tenant = Tenant.create('acme', 'Acme Corp');
+    await tenantRepository.save(tenant);
+    const found = await tenantRepository.findBySlug('acme');
+    expect(found?.name).toBe('Acme Corp');
+  });
+
+  it('scopes context per async request', () => {
+    runWithTenant('tenant-a', () => {
+      expect(getTenantId()).toBe('tenant-a');
+    });
+  });
+
+  it('bootstraps default tenant', async () => {
+    await bootstrapTenancy();
+    const list = await tenantRepository.list();
+    expect(list.length).toBeGreaterThan(0);
+  });
+
+<% if (model === 'multi-tenant-saas' && strategy === 'shared-db') { %>
+  it('filters records by tenant_id', () => {
+    runWithTenant('tenant-a', () => {
+      const rows = applyTenantFilter([
+        { id: '1', tenantId: 'tenant-a' },
+        { id: '2', tenantId: 'tenant-b' },
+      ]);
+      expect(rows).toHaveLength(1);
+      expect(withTenantId({ name: 'order' }).tenantId).toBe('tenant-a');
+    });
+  });
+<% } %>
+<% if (model === 'multi-tenant-saas' && strategy === 'schema-per-tenant') { %>
+  it('resolves schema names from tenant id', () => {
+    expect(resolveTenantSchema('acme-co')).toContain('acme');
+  });
+<% } %>
+});

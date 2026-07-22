@@ -1,0 +1,22 @@
+<% if (language === 'javascript') { %>
+export class DataDeleter {
+  constructor(privacyService) {
+    this.privacyService = privacyService;
+  }
+
+  delete(userId) {
+    return this.privacyService.deleteUserData(userId);
+  }
+}
+<% } else { %>
+import type { UserDataDeletionResult } from '../privacy.types.js';
+import { PrivacyService } from '../privacy.service.js';
+
+export class DataDeleter {
+  constructor(private readonly privacyService: PrivacyService) {}
+
+  delete(userId: string): Promise<UserDataDeletionResult> {
+    return this.privacyService.deleteUserData(userId);
+  }
+}
+<% } %>

@@ -1,0 +1,100 @@
+<% if (language === 'javascript') { %>
+import { createBackupService } from './backup/backup.service.js';
+import { createReportService } from './reports/report.service.js';
+import { listMigrations } from './migrations/registry.js';
+
+/**
+ * Upgrade service for <%= appName %> — never overwrites user files by default.
+ */
+export class UpgradeService {
+  constructor() {
+    this.backup = createBackupService();
+    this.reports = createReportService();
+  }
+
+  plan(fromVersion = '1.0.0', toVersion = '1.1.0') {
+    const actions = listMigrations().map((m) => ({
+      id: m.id,
+      scope: 'project',
+      description: m.description,
+      status: 'planned',
+    }));
+    return {
+      id: 'local-plan',
+      generatedAt: new Date(),
+      projectName: '<%= appName %>',
+      fromVersion,
+      toVersion,
+      scopes: ['project'],
+      dryRun: true,
+      actions,
+      summary: {
+        applied: 0,
+        skipped: 0,
+        planned: actions.length,
+        failed: 0,
+      },
+      backup: this.backup.plan(),
+    };
+  }
+
+  render(report) {
+    return this.reports.renderMarkdown(report);
+  }
+}
+
+export function createUpgradeService() {
+  return new UpgradeService();
+}
+<% } else { %>
+import type { UpgradeReport } from './migration.types.js';
+import { createBackupService, BackupService } from './backup/backup.service.js';
+import { createReportService, ReportService } from './reports/report.service.js';
+import { listMigrations } from './migrations/registry.js';
+
+/**
+ * Upgrade service for <%= appName %> — never overwrites user files by default.
+ */
+export class UpgradeService {
+  private readonly backup: BackupService;
+  private readonly reports: ReportService;
+
+  constructor() {
+    this.backup = createBackupService();
+    this.reports = createReportService();
+  }
+
+  plan(fromVersion = '1.0.0', toVersion = '1.1.0'): UpgradeReport {
+    const actions = listMigrations().map((m) => ({
+      id: m.id,
+      scope: 'project' as const,
+      description: m.description,
+      status: 'planned' as const,
+    }));
+    return {
+      id: 'local-plan',
+      generatedAt: new Date(),
+      projectName: '<%= appName %>',
+      fromVersion,
+      toVersion,
+      scopes: ['project'],
+      dryRun: true,
+      actions,
+      summary: {
+        applied: 0,
+        skipped: 0,
+        planned: actions.length,
+        failed: 0,
+      },
+    };
+  }
+
+  render(report: UpgradeReport): string {
+    return this.reports.renderMarkdown(report);
+  }
+}
+
+export function createUpgradeService(): UpgradeService {
+  return new UpgradeService();
+}
+<% } %>

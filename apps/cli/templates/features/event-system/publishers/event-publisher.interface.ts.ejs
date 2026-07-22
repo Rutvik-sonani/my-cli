@@ -1,0 +1,26 @@
+<% if (language === 'javascript') { %>
+/** @typedef {import('../serializer.js').EventEnvelope} EventEnvelope */
+
+export class EventPublisherError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'EventPublisherError';
+  }
+}
+
+/** @typedef {{ publish(envelope: EventEnvelope): Promise<void>, close?(): Promise<void> }} EventPublisher */
+<% } else { %>
+import type { EventEnvelope } from '../serializer.js';
+
+export class EventPublisherError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'EventPublisherError';
+  }
+}
+
+export interface EventPublisher {
+  publish<T>(envelope: EventEnvelope<T>): Promise<void>;
+  close?(): Promise<void>;
+}
+<% } %>

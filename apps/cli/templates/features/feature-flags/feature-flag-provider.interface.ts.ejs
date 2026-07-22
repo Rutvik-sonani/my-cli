@@ -1,0 +1,25 @@
+<% if (language === 'javascript') { %>
+/**
+ * @typedef {Object} FeatureFlagProvider
+ * @property {string} id
+ * @property {() => Promise<void>} connect
+ * @property {() => Promise<void>} disconnect
+ * @property {(key: string, context?: object) => Promise<boolean>} isEnabled
+ * @property {(key: string, context?: object) => Promise<object>} evaluate
+ */
+<% } else { %>
+import type {
+  FeatureFlagContext,
+  FeatureFlagEvaluation,
+  FeatureFlagProviderId,
+} from './feature-flag.types.js';
+
+export interface FeatureFlagProvider {
+  readonly id: FeatureFlagProviderId;
+  connect(): Promise<void>;
+  disconnect(): Promise<void>;
+  isEnabled(key: string, context?: FeatureFlagContext): Promise<boolean>;
+  evaluate(key: string, context?: FeatureFlagContext): Promise<FeatureFlagEvaluation>;
+  getAllFlags?(context?: FeatureFlagContext): Promise<Record<string, boolean>>;
+}
+<% } %>

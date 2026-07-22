@@ -1,0 +1,19 @@
+export type <%= pascal %>MiddlewareRequest = {
+  headers: Record<string, string | undefined>;
+  <%= camel %>?: unknown;
+};
+
+export function <%= camel %>Middleware() {
+  return async (
+    req: <%= pascal %>MiddlewareRequest,
+    _res: unknown,
+    next: (err?: unknown) => void,
+  ) => {
+    try {
+      // Customize <%= name %> middleware logic here
+      next();
+    } catch (error) {
+      next(error);
+    }
+  };
+}

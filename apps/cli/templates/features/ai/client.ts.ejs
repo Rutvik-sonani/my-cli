@@ -1,0 +1,26 @@
+export type AiProvider = '<%= provider %>';
+
+export interface AiCompletionInput {
+  prompt: string;
+  system?: string;
+}
+
+export async function complete(input: AiCompletionInput): Promise<string> {
+  const provider = (process.env.AI_PROVIDER ?? '<%= provider %>') as AiProvider;
+
+  if (provider === 'ollama') {
+    const host = process.env.OLLAMA_HOST ?? 'http://localhost:11434';
+    const model = process.env.OLLAMA_MODEL ?? 'llama3.2';
+    const response = await fetch(`${host}/api/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, prompt: input.prompt, stream: false }),
+    });
+    if (!response.ok) throw new Error(`Ollama request failed: ${response.status}`);
+    const payload = (await response.json()) as { response?: string };
+    return payload.response ?? '';
+  }
+
+  // OpenAI / Anthropic integrations — configure API keys in .env
+  throw new Error(`Configure ${provider} API credentials in .env before calling complete()`);
+}

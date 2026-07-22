@@ -1,0 +1,74 @@
+import { MikroORM } from '@mikro-orm/core';
+import config from '../../database/mikro-orm.config.js';
+import { Role } from '../../database/entities/role.entity.js';
+import { Permission } from '../../database/entities/permission.entity.js';
+import { RolePermission } from '../../database/entities/role-permission.entity.js';
+import { UserRole } from '../../database/entities/user-role.entity.js';
+import type { Permission as PermissionType, Role as RoleType } from './rbac.types.js';
+
+let ormPromise: Promise<MikroORM> | undefined;
+
+async function getOrm(): Promise<MikroORM> {
+  ormPromise ??= MikroORM.init(config);
+  return ormPromise;
+}
+
+export class RbacRepository {
+  async findRoleByName(name: string): Promise<RoleType | null> {
+    const orm = await getOrm();
+    return orm.em.findOne(Role, { name });
+  }
+
+  async findPermissionByName(name: string): Promise<PermissionType | null> {
+    const orm = await getOrm();
+    return orm.em.findOne(Permission, { name });
+  }
+
+  async createRole(name: string, description?: string): Promise<RoleType> {
+    const orm = await getOrm();
+    const role = orm.em.create(Role, { name, description: description ?? null });
+    await orm.em.persistAndFlush(role);
+    return role;
+  }
+
+  async createPermission(name: string, description?: string): Promise<PermissionType> {
+    const orm = await getOrm();
+    const permission = orm.em.create(Permission, { name, description: description ?? null });
+    await orm.em.persistAndFlush(permission);
+    return permission;
+  }
+
+  async assignPermission(roleId: string, permissionId: string): Promise<void> {
+    const orm = await getOrm();
+    const link = orm.em.create(RolePermission, { roleId, permissionId });
+    await orm.em.persistAndFlush(link);
+  }
+
+  async assignRole(userId: string, roleId: string): Promise<void> {
+    const orm = await getOrm();
+    const link = orm.em.create(UserRole, { userId, roleId });
+    await orm.em.persistAndFlush(link);
+  }
+
+  async userRoles(userId: string): Promise<RoleType[]> {
+    const orm = await getOrm();
+    const links = await orm.em.find(UserRole, { userId });
+    const result: RoleType[] = [];
+    for (const link of links) {
+      const role = await orm.em.findOne(Role, { id: link.roleId });
+      if (role) result.push(role);
+    }
+    return result;
+  }
+
+  async rolePermissions(roleId: string): Promise<PermissionType[]> {
+    const orm = await getOrm();
+    const links = await orm.em.find(RolePermission, { roleId });
+    const result: PermissionType[] = [];
+    for (const link of links) {
+      const permission = await orm.em.findOne(Permission, { id: link.permissionId });
+      if (permission) result.push(permission);
+    }
+    return result;
+  }
+}

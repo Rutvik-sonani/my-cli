@@ -1,0 +1,23 @@
+# Infrastructure Services — <%= appName %>
+
+MyCLI-generated service modules for <%= appName %>.
+
+| Service | Command | Path |
+|---------|---------|------|
+| Cache | `my add cache` | `src/services/cache/` |
+| Queue | `my add queue` | `src/services/queue/` |
+| Events | `my add events` | `src/services/events/` |
+| Mail | `my add mail` | `src/services/mail/` |
+| Storage | `my add storage` | `src/services/storage/` |
+| Upload | `my add upload` | `src/services/storage/` (upload plugin) |
+| Payment | `my add payment` | `src/services/payment/` |
+
+See `docs/<service>.md` for provider-specific configuration.
+
+## Environment
+
+All services append variables to `.env.example`. Copy to `.env` and fill in credentials before use.
+
+## Dependencies
+
+Each `my add <service>` command installs the required npm packages automatically.

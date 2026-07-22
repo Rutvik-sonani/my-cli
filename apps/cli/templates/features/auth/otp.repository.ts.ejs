@@ -1,0 +1,64 @@
+<% if (orm === 'prisma') { %>
+import { prisma } from '../../database/prisma.client.js';
+<% } %>
+import { randomInt } from 'node:crypto';
+
+function parseDuration(value: string, fallbackMs: number): number {
+  const match = /^(\d+)([smhd])$/.exec(value);
+  if (!match) return fallbackMs;
+  const amount = Number(match[1]);
+  const unit = match[2];
+  const multipliers: Record<string, number> = { s: 1000, m: 60_000, h: 3_600_000, d: 86_400_000 };
+  return amount * (multipliers[unit] ?? 60_000);
+}
+
+export class OtpRepository {
+  private readonly ttlMs = parseDuration(process.env.OTP_EXPIRES_IN ?? '5m', 300_000);
+
+  async create(destination: string): Promise<string> {
+    const code = String(randomInt(100_000, 999_999));
+    const expiresAt = new Date(Date.now() + this.ttlMs);
+<% if (orm === 'prisma') { %>
+    await prisma.otpCode.deleteMany({ where: { destination, verifiedAt: null } });
+    await prisma.otpCode.create({
+      data: { destination, code, expiresAt },
+    });
+<% } else { %>
+    memoryOtps.set(destination, { code, expiresAt, verifiedAt: null });
+<% } %>
+    return code;
+  }
+
+  async verify(destination: string, code: string): Promise<boolean> {
+<% if (orm === 'prisma') { %>
+    const row = await prisma.otpCode.findFirst({
+      where: {
+        destination,
+        code,
+        verifiedAt: null,
+        expiresAt: { gt: new Date() },
+      },
+    });
+    if (!row) return false;
+    await prisma.otpCode.update({
+      where: { id: row.id },
+      data: { verifiedAt: new Date() },
+    });
+    return true;
+<% } else { %>
+    const row = memoryOtps.get(destination);
+    if (!row || row.verifiedAt || row.expiresAt < new Date() || row.code !== code) {
+      return false;
+    }
+    row.verifiedAt = new Date();
+    return true;
+<% } %>
+  }
+}
+<% if (orm !== 'prisma') { %>
+
+const memoryOtps = new Map<
+  string,
+  { code: string; expiresAt: Date; verifiedAt: Date | null }
+>();
+<% } %>

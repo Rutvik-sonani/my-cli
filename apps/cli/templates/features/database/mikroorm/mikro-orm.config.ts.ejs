@@ -1,0 +1,23 @@
+<% if (database === 'mongodb') { %>
+import { defineConfig } from '@mikro-orm/mongodb';
+<% } else if (database === 'mysql' || database === 'mariadb') { %>
+import { defineConfig } from '@mikro-orm/mysql';
+<% } else if (database === 'sqlite') { %>
+import { defineConfig } from '@mikro-orm/sqlite';
+<% } else { %>
+import { defineConfig } from '@mikro-orm/postgresql';
+<% } %>
+import { User } from './entities/user.entity.js';
+<% if (includeRbac) { %>
+import { Role } from './entities/role.entity.js';
+import { Permission } from './entities/permission.entity.js';
+import { RolePermission } from './entities/role-permission.entity.js';
+import { UserRole } from './entities/user-role.entity.js';
+<% } %>
+
+export default defineConfig({
+  entities: [User<% if (includeRbac) { %>, Role, Permission, RolePermission, UserRole<% } %>],
+  clientUrl: process.env.DATABASE_URL,
+  debug: process.env.NODE_ENV === 'development',
+  migrations: { path: 'src/database/migrations' },
+});

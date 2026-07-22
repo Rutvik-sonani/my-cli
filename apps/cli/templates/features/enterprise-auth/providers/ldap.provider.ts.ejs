@@ -1,0 +1,45 @@
+<% if (language === 'javascript') { %>
+import { authenticateLdap } from '../strategies/ldap.strategy.js';
+
+export class LdapIdentityProvider {
+  constructor() {
+    this.id = 'ldap';
+    this.protocol = 'ldap';
+  }
+
+  async authenticate(input) {
+    const profile = await authenticateLdap(this, input);
+    return { ...profile, provider: this.id, claims: profile.claims ?? {} };
+  }
+
+  async bindAndSearch({ username, password }) {
+    // Use ldapts client against process.env.LDAP_URL
+    return { id: username, email: `${username}@local`, name: username, claims: { username, password: '***' } };
+  }
+}
+<% } else { %>
+import type { IdentityProvider, IdentityUser } from '../identity-provider.interface.js';
+import { authenticateLdap } from '../strategies/ldap.strategy.js';
+
+export class LdapIdentityProvider implements IdentityProvider {
+  readonly id = 'ldap' as const;
+  readonly protocol = 'ldap' as const;
+
+  async authenticate(input: Record<string, unknown>): Promise<IdentityUser> {
+    const profile = await authenticateLdap(this, {
+      username: String(input.username ?? ''),
+      password: String(input.password ?? ''),
+    });
+    return { id: profile.id, email: profile.email, name: profile.name, provider: this.id, claims: profile.claims };
+  }
+
+  async bindAndSearch(input: { username: string; password: string }) {
+    return {
+      id: input.username,
+      email: `${input.username}@local`,
+      name: input.username,
+      claims: { ldapUrl: process.env.LDAP_URL, username: input.username },
+    };
+  }
+}
+<% } %>

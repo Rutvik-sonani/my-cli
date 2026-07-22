@@ -1,0 +1,135 @@
+<% if (language === 'javascript') { %>
+import { CHECK_CATALOG } from './checks/check-catalog.js';
+import { DEFAULT_RETENTION_RULES } from './checks/check-catalog.js';
+import { listPolicies } from './policies/index.js';
+
+function summarize(checks) {
+  const summary = { pass: 0, fail: 0, warning: 0, notApplicable: 0 };
+  for (const check of checks) {
+    if (check.status === 'pass') summary.pass += 1;
+    else if (check.status === 'fail') summary.fail += 1;
+    else if (check.status === 'warning') summary.warning += 1;
+    else summary.notApplicable += 1;
+  }
+  return summary;
+}
+
+export class ComplianceService {
+  constructor(frameworks) {
+    this.frameworks = frameworks;
+    this.overrides = new Map();
+  }
+
+  getFrameworks() {
+    return [...this.frameworks];
+  }
+
+  setCheckStatus(checkId, status) {
+    this.overrides.set(checkId, status);
+  }
+
+  listPolicies() {
+    return listPolicies().filter((policy) => this.frameworks.includes(policy.framework));
+  }
+
+  listRetentionRules() {
+    return DEFAULT_RETENTION_RULES.filter((rule) => this.frameworks.includes(rule.framework));
+  }
+
+  runChecks() {
+    return CHECK_CATALOG.filter((entry) => this.frameworks.includes(entry.framework)).map((entry) => ({
+      id: entry.id,
+      framework: entry.framework,
+      category: entry.category,
+      title: entry.title,
+      description: entry.description,
+      status: this.overrides.get(entry.id) ?? entry.defaultStatus ?? 'warning',
+    }));
+  }
+
+  generateReport() {
+    const checks = this.runChecks();
+    return {
+      id: crypto.randomUUID(),
+      frameworks: [...this.frameworks],
+      generatedAt: new Date(),
+      checks,
+      summary: summarize(checks),
+    };
+  }
+}
+<% } else { %>
+import type {
+  ComplianceCheck,
+  ComplianceCheckStatus,
+  ComplianceFramework,
+  CompliancePolicy,
+  ComplianceReport,
+  ComplianceReportSummary,
+  DataRetentionRule,
+} from './compliance.types.js';
+import { CHECK_CATALOG, DEFAULT_RETENTION_RULES } from './checks/check-catalog.js';
+import { listPolicies } from './policies/index.js';
+
+function summarize(checks: ComplianceCheck[]): ComplianceReportSummary {
+  const summary: ComplianceReportSummary = {
+    pass: 0,
+    fail: 0,
+    warning: 0,
+    notApplicable: 0,
+  };
+  for (const check of checks) {
+    if (check.status === 'pass') summary.pass += 1;
+    else if (check.status === 'fail') summary.fail += 1;
+    else if (check.status === 'warning') summary.warning += 1;
+    else summary.notApplicable += 1;
+  }
+  return summary;
+}
+
+export class ComplianceService {
+  private readonly overrides = new Map<string, ComplianceCheckStatus>();
+
+  constructor(private readonly frameworks: ComplianceFramework[]) {}
+
+  getFrameworks(): ComplianceFramework[] {
+    return [...this.frameworks];
+  }
+
+  setCheckStatus(checkId: string, status: ComplianceCheckStatus): void {
+    this.overrides.set(checkId, status);
+  }
+
+  listPolicies(): CompliancePolicy[] {
+    return listPolicies().filter((policy) => this.frameworks.includes(policy.framework));
+  }
+
+  listRetentionRules(): DataRetentionRule[] {
+    return DEFAULT_RETENTION_RULES.filter((rule) => this.frameworks.includes(rule.framework));
+  }
+
+  runChecks(): ComplianceCheck[] {
+    return CHECK_CATALOG.filter((entry) => this.frameworks.includes(entry.framework)).map(
+      (entry) => ({
+        id: entry.id,
+        framework: entry.framework,
+        category: entry.category,
+        title: entry.title,
+        description: entry.description,
+        status: this.overrides.get(entry.id) ?? entry.defaultStatus ?? 'warning',
+      }),
+    );
+  }
+
+  generateReport(): ComplianceReport {
+    const checks = this.runChecks();
+    return {
+      id: crypto.randomUUID(),
+      frameworks: [...this.frameworks],
+      generatedAt: new Date(),
+      checks,
+      summary: summarize(checks),
+    };
+  }
+}
+<% } %>

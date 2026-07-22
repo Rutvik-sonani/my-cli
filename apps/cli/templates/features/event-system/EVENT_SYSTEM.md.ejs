@@ -1,0 +1,46 @@
+# Event System — <%= appName %>
+
+Enterprise event-driven architecture using **<%= provider %>**.
+
+## Layout
+
+```
+src/event-system/
+  events/           Domain/integration event definitions
+  publishers/       EventPublisher implementations
+  consumers/        Event consumers and subscriptions
+  handlers/         Event handler logic
+  schemas/          Versioned JSON schemas
+  dead-letter/      Failed event storage and replay hooks
+```
+
+## Features
+
+- Event serialization with explicit **version** field
+- **Retry** policy with exponential backoff
+- **Dead-letter queue** for failed handlers
+- Provider: `<%= provider %>`
+
+## Usage
+
+```ts
+import { registerEventHandlers, publishUserCreated } from './src/event-system/index.js';
+
+await registerEventHandlers();
+await publishUserCreated(crypto.randomUUID(), 'demo@example.com');
+```
+
+## Generate more events
+
+```bash
+my make integration-event order-placed
+```
+
+## Environment
+
+See `.env.example` for provider connection settings.
+
+## Note on `my add events`
+
+`my add events` scaffolds a lightweight Redis pub/sub helper under `src/services/events/`.
+`my add event-system` is the **enterprise** event platform with schemas, DLQ, versioning, and multi-provider support.

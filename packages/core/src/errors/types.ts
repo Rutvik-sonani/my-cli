@@ -1,0 +1,32 @@
+export type ErrorCode =
+  | 'UNKNOWN'
+  | 'SERVICE_NOT_FOUND'
+  | 'CIRCULAR_DEPENDENCY'
+  | 'CONTAINER_DISPOSED'
+  | 'INVALID_CONFIG'
+  | 'CONFIG_NOT_FOUND'
+  | 'PLUGIN_LOAD_FAILED'
+  | 'PLUGIN_NOT_FOUND'
+  | 'PLUGIN_INVALID'
+  | 'COMMAND_NOT_FOUND'
+  | 'COMMAND_FAILED'
+  | 'COMMAND_VALIDATION'
+  | 'GENERATOR_FAILED'
+  | 'GENERATOR_NOT_FOUND'
+  | 'TEMPLATE_NOT_FOUND'
+  | 'TEMPLATE_RENDER_FAILED'
+  | 'FILE_NOT_FOUND'
+  | 'FILE_EXISTS'
+  | 'FILESYSTEM_ERROR'
+  | 'DEPENDENCY_INSTALL_FAILED'
+  | 'PACKAGE_MANAGER_NOT_FOUND'
+  | 'VALIDATION_FAILED'
+  | 'GIT_ERROR'
+  | 'AI_ERROR'
+  | 'TELEMETRY_ERROR';
+
+export interface ErrorDetails {
+  code?: ErrorCode;
+  details?: Record<string, unknown>;
+  cause?: unknown;
+}

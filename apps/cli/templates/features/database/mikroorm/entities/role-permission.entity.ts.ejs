@@ -1,0 +1,10 @@
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+
+@Entity({ tableName: 'role_permissions' })
+export class RolePermission {
+  @PrimaryKey({ fieldName: 'role_id' })
+  roleId!: string;
+
+  @PrimaryKey({ fieldName: 'permission_id' })
+  permissionId!: string;
+}

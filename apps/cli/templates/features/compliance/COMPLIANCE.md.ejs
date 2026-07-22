@@ -1,0 +1,64 @@
+# Compliance — <%= appName %>
+
+Enterprise compliance scaffolding for frameworks: **<%= frameworks.join(', ') %>**.
+
+## Layout
+
+```
+src/compliance/
+  policies/
+  checks/
+  reports/
+  documentation/
+tests/compliance/
+COMPLIANCE.md
+```
+
+## Features
+
+- Data retention rules
+- Privacy policies
+- Security checklist
+- Compliance reports
+
+## Usage
+
+```ts
+import {
+  complianceService,
+  ComplianceChecker,
+  ReportGenerator,
+} from './src/compliance/index.js';
+
+const checks = complianceService.runChecks();
+const checker = new ComplianceChecker(complianceService);
+checker.markPass(checks[0].id, 'policy reviewed');
+
+const report = new ReportGenerator(complianceService).toMarkdown();
+console.log(report);
+```
+
+## Framework notes
+
+<% if (hasGdpr) { -%>
+### GDPR
+Privacy policy, retention, and subject-rights checks under `policies/gdpr.policy.ts`.
+<% } -%>
+<% if (hasHipaa) { -%>
+### HIPAA
+PHI access, audit logging, and breach readiness under `policies/hipaa.policy.ts`.
+<% } -%>
+<% if (hasSoc2) { -%>
+### SOC 2
+Access, change management, and monitoring under `policies/soc2.policy.ts`.
+<% } -%>
+<% if (hasIso27001) { -%>
+### ISO 27001
+ISMS, risk, and asset inventory under `policies/iso27001.policy.ts`.
+<% } -%>
+
+## Documentation
+
+- `src/compliance/documentation/privacy-policy.md`
+- `src/compliance/documentation/security-checklist.md`
+- `src/compliance/documentation/data-retention.md`

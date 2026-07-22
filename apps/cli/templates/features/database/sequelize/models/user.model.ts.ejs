@@ -1,0 +1,31 @@
+import { DataTypes, Model, Optional } from 'sequelize';
+import { sequelize } from '../config.js';
+
+interface UserAttributes {
+  id: string;
+  email: string;
+  passwordHash: string;
+  name?: string | null;
+  emailVerified: boolean;
+}
+
+type UserCreation = Optional<UserAttributes, 'id' | 'emailVerified'>;
+
+export class User extends Model<UserAttributes, UserCreation> implements UserAttributes {
+  declare id: string;
+  declare email: string;
+  declare passwordHash: string;
+  declare name?: string | null;
+  declare emailVerified: boolean;
+}
+
+User.init(
+  {
+    id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
+    email: { type: DataTypes.STRING, allowNull: false, unique: true },
+    passwordHash: { type: DataTypes.STRING, allowNull: false, field: 'password_hash' },
+    name: { type: DataTypes.STRING, allowNull: true },
+    emailVerified: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false, field: 'email_verified' },
+  },
+  { sequelize, tableName: 'users', underscored: true },
+);

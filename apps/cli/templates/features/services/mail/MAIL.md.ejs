@@ -1,0 +1,21 @@
+# Mail — <%= appName %>
+
+Email delivery via Nodemailer.
+
+## Environment
+
+See `.env.example` for `MAIL_PROVIDER=<%= provider %>` settings.
+
+## Usage
+
+```typescript
+import { mail } from './src/services/mail/index.js';
+
+await mail.send({
+  to: 'user@example.com',
+  subject: 'Welcome',
+  html: '<p>Welcome to <%= appName %></p>',
+});
+```
+
+Supported providers: `smtp`, `sendgrid`, `mailgun`

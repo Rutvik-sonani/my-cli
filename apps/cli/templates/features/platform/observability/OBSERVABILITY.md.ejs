@@ -1,0 +1,21 @@
+# Observability — <%= appName %>
+
+Structured logging (Pino), OpenTelemetry tracing, and a basic `/metrics` endpoint.
+
+## Environment
+
+```env
+LOG_LEVEL=info
+OTEL_SERVICE_NAME=<%= appName %>
+OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
+```
+
+## Usage
+
+```typescript
+import { logger, startTelemetry, registerMetricsPlugin } from './src/platform/observability/index.js';
+
+startTelemetry();
+logger.info('Server starting');
+await registerMetricsPlugin(app);
+```

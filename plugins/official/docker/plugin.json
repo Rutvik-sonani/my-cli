@@ -1,0 +1,11 @@
+{
+  "name": "@mycli/docker",
+  "version": "1.0.0",
+  "description": "Official MyCLI docker plugin",
+  "main": "dist/index.js",
+  "compatibility": ">=1.0.0",
+  "author": "MyCLI",
+  "slug": "docker",
+  "npmPackage": "@mycli/plugin-docker",
+  "keywords": ["docker", "mycli"]
+}

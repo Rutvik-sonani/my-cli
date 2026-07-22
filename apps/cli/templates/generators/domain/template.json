@@ -1,0 +1,6 @@
+{
+  "name": "domain",
+  "version": "1.0.0",
+  "description": "DDD domain module — entity, value objects, aggregate, events, application commands, repository port",
+  "engine": "ejs"
+}

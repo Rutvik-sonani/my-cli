@@ -1,0 +1,11 @@
+<% if (language === 'javascript') { %>
+export function resolveTenantDatabaseUrl(tenantSlug) {
+  const key = `DATABASE_URL_${tenantSlug.toUpperCase().replace(/[^A-Z0-9_]/g, '_')}`;
+  return process.env[key];
+}
+<% } else { %>
+export function resolveTenantDatabaseUrl(tenantSlug: string): string | undefined {
+  const key = `DATABASE_URL_${tenantSlug.toUpperCase().replace(/[^A-Z0-9_]/g, '_')}`;
+  return process.env[key];
+}
+<% } %>

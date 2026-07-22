@@ -1,0 +1,22 @@
+<% if (language === 'javascript') { %>
+/** Single-tenant app: fixed tenant from environment. */
+export function resolveTenantFromRequest() {
+  return {
+    tenantId: process.env.DEFAULT_TENANT ?? '<%= appName %>',
+    slug: process.env.TENANT_SLUG ?? '<%= appName %>',
+  };
+}
+<% } else { %>
+export interface ResolvedTenant {
+  tenantId: string;
+  slug: string;
+}
+
+/** Single-tenant app: fixed tenant from environment. */
+export function resolveTenantFromRequest(): ResolvedTenant {
+  return {
+    tenantId: process.env.DEFAULT_TENANT ?? '<%= appName %>',
+    slug: process.env.TENANT_SLUG ?? '<%= appName %>',
+  };
+}
+<% } %>

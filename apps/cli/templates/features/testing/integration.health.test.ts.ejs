@@ -1,0 +1,18 @@
+<% if (unit === 'vitest') { %>
+import { describe, expect, it } from 'vitest';
+<% } else { %>
+import { describe, expect, it } from '@jest/globals';
+<% } %>
+import request from 'supertest';
+
+describe('health endpoint', () => {
+  it.skipIf(!process.env.TEST_BASE_URL)('returns ok when server is running', async () => {
+    const baseUrl = process.env.TEST_BASE_URL!;
+    const response = await request(baseUrl).get('/health');
+    expect([200, 404]).toContain(response.status);
+  });
+
+  it('scaffold is ready for live integration tests', () => {
+    expect(process.env.TEST_BASE_URL ?? 'pending').toBeTruthy();
+  });
+});

@@ -1,0 +1,36 @@
+import type { <%= pascal %> } from '../<%= kebab %>.model.js';
+
+type Handler<T> = (payload: T) => void | Promise<void>;
+
+export class <%= pascal %>Events {
+  private readonly createdHandlers: Handler<<%= pascal %>>[] = [];
+  private readonly updatedHandlers: Handler<<%= pascal %>>[] = [];
+  private readonly deletedHandlers: Handler<string>[] = [];
+
+  onCreated(handler: Handler<<%= pascal %>>) {
+    this.createdHandlers.push(handler);
+    return this;
+  }
+
+  onUpdated(handler: Handler<<%= pascal %>>) {
+    this.updatedHandlers.push(handler);
+    return this;
+  }
+
+  onDeleted(handler: Handler<string>) {
+    this.deletedHandlers.push(handler);
+    return this;
+  }
+
+  async emitCreated(entity: <%= pascal %>) {
+    for (const handler of this.createdHandlers) await handler(entity);
+  }
+
+  async emitUpdated(entity: <%= pascal %>) {
+    for (const handler of this.updatedHandlers) await handler(entity);
+  }
+
+  async emitDeleted(id: string) {
+    for (const handler of this.deletedHandlers) await handler(id);
+  }
+}

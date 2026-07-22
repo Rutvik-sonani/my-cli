@@ -1,0 +1,43 @@
+<% if (language === 'javascript') { %>
+import winston from 'winston';
+import { getCorrelation } from '../correlation.js';
+
+export const logger = winston.createLogger({
+  level: process.env.LOG_LEVEL ?? 'info',
+  defaultMeta: { service: '<%= appName %>' },
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format((info) => {
+      const correlation = getCorrelation();
+      info.correlationId = info.correlationId ?? correlation?.correlationId;
+      info.traceId = info.traceId ?? correlation?.traceId;
+      info.spanId = info.spanId ?? correlation?.spanId;
+      return info;
+    })(),
+    winston.format.json(),
+  ),
+  transports: [new winston.transports.Console()],
+});
+<% } else { %>
+import winston from 'winston';
+import { getCorrelation } from '../correlation.js';
+
+export const logger = winston.createLogger({
+  level: process.env.LOG_LEVEL ?? 'info',
+  defaultMeta: { service: '<%= appName %>' },
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format((info) => {
+      const correlation = getCorrelation();
+      info.correlationId = info.correlationId ?? correlation?.correlationId;
+      info.traceId = info.traceId ?? correlation?.traceId;
+      info.spanId = info.spanId ?? correlation?.spanId;
+      return info;
+    })(),
+    winston.format.json(),
+  ),
+  transports: [new winston.transports.Console()],
+});
+
+export type Logger = typeof logger;
+<% } %>

@@ -1,0 +1,21 @@
+# Data Retention — <%= appName %>
+
+Retention rules generated for frameworks: **<%= frameworks.join(', ') %>**.
+
+| Category | Default days | Notes |
+|----------|--------------|-------|
+<% if (hasGdpr) { -%>
+| account-profile | 1095 | Contract / account lifecycle |
+| application-logs | 90 | Operational diagnostics |
+<% } -%>
+<% if (hasHipaa) { -%>
+| phi | 2190 | Legal / clinical retention |
+<% } -%>
+<% if (hasSoc2) { -%>
+| audit-trail | 365 | Security evidence |
+<% } -%>
+<% if (hasIso27001) { -%>
+| asset-inventory | 730 | ISMS records |
+<% } -%>
+
+Adjust these values in `src/compliance/checks/check-catalog.ts` to match legal counsel guidance.

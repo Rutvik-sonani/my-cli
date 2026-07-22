@@ -1,0 +1,18 @@
+type Handler<T> = (payload: T) => void | Promise<void>;
+
+export class <%= pascal %>Events {
+  private readonly handlers = new Map<string, Handler<unknown>[]>();
+
+  on(event: string, handler: Handler<unknown>) {
+    const list = this.handlers.get(event) ?? [];
+    list.push(handler);
+    this.handlers.set(event, list);
+    return this;
+  }
+
+  async emit(event: string, payload: unknown) {
+    for (const handler of this.handlers.get(event) ?? []) {
+      await handler(payload);
+    }
+  }
+}

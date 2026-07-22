@@ -1,0 +1,76 @@
+<% if (language === 'javascript') { %>
+import { Kafka } from 'kafkajs';
+import { JsonEventSerializer } from '../serializer.js';
+import { withRetry } from '../retry.policy.js';
+import { DeadLetterQueue } from '../dead-letter/dead-letter.queue.js';
+
+export class KafkaEventPublisher {
+  constructor(options = {}) {
+    this.topic = options.topic ?? process.env.KAFKA_TOPIC ?? '<%= appName %>.events';
+    this.kafka = options.kafka ?? new Kafka({ clientId: '<%= appName %>', brokers: (process.env.KAFKA_BROKERS ?? 'localhost:9092').split(',') });
+    this.producer = this.kafka.producer();
+    this.serializer = new JsonEventSerializer();
+    this.deadLetter = new DeadLetterQueue();
+    this.connected = false;
+  }
+
+  async publish(envelope) {
+    if (!this.connected) {
+      await this.producer.connect();
+      this.connected = true;
+    }
+    await withRetry(async () => {
+      await this.producer.send({
+        topic: this.topic,
+        messages: [{ key: envelope.type, value: this.serializer.serialize(envelope) }],
+      });
+    });
+  }
+
+  async close() {
+    if (this.connected) await this.producer.disconnect();
+  }
+}
+<% } else { %>
+import { Kafka, type Producer } from 'kafkajs';
+import { JsonEventSerializer, type EventEnvelope } from '../serializer.js';
+import { withRetry } from '../retry.policy.js';
+import { DeadLetterQueue } from '../dead-letter/dead-letter.queue.js';
+import type { EventPublisher } from './event-publisher.interface.js';
+
+export class KafkaEventPublisher implements EventPublisher {
+  private readonly topic: string;
+  private readonly producer: Producer;
+  private readonly serializer = new JsonEventSerializer();
+  readonly deadLetter = new DeadLetterQueue();
+  private connected = false;
+
+  constructor(options: { kafka?: Kafka; topic?: string } = {}) {
+    this.topic = options.topic ?? process.env.KAFKA_TOPIC ?? '<%= appName %>.events';
+    const kafka =
+      options.kafka ??
+      new Kafka({
+        clientId: '<%= appName %>',
+        brokers: (process.env.KAFKA_BROKERS ?? 'localhost:9092').split(','),
+      });
+    this.producer = kafka.producer();
+  }
+
+  async publish<T>(envelope: EventEnvelope<T>): Promise<void> {
+    if (!this.connected) {
+      await this.producer.connect();
+      this.connected = true;
+    }
+    await withRetry(async () => {
+      await this.producer.send({
+        topic: this.topic,
+        messages: [{ key: envelope.type, value: this.serializer.serialize(envelope) }],
+      });
+    });
+  }
+
+  async close(): Promise<void> {
+    if (this.connected) await this.producer.disconnect();
+  }
+}
+<% } %>

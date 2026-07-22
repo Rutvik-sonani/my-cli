@@ -1,0 +1,18 @@
+<% if (language === 'javascript') { %>
+export async function authenticateLdap(provider, { username, password }) {
+  return provider.bindAndSearch({ username, password });
+}
+<% } else { %>
+export interface LdapInput {
+  username: string;
+  password: string;
+}
+
+export interface LdapAuthenticator {
+  bindAndSearch(input: LdapInput): Promise<{ id: string; email?: string; name?: string; claims: Record<string, unknown> }>;
+}
+
+export async function authenticateLdap(provider: LdapAuthenticator, input: LdapInput) {
+  return provider.bindAndSearch(input);
+}
+<% } %>

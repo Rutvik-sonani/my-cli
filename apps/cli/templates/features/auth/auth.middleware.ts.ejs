@@ -1,0 +1,40 @@
+import type { FastifyReply, FastifyRequest } from 'fastify';
+import { TokenService } from './token.service.js';
+<% if (hasSession) { %>
+import { SessionService } from './session.service.js';
+<% } %>
+
+const tokens = new TokenService();
+<% if (hasSession) { %>
+const sessions = new SessionService();
+<% } %>
+
+export async function authMiddleware(
+  request: FastifyRequest,
+  reply: FastifyReply,
+): Promise<void> {
+  const header = request.headers.authorization;
+  if (header?.startsWith('Bearer ')) {
+    try {
+      const payload = await tokens.verifyAccess(header.slice(7));
+      (request as FastifyRequest & { user?: { sub: string; email: string } }).user = {
+        sub: payload.sub!,
+        email: payload.email as string,
+      };
+      return;
+    } catch {
+      reply.status(401).send({ error: 'Invalid token' });
+      return;
+    }
+  }
+
+<% if (hasSession) { %>
+  const sessionUserId = sessions.getUserId(request);
+  if (sessionUserId) {
+    (request as FastifyRequest & { user?: { sub: string } }).user = { sub: sessionUserId };
+    return;
+  }
+<% } %>
+
+  reply.status(401).send({ error: 'Unauthorized' });
+}

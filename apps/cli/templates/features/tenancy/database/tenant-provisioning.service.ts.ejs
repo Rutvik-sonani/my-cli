@@ -1,0 +1,36 @@
+<% if (language === 'javascript') { %>
+import { Tenant } from '../entities/Tenant.js';
+import { tenantRepository } from '../repositories/tenant.repository.js';
+
+export class TenantProvisioningService {
+  constructor(connectionManager) {
+    this.connectionManager = connectionManager;
+  }
+
+  async provisionTenant(slug, name) {
+    const tenant = Tenant.create(slug, name);
+    await tenantRepository.save({ ...tenant, status: 'provisioning' });
+    this.connectionManager.getConnection(slug);
+    await tenantRepository.save({ ...tenant, status: 'active' });
+    return tenant;
+  }
+}
+<% } else { %>
+import { Tenant } from '../entities/Tenant.js';
+import { tenantRepository } from '../repositories/tenant.repository.js';
+import type { TenantConnectionManager } from './tenant-connection-manager.js';
+
+export class TenantProvisioningService {
+  constructor(private readonly connectionManager: TenantConnectionManager) {}
+
+  async provisionTenant(slug: string, name: string): Promise<Tenant> {
+    const tenant = Tenant.create(slug, name);
+    await tenantRepository.save(
+      new Tenant(tenant.id, tenant.slug, tenant.name, 'provisioning', tenant.createdAt),
+    );
+    this.connectionManager.getConnection(slug);
+    await tenantRepository.save(tenant);
+    return tenant;
+  }
+}
+<% } %>

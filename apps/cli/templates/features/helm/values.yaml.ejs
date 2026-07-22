@@ -1,0 +1,31 @@
+replicaCount: <%= replicas %>
+
+image:
+  repository: <%= image %>
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: <%= port %>
+
+ingress:
+  enabled: true
+  className: nginx
+  host: <%= host %>
+  tls:
+    enabled: <%= tlsEnabled %>
+
+resources:
+  requests:
+    cpu: <%= cpuRequest %>
+    memory: <%= memoryRequest %>
+  limits:
+    cpu: <%= cpuLimit %>
+    memory: <%= memoryLimit %>
+
+autoscaling:
+  enabled: true
+  minReplicas: <%= minReplicas %>
+  maxReplicas: <%= maxReplicas %>
+  targetCPUUtilizationPercentage: 70

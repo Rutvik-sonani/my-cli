@@ -1,0 +1,11 @@
+# Feature Modules
+
+Each subdirectory is a bounded feature: `user/`, `order/`, `billing/`, etc.
+
+Scaffold with:
+
+```bash
+my make module <name>
+```
+
+Each module should export a single registration function consumed by `src/bootstrap/register-modules.ts`.

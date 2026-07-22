@@ -1,0 +1,47 @@
+import { EventEmitter } from 'node:events';
+import { getRedisClient } from './redis.client.js';
+
+export type DomainEvent<T = unknown> = {
+  name: string;
+  payload: T;
+  occurredAt: string;
+};
+
+type EventHandler<T = unknown> = (event: DomainEvent<T>) => void | Promise<void>;
+
+export class EventBusService extends EventEmitter {
+  private readonly channel = process.env.EVENTS_CHANNEL ?? '<%= appName %>.events';
+  private readonly redis = getRedisClient();
+  private subscribed = false;
+
+  async publish<T>(name: string, payload: T): Promise<void> {
+    const event: DomainEvent<T> = {
+      name,
+      payload,
+      occurredAt: new Date().toISOString(),
+    };
+    this.emit(name, event);
+    await this.redis.publish(this.channel, JSON.stringify(event));
+  }
+
+  onEvent<T>(name: string, handler: EventHandler<T>): void {
+    this.on(name, handler as EventHandler);
+  }
+
+  async subscribeRemote(): Promise<void> {
+    if (this.subscribed) return;
+    const sub = this.redis.duplicate();
+    await sub.subscribe(this.channel);
+    sub.on('message', (_channel, message) => {
+      try {
+        const event = JSON.parse(message) as DomainEvent;
+        this.emit(event.name, event);
+      } catch {
+        // ignore malformed messages
+      }
+    });
+    this.subscribed = true;
+  }
+}
+
+export const eventBus = new EventBusService();

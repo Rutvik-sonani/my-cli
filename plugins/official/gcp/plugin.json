@@ -1,0 +1,11 @@
+{
+  "name": "@mycli/gcp",
+  "version": "1.0.0",
+  "description": "Official MyCLI gcp plugin",
+  "main": "dist/index.js",
+  "compatibility": ">=1.0.0",
+  "author": "MyCLI",
+  "slug": "gcp",
+  "npmPackage": "@mycli/plugin-gcp",
+  "keywords": ["gcp", "mycli"]
+}

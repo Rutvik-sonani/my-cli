@@ -1,0 +1,87 @@
+<% if (language === 'javascript') { %>
+import { percentageBucket } from './percentage.js';
+
+export function evaluateDefinition(definition, context = {}) {
+  if (!definition) {
+    return { key: 'unknown', enabled: false, reason: 'default' };
+  }
+
+  const key = definition.key;
+  if (!definition.enabled) {
+    return { key, enabled: false, reason: 'disabled' };
+  }
+
+  if (definition.environments?.length) {
+    if (!context.environment || !definition.environments.includes(context.environment)) {
+      return { key, enabled: false, reason: 'environment' };
+    }
+  }
+
+  if (definition.countries?.length) {
+    if (!context.country || !definition.countries.includes(context.country.toUpperCase())) {
+      return { key, enabled: false, reason: 'country' };
+    }
+  }
+
+  if (definition.userTargets && context.userId && definition.userTargets.includes(context.userId)) {
+    return { key, enabled: true, reason: 'user-target' };
+  }
+
+  if (typeof definition.percentage === 'number') {
+    const pct = Math.max(0, Math.min(100, definition.percentage));
+    if (pct <= 0) return { key, enabled: false, reason: 'percentage' };
+    if (pct >= 100) return { key, enabled: true, reason: 'percentage' };
+    const userId = context.userId ?? 'anonymous';
+    return { key, enabled: percentageBucket(key, userId) < pct, reason: 'percentage' };
+  }
+
+  return { key, enabled: true, reason: 'enabled' };
+}
+<% } else { %>
+import type {
+  FeatureFlagContext,
+  FeatureFlagDefinition,
+  FeatureFlagEvaluation,
+} from '../feature-flag.types.js';
+import { percentageBucket } from './percentage.js';
+
+export function evaluateDefinition(
+  definition: FeatureFlagDefinition | undefined,
+  context: FeatureFlagContext = {},
+): FeatureFlagEvaluation {
+  if (!definition) {
+    return { key: 'unknown', enabled: false, reason: 'default' };
+  }
+
+  const key = definition.key;
+  if (!definition.enabled) {
+    return { key, enabled: false, reason: 'disabled' };
+  }
+
+  if (definition.environments && definition.environments.length > 0) {
+    if (!context.environment || !definition.environments.includes(context.environment)) {
+      return { key, enabled: false, reason: 'environment' };
+    }
+  }
+
+  if (definition.countries && definition.countries.length > 0) {
+    if (!context.country || !definition.countries.includes(context.country.toUpperCase())) {
+      return { key, enabled: false, reason: 'country' };
+    }
+  }
+
+  if (definition.userTargets && context.userId && definition.userTargets.includes(context.userId)) {
+    return { key, enabled: true, reason: 'user-target' };
+  }
+
+  if (typeof definition.percentage === 'number') {
+    const pct = Math.max(0, Math.min(100, definition.percentage));
+    if (pct <= 0) return { key, enabled: false, reason: 'percentage' };
+    if (pct >= 100) return { key, enabled: true, reason: 'percentage' };
+    const userId = context.userId ?? 'anonymous';
+    return { key, enabled: percentageBucket(key, userId) < pct, reason: 'percentage' };
+  }
+
+  return { key, enabled: true, reason: 'enabled' };
+}
+<% } %>

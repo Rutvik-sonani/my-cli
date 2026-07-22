@@ -1,0 +1,16 @@
+<% if (language === 'javascript') { %>
+import { handleUserCreated } from '../handlers/user-created.handler.js';
+
+export function registerUserCreatedConsumer(consumer) {
+  consumer.on('user.created', handleUserCreated);
+}
+<% } else { %>
+import type { EventEnvelope } from '../serializer.js';
+import { handleUserCreated, type UserCreatedPayload } from '../handlers/user-created.handler.js';
+
+export function registerUserCreatedConsumer(
+  consumer: { on(type: string, handler: (envelope: EventEnvelope<UserCreatedPayload>) => Promise<void>): void },
+): void {
+  consumer.on('user.created', handleUserCreated);
+}
+<% } %>

@@ -1,0 +1,22 @@
+<% if (language === 'javascript') { %>
+/** @type {import('../compliance.types.js').CompliancePolicy} */
+export const hipaaPolicy = {
+  id: 'policy-hipaa',
+  framework: 'hipaa',
+  name: 'HIPAA Security Policy',
+  version: '1.0.0',
+  summary:
+    '<%= appName %> protects PHI with access controls, audit logging, and breach notification readiness.',
+};
+<% } else { %>
+import type { CompliancePolicy } from '../compliance.types.js';
+
+export const hipaaPolicy: CompliancePolicy = {
+  id: 'policy-hipaa',
+  framework: 'hipaa',
+  name: 'HIPAA Security Policy',
+  version: '1.0.0',
+  summary:
+    '<%= appName %> protects PHI with access controls, audit logging, and breach notification readiness.',
+};
+<% } %>

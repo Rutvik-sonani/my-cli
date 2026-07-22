@@ -1,0 +1,76 @@
+# Multi-Tenancy — <%= appName %>
+
+Enterprise tenancy module (Phase 5).
+
+## Configuration
+
+| Setting | Value |
+|---------|-------|
+| Tenant model | **<%= model %>** |
+| Database strategy | **<%= strategy %>** |
+
+## Request flow
+
+```
+GET /orders
+    ↓
+Identify tenant (header: x-tenant-id)
+    ↓
+Set AsyncLocalStorage tenant context
+    ↓
+<% if (model === 'multi-tenant-saas' && strategy === 'shared-db') { %>
+Apply tenant_id filter on queries
+<% } else if (model === 'multi-tenant-saas' && strategy === 'schema-per-tenant') { %>
+Switch PostgreSQL schema dynamically
+<% } else if (model === 'multi-tenant-saas' && strategy === 'db-per-tenant') { %>
+Resolve dedicated DATABASE_URL for tenant
+<% } else { %>
+Use fixed default tenant
+<% } %>
+```
+
+## Usage
+
+```ts
+import { registerTenancyMiddleware, getTenantId, bootstrapTenancy } from './src/tenancy/index.js';
+
+await bootstrapTenancy();
+await registerTenancyMiddleware(app);
+
+app.get('/orders', async () => {
+  const tenantId = getTenantId();
+  // fetch orders scoped to tenantId
+});
+```
+
+## Layout
+
+```
+src/tenancy/
+  entities/Tenant.ts
+  repositories/tenant.repository.ts
+  tenant.context.ts
+  tenant.middleware.ts
+  tenant.resolver.ts
+<% if (model === 'multi-tenant-saas' && strategy === 'shared-db') { %>
+  tenant-filter.ts
+  migrations/tenancy/001_add_tenant_id_columns.sql
+<% } %>
+<% if (model === 'multi-tenant-saas' && strategy === 'schema-per-tenant') { %>
+  schema/schema-manager.ts
+  schema/tenant-schema.service.ts
+<% } %>
+<% if (model === 'multi-tenant-saas' && strategy === 'db-per-tenant') { %>
+  database/tenant-connection-manager.ts
+  database/tenant-provisioning.service.ts
+  database/tenant-migration-runner.ts
+<% } %>
+```
+
+## Environment
+
+See `.env.example` for `TENANT_HEADER`, `DEFAULT_TENANT`, and strategy-specific variables.
+
+## Legacy platform tenancy
+
+Older projects may have `src/platform/tenancy/` from platform-manager. This module at `src/tenancy/` is the enterprise Phase 5 implementation.

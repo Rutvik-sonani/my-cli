@@ -1,0 +1,12 @@
+export type {
+  FeatureFlagContext,
+  FeatureFlagDefinition,
+  FeatureFlagEvaluation,
+  FeatureFlagProviderId,
+} from './feature-flag.types.js';
+export type { FeatureFlagProvider } from './feature-flag-provider.interface.js';
+export { FeatureFlagService } from './feature-flag.service.js';
+export { evaluateDefinition } from './targeting/evaluate.js';
+export { percentageBucket } from './targeting/percentage.js';
+export * from './providers/index.js';
+export { featureFlags, featureFlagProvider } from './register-feature-flags.js';

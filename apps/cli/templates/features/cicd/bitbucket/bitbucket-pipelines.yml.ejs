@@ -1,0 +1,17 @@
+image: node:<%= nodeVersion %>
+
+pipelines:
+  default:
+    - step:
+        name: Build and Test
+        caches:
+          - node
+        script:
+          - <%= installCommand %>
+          - <%= lintCommand %>
+          - <%= testCommand %>
+          - <%= buildCommand %>
+
+definitions:
+  caches:
+    node: node_modules

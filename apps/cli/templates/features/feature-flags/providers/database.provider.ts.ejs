@@ -1,0 +1,88 @@
+<% if (language === 'javascript') { %>
+import { readFile } from 'node:fs/promises';
+import { evaluateDefinition } from '../targeting/evaluate.js';
+
+export class DatabaseFeatureFlagProvider {
+  constructor(flags = {}) {
+    this.id = 'database';
+    this.flags = flags;
+    this.connected = false;
+  }
+
+  async connect() {
+    const path = process.env.FEATURE_FLAGS_PATH ?? 'config/feature-flags.json';
+    try {
+      const raw = await readFile(path, 'utf8');
+      this.flags = JSON.parse(raw);
+    } catch {
+      /* keep existing */
+    }
+    this.connected = true;
+  }
+
+  async disconnect() {
+    this.connected = false;
+  }
+
+  setFlag(definition) {
+    this.flags[definition.key] = definition;
+  }
+
+  async evaluate(key, context = {}) {
+    if (!this.connected) await this.connect();
+    return evaluateDefinition(this.flags[key], context);
+  }
+
+  async isEnabled(key, context = {}) {
+    return (await this.evaluate(key, context)).enabled;
+  }
+}
+<% } else { %>
+import { readFile } from 'node:fs/promises';
+import type { FeatureFlagProvider } from '../feature-flag-provider.interface.js';
+import type {
+  FeatureFlagContext,
+  FeatureFlagDefinition,
+  FeatureFlagEvaluation,
+  FeatureFlagProviderId,
+} from '../feature-flag.types.js';
+import { evaluateDefinition } from '../targeting/evaluate.js';
+
+export class DatabaseFeatureFlagProvider implements FeatureFlagProvider {
+  readonly id: FeatureFlagProviderId = 'database';
+  private flags: Record<string, FeatureFlagDefinition>;
+  private connected = false;
+
+  constructor(flags: Record<string, FeatureFlagDefinition> = {}) {
+    this.flags = flags;
+  }
+
+  async connect(): Promise<void> {
+    const path = process.env.FEATURE_FLAGS_PATH ?? 'config/feature-flags.json';
+    try {
+      const raw = await readFile(path, 'utf8');
+      this.flags = JSON.parse(raw) as Record<string, FeatureFlagDefinition>;
+    } catch {
+      /* keep existing */
+    }
+    this.connected = true;
+  }
+
+  async disconnect(): Promise<void> {
+    this.connected = false;
+  }
+
+  setFlag(definition: FeatureFlagDefinition): void {
+    this.flags[definition.key] = definition;
+  }
+
+  async evaluate(key: string, context: FeatureFlagContext = {}): Promise<FeatureFlagEvaluation> {
+    if (!this.connected) await this.connect();
+    return evaluateDefinition(this.flags[key], context);
+  }
+
+  async isEnabled(key: string, context: FeatureFlagContext = {}): Promise<boolean> {
+    return (await this.evaluate(key, context)).enabled;
+  }
+}
+<% } %>

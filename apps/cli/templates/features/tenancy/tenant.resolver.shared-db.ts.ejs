@@ -1,0 +1,30 @@
+<% if (language === 'javascript') { %>
+const HEADER = process.env.TENANT_HEADER ?? 'x-tenant-id';
+
+export function resolveTenantFromRequest(request) {
+  const header = request?.headers?.[HEADER.toLowerCase()];
+  const tenantId =
+    (typeof header === 'string' ? header : Array.isArray(header) ? header[0] : undefined) ??
+    process.env.DEFAULT_TENANT ??
+    'default';
+  return { tenantId, slug: tenantId };
+}
+<% } else { %>
+import type { FastifyRequest } from 'fastify';
+
+const HEADER = process.env.TENANT_HEADER ?? 'x-tenant-id';
+
+export interface ResolvedTenant {
+  tenantId: string;
+  slug: string;
+}
+
+export function resolveTenantFromRequest(request?: FastifyRequest): ResolvedTenant {
+  const header = request?.headers?.[HEADER.toLowerCase()];
+  const tenantId =
+    (typeof header === 'string' ? header : Array.isArray(header) ? header[0] : undefined) ??
+    process.env.DEFAULT_TENANT ??
+    'default';
+  return { tenantId, slug: tenantId };
+}
+<% } %>

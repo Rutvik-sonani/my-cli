@@ -1,0 +1,11 @@
+{
+  "name": "@mycli/github",
+  "version": "1.0.0",
+  "description": "Official MyCLI github plugin",
+  "main": "dist/index.js",
+  "compatibility": ">=1.0.0",
+  "author": "MyCLI",
+  "slug": "github",
+  "npmPackage": "@mycli/plugin-github",
+  "keywords": ["github", "mycli"]
+}

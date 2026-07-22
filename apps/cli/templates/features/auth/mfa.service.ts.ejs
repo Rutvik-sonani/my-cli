@@ -1,0 +1,20 @@
+import { authenticator } from 'otplib';
+
+export class MfaService {
+  generateSecret(): string {
+    return authenticator.generateSecret();
+  }
+
+  generateOtpAuthUrl(email: string, secret: string): string {
+    const issuer = process.env.APP_NAME ?? 'MyCLI App';
+    return authenticator.keyuri(email, issuer, secret);
+  }
+
+  verify(code: string, secret: string): boolean {
+    try {
+      return authenticator.verify({ token: code, secret });
+    } catch {
+      return false;
+    }
+  }
+}

@@ -1,0 +1,19 @@
+<% if (language === 'javascript') { %>
+/** @typedef {{ id: string, email?: string, name?: string, provider: string, claims: Record<string, unknown> }} IdentityUser */
+
+/** @typedef {{ authenticate(input: Record<string, unknown>): Promise<IdentityUser>, id: string, protocol: string }} IdentityProvider */
+<% } else { %>
+export interface IdentityUser {
+  id: string;
+  email?: string;
+  name?: string;
+  provider: string;
+  claims: Record<string, unknown>;
+}
+
+export interface IdentityProvider {
+  readonly id: string;
+  readonly protocol: 'oauth2' | 'oidc' | 'saml' | 'ldap';
+  authenticate(input: Record<string, unknown>): Promise<IdentityUser>;
+}
+<% } %>

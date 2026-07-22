@@ -1,0 +1,44 @@
+/**
+ * Email value object — immutable, validated in the domain layer.
+ */
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+<% if (language === 'javascript') { %>
+export class Email {
+  constructor(value) {
+    const normalized = String(value).trim().toLowerCase();
+    if (!EMAIL_RE.test(normalized)) {
+      throw new Error('Invalid email address');
+    }
+    this.value = normalized;
+  }
+
+  toString() {
+    return this.value;
+  }
+
+  equals(other) {
+    return other instanceof Email && other.value === this.value;
+  }
+}
+<% } else { %>
+export class Email {
+  private constructor(public readonly value: string) {}
+
+  static create(raw: string): Email {
+    const normalized = raw.trim().toLowerCase();
+    if (!EMAIL_RE.test(normalized)) {
+      throw new Error('Invalid email address');
+    }
+    return new Email(normalized);
+  }
+
+  equals(other: Email): boolean {
+    return this.value === other.value;
+  }
+
+  toString(): string {
+    return this.value;
+  }
+}
+<% } %>

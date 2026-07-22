@@ -1,0 +1,30 @@
+<% if (language === 'javascript') { %>
+import { <%= pascal %>Query } from '../<%= pascal %>Query.js';
+
+export class <%= pascal %>Handler {
+  async handle(query) {
+    // TODO: implement <%= pascal %> query handler
+    return { items: [], query: query.type };
+  }
+}
+
+export function register<%= pascal %>Query(queryBus) {
+  const handler = new <%= pascal %>Handler();
+  queryBus.register(<%= pascal %>Query.type, (query) => handler.handle(query));
+}
+<% } else { %>
+import type { QueryBus } from '../../../cqrs/query-bus.js';
+import { <%= pascal %>Query } from '../<%= pascal %>Query.js';
+
+export class <%= pascal %>Handler {
+  async handle(query: <%= pascal %>Query): Promise<{ items: unknown[]; query: string }> {
+    // TODO: implement <%= pascal %> query handler
+    return { items: [], query: query.type };
+  }
+}
+
+export function register<%= pascal %>Query(queryBus: QueryBus): void {
+  const handler = new <%= pascal %>Handler();
+  queryBus.register(<%= pascal %>Query.type, (query) => handler.handle(query as <%= pascal %>Query));
+}
+<% } %>

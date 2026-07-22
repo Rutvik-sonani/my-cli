@@ -1,0 +1,19 @@
+/**
+ * Composition root — wire infrastructure adapters to application use cases.
+ * This is the only place concrete implementations should be instantiated.
+ */
+<% if (language === 'javascript') { %>
+export function createAppContainer() {
+  return {
+    // register repositories, use cases, controllers
+  };
+}
+<% } else { %>
+export interface AppContainer {
+  // register repositories, use cases, controllers
+}
+
+export function createAppContainer(): AppContainer {
+  return {};
+}
+<% } %>

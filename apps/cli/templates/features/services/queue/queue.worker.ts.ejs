@@ -1,0 +1,12 @@
+import { queueService } from './queue.service.js';
+
+/** Example worker — register additional workers per queue name. */
+export function startDefaultWorkers(): void {
+  queueService.registerWorker('default', async (job) => {
+    console.log(`[queue] processing ${job.name}`, job.data);
+  });
+}
+
+if (process.env.NODE_ENV !== 'test') {
+  startDefaultWorkers();
+}

@@ -1,0 +1,19 @@
+/** @type {import('cz-git').UserConfig} */
+export default {
+  path: 'cz-conventional-changelog',
+<% if (commitConvention === 'angular') { %>
+  types: [
+    { value: 'feat', name: 'feat:     ✨ A new feature', emoji: ':sparkles:' },
+    { value: 'fix', name: 'fix:      🐛 A bug fix', emoji: ':bug:' },
+    { value: 'docs', name: 'docs:     📝 Documentation only', emoji: ':memo:' },
+    { value: 'style', name: 'style:    💄 Code style (formatting)', emoji: ':lipstick:' },
+    { value: 'refactor', name: 'refactor: ♻️  Code refactor', emoji: ':recycle:' },
+    { value: 'perf', name: 'perf:     ⚡ Performance improvement', emoji: ':zap:' },
+    { value: 'test', name: 'test:     ✅ Tests', emoji: ':white_check_mark:' },
+    { value: 'build', name: 'build:    📦 Build system or deps', emoji: ':package:' },
+    { value: 'ci', name: 'ci:       👷 CI configuration', emoji: ':construction_worker:' },
+    { value: 'chore', name: 'chore:    🔧 Other changes', emoji: ':wrench:' },
+    { value: 'revert', name: 'revert:   ⏪ Revert a commit', emoji: ':rewind:' },
+  ],
+<% } %>
+};

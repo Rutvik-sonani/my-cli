@@ -1,0 +1,11 @@
+{
+  "name": "@mycli/mongodb",
+  "version": "1.0.0",
+  "description": "Official MyCLI MongoDB database plugin",
+  "main": "dist/index.js",
+  "compatibility": ">=1.0.0",
+  "author": "MyCLI",
+  "slug": "mongodb",
+  "npmPackage": "@mycli/plugin-mongodb",
+  "keywords": ["mongodb", "database", "mycli"]
+}

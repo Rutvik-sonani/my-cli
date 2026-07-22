@@ -1,0 +1,30 @@
+pipeline {
+  agent any
+
+  tools {
+    nodejs 'NodeJS-<%= nodeVersion %>'
+  }
+
+  stages {
+    stage('Install') {
+      steps {
+        sh '<%= installCommand %>'
+      }
+    }
+    stage('Lint') {
+      steps {
+        sh '<%= lintCommand %>'
+      }
+    }
+    stage('Test') {
+      steps {
+        sh '<%= testCommand %>'
+      }
+    }
+    stage('Build') {
+      steps {
+        sh '<%= buildCommand %>'
+      }
+    }
+  }
+}

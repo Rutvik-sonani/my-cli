@@ -1,0 +1,48 @@
+import type { FastifyInstance } from 'fastify';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+<% if (provider === 'swagger') { %>
+import swagger from '@fastify/swagger';
+import swaggerUi from '@fastify/swagger-ui';
+import { swaggerConfig } from './swagger.config.js';
+<% } %>
+<% if (provider === 'scalar') { %>
+import scalarReference from '@scalar/fastify-api-reference';
+<% } %>
+<% if (provider === 'redoc') { %>
+import fastifyStatic from '@fastify/static';
+<% } %>
+
+export async function registerDocsRoutes(app: FastifyInstance): Promise<void> {
+<% if (provider === 'swagger') { %>
+  await app.register(swagger, { openapi: swaggerConfig });
+  await app.register(swaggerUi, {
+    routePrefix: '/docs',
+    staticCSP: true,
+  });
+<% } else if (provider === 'scalar') { %>
+  const spec = JSON.parse(readFileSync(join(process.cwd(), 'openapi.json'), 'utf8'));
+  await app.register(scalarReference, {
+    routePrefix: '/docs',
+    configuration: { spec: { content: spec } },
+  });
+<% } else if (provider === 'redoc') { %>
+  await app.register(fastifyStatic, {
+    root: join(process.cwd(), 'public'),
+    prefix: '/public/',
+  });
+  app.get('/docs', async (_request, reply) => {
+    const html = `<!DOCTYPE html><html><head><title><%= title %></title></head><body><redoc spec-url='/openapi.json'></redoc><script src='https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js'></script></body></html>`;
+    return reply.type('text/html').send(html);
+  });
+  app.get('/openapi.json', async (_request, reply) => {
+    const spec = readFileSync(join(process.cwd(), 'openapi.json'), 'utf8');
+    return reply.type('application/json').send(JSON.parse(spec));
+  });
+<% } else { %>
+  app.get('/openapi.json', async (_request, reply) => {
+    const spec = readFileSync(join(process.cwd(), 'openapi.json'), 'utf8');
+    return reply.type('application/json').send(JSON.parse(spec));
+  });
+<% } %>
+}

@@ -1,0 +1,115 @@
+<% if (language === 'javascript') { %>
+function labelKey(labels) {
+  if (!labels) return '';
+  return Object.keys(labels)
+    .sort()
+    .map((key) => `${key}=${labels[key]}`)
+    .join(',');
+}
+
+export class MetricsRegistry {
+  constructor() {
+    this.counters = new Map();
+    this.histograms = new Map();
+  }
+
+  counter(name, help, labels) {
+    const entry = this.counters.get(name) ?? { help, values: new Map() };
+    const key = labelKey(labels);
+    entry.values.set(key, (entry.values.get(key) ?? 0) + 1);
+    this.counters.set(name, entry);
+  }
+
+  observe(name, help, value, labels) {
+    const entry = this.histograms.get(name) ?? { help, values: new Map() };
+    const key = labelKey(labels);
+    const current = entry.values.get(key) ?? { count: 0, sum: 0 };
+    current.count += 1;
+    current.sum += value;
+    entry.values.set(key, current);
+    this.histograms.set(name, entry);
+  }
+
+  scrape() {
+    const lines = [];
+    for (const [name, entry] of this.counters) {
+      lines.push(`# HELP ${name} ${entry.help}`);
+      lines.push(`# TYPE ${name} counter`);
+      for (const [labels, value] of entry.values) {
+        lines.push(labels ? `${name}{${labels}} ${value}` : `${name} ${value}`);
+      }
+    }
+    for (const [name, entry] of this.histograms) {
+      lines.push(`# HELP ${name} ${entry.help}`);
+      lines.push(`# TYPE ${name} summary`);
+      for (const [labels, value] of entry.values) {
+        const suffix = labels ? `{${labels}}` : '';
+        lines.push(`${name}_count${suffix} ${value.count}`);
+        lines.push(`${name}_sum${suffix} ${value.sum}`);
+      }
+    }
+    return `${lines.join('\n')}\n`;
+  }
+}
+
+export const metrics = new MetricsRegistry();
+<% } else { %>
+import type { MetricLabels } from '../observability.types.js';
+
+function labelKey(labels?: MetricLabels): string {
+  if (!labels) return '';
+  return Object.keys(labels)
+    .sort()
+    .map((key) => `${key}=${labels[key]}`)
+    .join(',');
+}
+
+export class MetricsRegistry {
+  private readonly counters = new Map<string, { help: string; values: Map<string, number> }>();
+  private readonly histograms = new Map<
+    string,
+    { help: string; values: Map<string, { count: number; sum: number }> }
+  >();
+
+  counter(name: string, help: string, labels?: MetricLabels): void {
+    const entry = this.counters.get(name) ?? { help, values: new Map() };
+    const key = labelKey(labels);
+    entry.values.set(key, (entry.values.get(key) ?? 0) + 1);
+    this.counters.set(name, entry);
+  }
+
+  observe(name: string, help: string, value: number, labels?: MetricLabels): void {
+    const entry = this.histograms.get(name) ?? { help, values: new Map() };
+    const key = labelKey(labels);
+    const current = entry.values.get(key) ?? { count: 0, sum: 0 };
+    current.count += 1;
+    current.sum += value;
+    entry.values.set(key, current);
+    this.histograms.set(name, entry);
+  }
+
+  /** Prometheus text exposition format */
+  scrape(): string {
+    const lines: string[] = [];
+    for (const [name, entry] of this.counters) {
+      lines.push(`# HELP ${name} ${entry.help}`);
+      lines.push(`# TYPE ${name} counter`);
+      for (const [labels, value] of entry.values) {
+        lines.push(labels ? `${name}{${labels}} ${value}` : `${name} ${value}`);
+      }
+    }
+    for (const [name, entry] of this.histograms) {
+      lines.push(`# HELP ${name} ${entry.help}`);
+      lines.push(`# TYPE ${name} summary`);
+      for (const [labels, value] of entry.values) {
+        const suffix = labels ? `{${labels}}` : '';
+        lines.push(`${name}_count${suffix} ${value.count}`);
+        lines.push(`${name}_sum${suffix} ${value.sum}`);
+      }
+    }
+    return `${lines.join('\n')}\n`;
+  }
+}
+
+export const metrics = new MetricsRegistry();
+<% } %>

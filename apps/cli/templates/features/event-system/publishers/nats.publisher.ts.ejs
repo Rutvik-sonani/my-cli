@@ -1,0 +1,66 @@
+<% if (language === 'javascript') { %>
+import { connect, StringCodec } from 'nats';
+import { JsonEventSerializer } from '../serializer.js';
+import { withRetry } from '../retry.policy.js';
+import { DeadLetterQueue } from '../dead-letter/dead-letter.queue.js';
+
+export class NatsEventPublisher {
+  constructor(options = {}) {
+    this.subjectPrefix = options.subjectPrefix ?? process.env.NATS_SUBJECT ?? '<%= appName %>.events';
+    this.url = options.url ?? process.env.NATS_URL ?? 'nats://localhost:4222';
+    this.serializer = new JsonEventSerializer();
+    this.deadLetter = new DeadLetterQueue();
+    this.sc = StringCodec();
+    this.connection = null;
+  }
+
+  async publish(envelope) {
+    if (!this.connection) {
+      this.connection = await connect({ servers: this.url });
+    }
+    await withRetry(async () => {
+      this.connection.publish(`${this.subjectPrefix}.${envelope.type}`, this.sc.encode(this.serializer.serialize(envelope)));
+    });
+  }
+
+  async close() {
+    await this.connection?.drain();
+  }
+}
+<% } else { %>
+import { connect, StringCodec, type NatsConnection } from 'nats';
+import { JsonEventSerializer, type EventEnvelope } from '../serializer.js';
+import { withRetry } from '../retry.policy.js';
+import { DeadLetterQueue } from '../dead-letter/dead-letter.queue.js';
+import type { EventPublisher } from './event-publisher.interface.js';
+
+export class NatsEventPublisher implements EventPublisher {
+  private readonly subjectPrefix: string;
+  private readonly url: string;
+  private connection: NatsConnection | null = null;
+  private readonly serializer = new JsonEventSerializer();
+  private readonly sc = StringCodec();
+  readonly deadLetter = new DeadLetterQueue();
+
+  constructor(options: { url?: string; subjectPrefix?: string } = {}) {
+    this.subjectPrefix = options.subjectPrefix ?? process.env.NATS_SUBJECT ?? '<%= appName %>.events';
+    this.url = options.url ?? process.env.NATS_URL ?? 'nats://localhost:4222';
+  }
+
+  async publish<T>(envelope: EventEnvelope<T>): Promise<void> {
+    if (!this.connection) {
+      this.connection = await connect({ servers: this.url });
+    }
+    await withRetry(async () => {
+      this.connection!.publish(
+        `${this.subjectPrefix}.${envelope.type}`,
+        this.sc.encode(this.serializer.serialize(envelope)),
+      );
+    });
+  }
+
+  async close(): Promise<void> {
+    await this.connection?.drain();
+  }
+}
+<% } %>

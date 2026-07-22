@@ -1,0 +1,62 @@
+import { AppDataSource } from '../../database/data-source.js';
+import { Role } from '../../database/entities/role.entity.js';
+import { Permission } from '../../database/entities/permission.entity.js';
+import { RolePermission } from '../../database/entities/role-permission.entity.js';
+import { UserRole } from '../../database/entities/user-role.entity.js';
+import type { Permission as PermissionType, Role as RoleType } from './rbac.types.js';
+
+export class RbacRepository {
+  private roles() {
+    return AppDataSource.getRepository(Role);
+  }
+
+  private permissions() {
+    return AppDataSource.getRepository(Permission);
+  }
+
+  async findRoleByName(name: string): Promise<RoleType | null> {
+    return this.roles().findOne({ where: { name } });
+  }
+
+  async findPermissionByName(name: string): Promise<PermissionType | null> {
+    return this.permissions().findOne({ where: { name } });
+  }
+
+  async createRole(name: string, description?: string): Promise<RoleType> {
+    const role = this.roles().create({ name, description: description ?? null });
+    return this.roles().save(role);
+  }
+
+  async createPermission(name: string, description?: string): Promise<PermissionType> {
+    const permission = this.permissions().create({ name, description: description ?? null });
+    return this.permissions().save(permission);
+  }
+
+  async assignPermission(roleId: string, permissionId: string): Promise<void> {
+    await AppDataSource.getRepository(RolePermission).save({ roleId, permissionId });
+  }
+
+  async assignRole(userId: string, roleId: string): Promise<void> {
+    await AppDataSource.getRepository(UserRole).save({ userId, roleId });
+  }
+
+  async userRoles(userId: string): Promise<RoleType[]> {
+    const links = await AppDataSource.getRepository(UserRole).find({ where: { userId } });
+    const result: RoleType[] = [];
+    for (const link of links) {
+      const role = await this.roles().findOne({ where: { id: link.roleId } });
+      if (role) result.push(role);
+    }
+    return result;
+  }
+
+  async rolePermissions(roleId: string): Promise<PermissionType[]> {
+    const links = await AppDataSource.getRepository(RolePermission).find({ where: { roleId } });
+    const result: PermissionType[] = [];
+    for (const link of links) {
+      const permission = await this.permissions().findOne({ where: { id: link.permissionId } });
+      if (permission) result.push(permission);
+    }
+    return result;
+  }
+}

@@ -1,0 +1,78 @@
+<% if (language === 'javascript') { %>
+import { createProcessingRecord } from './processing-record.js';
+
+export class ProcessingRegistry {
+  constructor() {
+    this.records = [];
+  }
+
+  async record(userId, purpose, legalBasis, dataCategories, options = {}) {
+    const entry = createProcessingRecord({
+      userId,
+      purpose,
+      legalBasis,
+      dataCategories,
+      processor: options.processor,
+      metadata: options.metadata,
+    });
+    this.records.push(entry);
+    return entry;
+  }
+
+  async listByUser(userId) {
+    return this.records.filter((record) => record.userId === userId);
+  }
+
+  async deleteByUser(userId) {
+    let removed = 0;
+    for (let i = this.records.length - 1; i >= 0; i -= 1) {
+      if (this.records[i]?.userId === userId) {
+        this.records.splice(i, 1);
+        removed += 1;
+      }
+    }
+    return removed;
+  }
+}
+<% } else { %>
+import type { DataProcessingRecord } from '../privacy.types.js';
+import { createProcessingRecord } from './processing-record.js';
+
+export class ProcessingRegistry {
+  private readonly records: DataProcessingRecord[] = [];
+
+  async record(
+    userId: string,
+    purpose: string,
+    legalBasis: string,
+    dataCategories: string[],
+    options: { processor?: string; metadata?: Record<string, unknown> } = {},
+  ): Promise<DataProcessingRecord> {
+    const entry = createProcessingRecord({
+      userId,
+      purpose,
+      legalBasis,
+      dataCategories,
+      processor: options.processor,
+      metadata: options.metadata,
+    });
+    this.records.push(entry);
+    return entry;
+  }
+
+  async listByUser(userId: string): Promise<DataProcessingRecord[]> {
+    return this.records.filter((record) => record.userId === userId);
+  }
+
+  async deleteByUser(userId: string): Promise<number> {
+    let removed = 0;
+    for (let i = this.records.length - 1; i >= 0; i -= 1) {
+      if (this.records[i]?.userId === userId) {
+        this.records.splice(i, 1);
+        removed += 1;
+      }
+    }
+    return removed;
+  }
+}
+<% } %>

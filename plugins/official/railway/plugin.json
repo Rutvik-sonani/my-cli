@@ -1,0 +1,11 @@
+{
+  "name": "@mycli/railway",
+  "version": "1.0.0",
+  "description": "Official MyCLI railway plugin",
+  "main": "dist/index.js",
+  "compatibility": ">=1.0.0",
+  "author": "MyCLI",
+  "slug": "railway",
+  "npmPackage": "@mycli/plugin-railway",
+  "keywords": ["railway", "mycli"]
+}

@@ -1,0 +1,40 @@
+<% if (language === 'javascript') { %>
+/**
+ * @param {{ features?: Record<string, boolean>, existingPaths?: string[] }} snapshot
+ * @returns {import('../health.types.js').HealthFinding[]}
+ */
+export function analyzeSecurity(snapshot) {
+  const hasSecurity =
+    Boolean(snapshot.features?.security) || (snapshot.existingPaths ?? []).includes('src/security');
+  return [
+    {
+      id: 'sec-platform',
+      category: 'security',
+      status: hasSecurity ? 'pass' : 'fail',
+      title: 'Security platform',
+      message: hasSecurity ? 'Security platform present.' : 'Security platform missing.',
+      recommendation: hasSecurity ? undefined : 'Run `my security setup`.',
+    },
+  ];
+}
+<% } else { %>
+import type { HealthFinding } from '../health.types.js';
+
+export function analyzeSecurity(snapshot: {
+  features?: Record<string, boolean>;
+  existingPaths?: string[];
+}): HealthFinding[] {
+  const hasSecurity =
+    Boolean(snapshot.features?.security) || (snapshot.existingPaths ?? []).includes('src/security');
+  return [
+    {
+      id: 'sec-platform',
+      category: 'security',
+      status: hasSecurity ? 'pass' : 'fail',
+      title: 'Security platform',
+      message: hasSecurity ? 'Security platform present.' : 'Security platform missing.',
+      recommendation: hasSecurity ? undefined : 'Run `my security setup`.',
+    },
+  ];
+}
+<% } %>

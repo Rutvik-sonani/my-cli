@@ -1,0 +1,242 @@
+<% if (language === 'javascript') { %>
+/**
+ * Evaluates governance policy against a project snapshot.
+ */
+export class GovernanceChecker {
+  /** @param {import('../governance.types.js').GovernancePolicy} policy */
+  constructor(policy) {
+    this.policy = policy;
+  }
+
+  getPolicy() {
+    return this.policy;
+  }
+
+  /**
+   * @param {{ projectName: string, database?: string, features: Record<string, boolean>, scripts: Record<string, string>, existingPaths: string[] }} snapshot
+   * @returns {import('../governance.types.js').GovernanceReport}
+   */
+  check(snapshot) {
+    const results = this.policy.rules.map((rule) => this.evaluateRule(rule, snapshot));
+    const summary = { pass: 0, fail: 0, warning: 0, skipped: 0 };
+    for (const result of results) summary[result.status] += 1;
+    const requiredFailed = results.some(
+      (result, index) => this.policy.rules[index]?.required && result.status === 'fail',
+    );
+    return {
+      id: crypto.randomUUID(),
+      policyId: this.policy.id,
+      generatedAt: new Date(),
+      projectName: snapshot.projectName,
+      results,
+      summary,
+      compliant: !requiredFailed,
+    };
+  }
+
+  /** @param {import('../governance.types.js').GovernanceReport} report */
+  renderMarkdown(report) {
+    const lines = [
+      `# Governance Report — ${report.projectName}`,
+      '',
+      `- Compliant: ${report.compliant ? 'yes' : 'no'}`,
+      `- Pass: ${report.summary.pass}`,
+      `- Fail: ${report.summary.fail}`,
+      '',
+      '## Checklist',
+      '',
+    ];
+    for (const result of report.results) {
+      const mark = result.status === 'pass' ? '✔' : result.status === 'fail' ? '✘' : '⚠';
+      lines.push(`- ${mark} **${result.title}** (${result.status}): ${result.message}`);
+    }
+    lines.push('');
+    return lines.join('\n');
+  }
+
+  evaluateRule(rule, snapshot) {
+    const failures = [];
+    const evidence = [];
+
+    if (rule.expect?.database) {
+      if (snapshot.database === rule.expect.database) evidence.push(`database=${snapshot.database}`);
+      else failures.push(`expected database \`${rule.expect.database}\``);
+    }
+
+    const hasFeature = Boolean(rule.featureKey);
+    const hasPaths = Boolean(rule.expect?.pathExists?.length);
+    const hasScripts = Boolean(rule.expect?.packageScripts?.length);
+
+    if (hasFeature && hasPaths && hasScripts) {
+      const featureOk = Boolean(snapshot.features[rule.featureKey]);
+      const matchedPaths = rule.expect.pathExists.filter((p) => snapshot.existingPaths.includes(p));
+      const scriptsOk = rule.expect.packageScripts.every((s) => snapshot.scripts[s]);
+      if (featureOk || matchedPaths.length || scriptsOk) {
+        if (featureOk) evidence.push(`feature:${rule.featureKey}`);
+        if (matchedPaths.length) evidence.push(`paths:${matchedPaths.join(',')}`);
+        if (scriptsOk) evidence.push(`scripts:${rule.expect.packageScripts.join(',')}`);
+      } else {
+        failures.push('tests requirement not met');
+      }
+    } else if (hasFeature && hasPaths) {
+      const featureOk = Boolean(snapshot.features[rule.featureKey]);
+      const matchedPaths = rule.expect.pathExists.filter((p) => snapshot.existingPaths.includes(p));
+      if (featureOk || matchedPaths.length) {
+        if (featureOk) evidence.push(`feature:${rule.featureKey}`);
+        if (matchedPaths.length) evidence.push(`paths:${matchedPaths.join(',')}`);
+      } else {
+        failures.push(`missing feature \`${rule.featureKey}\` and related paths`);
+      }
+    } else if (hasFeature) {
+      if (snapshot.features[rule.featureKey]) evidence.push(`feature:${rule.featureKey}`);
+      else failures.push(`missing feature \`${rule.featureKey}\``);
+    } else if (hasPaths) {
+      const matchedPaths = rule.expect.pathExists.filter((p) => snapshot.existingPaths.includes(p));
+      if (matchedPaths.length) evidence.push(`paths:${matchedPaths.join(',')}`);
+      else failures.push(`missing one of: ${rule.expect.pathExists.join(', ')}`);
+    }
+
+    if (!failures.length) {
+      return {
+        ruleId: rule.id,
+        status: 'pass',
+        title: rule.title,
+        message: rule.description,
+        evidence: evidence.join('; ') || undefined,
+      };
+    }
+    return {
+      ruleId: rule.id,
+      status: rule.required ? 'fail' : 'warning',
+      title: rule.title,
+      message: failures.join('; '),
+      evidence: evidence.join('; ') || undefined,
+    };
+  }
+}
+<% } else { %>
+import { randomUUID } from 'node:crypto';
+import type {
+  GovernanceCheckResult,
+  GovernancePolicy,
+  GovernanceReport,
+  GovernanceRule,
+} from '../governance.types.js';
+
+export interface ProjectSnapshot {
+  projectName: string;
+  database?: string;
+  features: Record<string, boolean>;
+  scripts: Record<string, string>;
+  existingPaths: string[];
+}
+
+/** Evaluates governance policy against a project snapshot. */
+export class GovernanceChecker {
+  constructor(private readonly policy: GovernancePolicy) {}
+
+  getPolicy(): GovernancePolicy {
+    return this.policy;
+  }
+
+  check(snapshot: ProjectSnapshot): GovernanceReport {
+    const results = this.policy.rules.map((rule) => this.evaluateRule(rule, snapshot));
+    const summary = { pass: 0, fail: 0, warning: 0, skipped: 0 };
+    for (const result of results) summary[result.status] += 1;
+    const requiredFailed = results.some(
+      (result, index) => this.policy.rules[index]?.required && result.status === 'fail',
+    );
+    return {
+      id: randomUUID(),
+      policyId: this.policy.id,
+      generatedAt: new Date(),
+      projectName: snapshot.projectName,
+      results,
+      summary,
+      compliant: !requiredFailed,
+    };
+  }
+
+  renderMarkdown(report: GovernanceReport): string {
+    const lines = [
+      `# Governance Report — ${report.projectName}`,
+      '',
+      `- Compliant: ${report.compliant ? 'yes' : 'no'}`,
+      `- Pass: ${report.summary.pass}`,
+      `- Fail: ${report.summary.fail}`,
+      '',
+      '## Checklist',
+      '',
+    ];
+    for (const result of report.results) {
+      const mark = result.status === 'pass' ? '✔' : result.status === 'fail' ? '✘' : '⚠';
+      lines.push(`- ${mark} **${result.title}** (${result.status}): ${result.message}`);
+    }
+    lines.push('');
+    return lines.join('\n');
+  }
+
+  private evaluateRule(rule: GovernanceRule, snapshot: ProjectSnapshot): GovernanceCheckResult {
+    const failures: string[] = [];
+    const evidence: string[] = [];
+
+    if (rule.expect?.database) {
+      if (snapshot.database === rule.expect.database) evidence.push(`database=${snapshot.database}`);
+      else failures.push(`expected database \`${rule.expect.database}\``);
+    }
+
+    const hasFeature = Boolean(rule.featureKey);
+    const hasPaths = Boolean(rule.expect?.pathExists?.length);
+    const hasScripts = Boolean(rule.expect?.packageScripts?.length);
+
+    if (hasFeature && hasPaths && hasScripts) {
+      const featureOk = Boolean(snapshot.features[rule.featureKey!]);
+      const matchedPaths =
+        rule.expect!.pathExists!.filter((p) => snapshot.existingPaths.includes(p));
+      const scriptsOk = rule.expect!.packageScripts!.every((s) => snapshot.scripts[s]);
+      if (featureOk || matchedPaths.length || scriptsOk) {
+        if (featureOk) evidence.push(`feature:${rule.featureKey}`);
+        if (matchedPaths.length) evidence.push(`paths:${matchedPaths.join(',')}`);
+        if (scriptsOk) evidence.push(`scripts:${rule.expect!.packageScripts!.join(',')}`);
+      } else {
+        failures.push('tests requirement not met');
+      }
+    } else if (hasFeature && hasPaths) {
+      const featureOk = Boolean(snapshot.features[rule.featureKey!]);
+      const matchedPaths =
+        rule.expect!.pathExists!.filter((p) => snapshot.existingPaths.includes(p));
+      if (featureOk || matchedPaths.length) {
+        if (featureOk) evidence.push(`feature:${rule.featureKey}`);
+        if (matchedPaths.length) evidence.push(`paths:${matchedPaths.join(',')}`);
+      } else {
+        failures.push(`missing feature \`${rule.featureKey}\` and related paths`);
+      }
+    } else if (hasFeature) {
+      if (snapshot.features[rule.featureKey!]) evidence.push(`feature:${rule.featureKey}`);
+      else failures.push(`missing feature \`${rule.featureKey}\``);
+    } else if (hasPaths) {
+      const matchedPaths =
+        rule.expect!.pathExists!.filter((p) => snapshot.existingPaths.includes(p));
+      if (matchedPaths.length) evidence.push(`paths:${matchedPaths.join(',')}`);
+      else failures.push(`missing one of: ${rule.expect!.pathExists!.join(', ')}`);
+    }
+
+    if (!failures.length) {
+      return {
+        ruleId: rule.id,
+        status: 'pass',
+        title: rule.title,
+        message: rule.description,
+        evidence: evidence.join('; ') || undefined,
+      };
+    }
+    return {
+      ruleId: rule.id,
+      status: rule.required ? 'fail' : 'warning',
+      title: rule.title,
+      message: failures.join('; '),
+      evidence: evidence.join('; ') || undefined,
+    };
+  }
+}
+<% } %>

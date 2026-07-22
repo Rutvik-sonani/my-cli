@@ -1,0 +1,38 @@
+# Search — <%= appName %>
+
+Provider: **<%= provider %>** (`<%= providerClass %>`)
+
+## Layout
+
+```
+src/search/
+  search-provider.interface.ts
+  search.service.ts
+  adapter/          # memory + <%= provider %>
+  indexer/
+  query/
+tests/search/
+SEARCH.md
+```
+
+## Usage
+
+```ts
+import { registerSearch, indexer, search, SearchQueryBuilder } from './src/search/index.js';
+
+await registerSearch();
+await indexer.indexOne({ id: '1', title: 'Red shoes' });
+
+const built = SearchQueryBuilder.create('shoes').limit(10).build();
+const result = await search.search(built.query, built.options);
+```
+
+## Providers
+
+```bash
+my add search --provider meilisearch
+my add search --provider elasticsearch
+my add search --provider algolia
+```
+
+Remote adapters fall back to the in-memory adapter when the SDK/host is unavailable.

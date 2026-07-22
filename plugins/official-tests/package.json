@@ -1,0 +1,19 @@
+{
+  "name": "@mycli/official-plugins-tests",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@mycli/config-manager": "workspace:*",
+    "@mycli/core": "workspace:*",
+    "@mycli/filesystem": "workspace:*",
+    "@mycli/plugin-system": "workspace:*",
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}

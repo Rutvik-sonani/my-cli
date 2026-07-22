@@ -1,0 +1,41 @@
+<% if (language === 'javascript') { %>
+import { auditService } from './register-audit.js';
+
+export class AuditRepository {
+  constructor(service = auditService) {
+    this.service = service;
+  }
+
+  async findByResource(resource) {
+    return this.service.listByResource(resource);
+  }
+
+  async findByUser(userId) {
+    return this.service.listByUser(userId);
+  }
+
+  async recent(limit = 50) {
+    return this.service.storage.list(limit);
+  }
+}
+<% } else { %>
+import { auditService } from './register-audit.js';
+import type { AuditService } from './audit.service.js';
+import type { AuditRecord } from './audit-record.js';
+
+export class AuditRepository {
+  constructor(private readonly service: AuditService = auditService) {}
+
+  async findByResource(resource: string): Promise<AuditRecord[]> {
+    return this.service.listByResource(resource);
+  }
+
+  async findByUser(userId: string): Promise<AuditRecord[]> {
+    return this.service.listByUser(userId);
+  }
+
+  async recent(limit = 50): Promise<AuditRecord[]> {
+    return this.service.getStorage().list(limit);
+  }
+}
+<% } %>

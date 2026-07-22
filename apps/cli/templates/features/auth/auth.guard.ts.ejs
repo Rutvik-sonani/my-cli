@@ -1,0 +1,10 @@
+import type { FastifyReply, FastifyRequest } from 'fastify';
+
+export function requireAuth(request: FastifyRequest, reply: FastifyReply): boolean {
+  const user = (request as FastifyRequest & { user?: { sub: string } }).user;
+  if (!user?.sub) {
+    reply.status(401).send({ error: 'Unauthorized' });
+    return false;
+  }
+  return true;
+}

@@ -1,0 +1,9 @@
+output "app_url" {
+  description = "Container App ingress URL"
+  value       = azurerm_container_app.app.latest_revision_fqdn
+}
+
+output "app_name" {
+  description = "Container App name"
+  value       = azurerm_container_app.app.name
+}

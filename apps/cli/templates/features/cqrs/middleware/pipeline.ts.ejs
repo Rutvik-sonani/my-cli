@@ -1,0 +1,33 @@
+<% if (language === 'javascript') { %>
+export function composeMiddleware(middlewares) {
+  return async (message, finalHandler) => {
+    let index = 0;
+    const dispatch = async () => {
+      if (index < middlewares.length) {
+        const middleware = middlewares[index++];
+        return middleware(message, dispatch);
+      }
+      return finalHandler(message);
+    };
+    return dispatch();
+  };
+}
+<% } else { %>
+export type BusMiddleware<T> = (message: T, next: () => Promise<unknown>) => Promise<unknown>;
+
+export function composeMiddleware<T>(
+  middlewares: BusMiddleware<T>[],
+): (message: T, finalHandler: (message: T) => Promise<unknown>) => Promise<unknown> {
+  return async (message, finalHandler) => {
+    let index = 0;
+    const dispatch = async (): Promise<unknown> => {
+      if (index < middlewares.length) {
+        const middleware = middlewares[index++]!;
+        return middleware(message, dispatch);
+      }
+      return finalHandler(message);
+    };
+    return dispatch();
+  };
+}
+<% } %>

@@ -1,0 +1,59 @@
+import { describe, expect, it } from 'vitest';
+import {
+  DatabaseFeatureFlagProvider,
+  evaluateDefinition,
+  featureFlags,
+} from '../../src/feature-flags/index.js';
+
+describe('feature flags platform', () => {
+  it('evaluates boolean flags', () => {
+    const result = evaluateDefinition(
+      { key: 'dark-mode', enabled: true },
+      { userId: 'u1' },
+    );
+    expect(result.enabled).toBe(true);
+    expect(result.reason).toBe('enabled');
+  });
+
+  it('supports user, environment, country, and percentage targeting', async () => {
+    const provider = new DatabaseFeatureFlagProvider({
+      'new-checkout': {
+        key: 'new-checkout',
+        enabled: true,
+        percentage: 25,
+        userTargets: ['beta-user'],
+        environments: ['staging'],
+        countries: ['US'],
+      },
+    });
+    await provider.connect();
+
+    const targeted = await provider.evaluate('new-checkout', {
+      userId: 'beta-user',
+      environment: 'staging',
+      country: 'US',
+    });
+    expect(targeted.enabled).toBe(true);
+    expect(targeted.reason).toBe('user-target');
+
+    const wrongEnv = await provider.evaluate('new-checkout', {
+      userId: 'other',
+      environment: 'production',
+      country: 'US',
+    });
+    expect(wrongEnv.enabled).toBe(false);
+    expect(wrongEnv.reason).toBe('environment');
+
+    const wrongCountry = await provider.evaluate('new-checkout', {
+      userId: 'other',
+      environment: 'staging',
+      country: 'DE',
+    });
+    expect(wrongCountry.enabled).toBe(false);
+    expect(wrongCountry.reason).toBe('country');
+  });
+
+  it('exposes registered featureFlags service', async () => {
+    expect(featureFlags.getProvider().id).toBe('<%= provider %>');
+  });
+});

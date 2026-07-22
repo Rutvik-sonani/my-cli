@@ -1,0 +1,94 @@
+<% if (language === 'javascript') { %>
+import { Kafka } from 'kafkajs';
+import { JsonEventSerializer } from '../serializer.js';
+import { withRetry } from '../retry.policy.js';
+import { DeadLetterQueue } from '../dead-letter/dead-letter.queue.js';
+
+export class KafkaEventConsumer {
+  constructor(options = {}) {
+    this.topic = options.topic ?? process.env.KAFKA_TOPIC ?? '<%= appName %>.events';
+    this.groupId = options.groupId ?? '<%= appName %>-consumers';
+    this.kafka = options.kafka ?? new Kafka({ clientId: '<%= appName %>', brokers: (process.env.KAFKA_BROKERS ?? 'localhost:9092').split(',') });
+    this.consumer = this.kafka.consumer({ groupId: this.groupId });
+    this.serializer = new JsonEventSerializer();
+    this.handlers = new Map();
+    this.deadLetter = new DeadLetterQueue();
+  }
+
+  on(type, handler) {
+    const list = this.handlers.get(type) ?? [];
+    list.push(handler);
+    this.handlers.set(type, list);
+  }
+
+  async start() {
+    await this.consumer.connect();
+    await this.consumer.subscribe({ topic: this.topic, fromBeginning: false });
+    await this.consumer.run({
+      eachMessage: async ({ message }) => {
+        const raw = message.value?.toString();
+        if (!raw) return;
+        try {
+          const envelope = this.serializer.deserialize(raw);
+          const handlers = this.handlers.get(envelope.type) ?? [];
+          for (const handler of handlers) {
+            await withRetry(() => handler(envelope));
+          }
+        } catch (error) {
+          this.deadLetter.push(this.serializer.deserialize(raw), error);
+        }
+      },
+    });
+  }
+}
+<% } else { %>
+import { Kafka, type Consumer } from 'kafkajs';
+import { JsonEventSerializer, type EventEnvelope } from '../serializer.js';
+import { withRetry } from '../retry.policy.js';
+import { DeadLetterQueue } from '../dead-letter/dead-letter.queue.js';
+
+export class KafkaEventConsumer {
+  private readonly topic: string;
+  private readonly consumer: Consumer;
+  private readonly serializer = new JsonEventSerializer();
+  private readonly handlers = new Map<string, Array<(envelope: EventEnvelope) => Promise<void>>>();
+  readonly deadLetter = new DeadLetterQueue();
+
+  constructor(options: { kafka?: Kafka; topic?: string; groupId?: string } = {}) {
+    this.topic = options.topic ?? process.env.KAFKA_TOPIC ?? '<%= appName %>.events';
+    const kafka =
+      options.kafka ??
+      new Kafka({
+        clientId: '<%= appName %>',
+        brokers: (process.env.KAFKA_BROKERS ?? 'localhost:9092').split(','),
+      });
+    this.consumer = kafka.consumer({ groupId: options.groupId ?? '<%= appName %>-consumers' });
+  }
+
+  on<T>(type: string, handler: (envelope: EventEnvelope<T>) => Promise<void>): void {
+    const list = this.handlers.get(type) ?? [];
+    list.push(handler as (envelope: EventEnvelope) => Promise<void>);
+    this.handlers.set(type, list);
+  }
+
+  async start(): Promise<void> {
+    await this.consumer.connect();
+    await this.consumer.subscribe({ topic: this.topic, fromBeginning: false });
+    await this.consumer.run({
+      eachMessage: async ({ message }) => {
+        const raw = message.value?.toString();
+        if (!raw) return;
+        try {
+          const envelope = this.serializer.deserialize(raw);
+          const handlers = this.handlers.get(envelope.type) ?? [];
+          for (const handler of handlers) {
+            await withRetry(async () => handler(envelope));
+          }
+        } catch (error) {
+          this.deadLetter.push(this.serializer.deserialize(raw), error);
+        }
+      },
+    });
+  }
+}
+<% } %>

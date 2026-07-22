@@ -1,0 +1,15 @@
+/**
+ * Register all feature modules for <%= appName %>.
+ * Import each module's register function and invoke during app bootstrap.
+ */
+<% if (language === 'javascript') { %>
+export async function registerModules(app) {
+  // my make module <name> — add registrations here
+}
+<% } else { %>
+import type { FastifyInstance } from 'fastify';
+
+export async function registerModules(app: FastifyInstance): Promise<void> {
+  // my make module <name> — add registrations here
+}
+<% } %>

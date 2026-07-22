@@ -1,0 +1,19 @@
+<% if (language === 'javascript') { %>
+export function getCorsConfig() {
+  return {
+    origins: (process.env.CORS_ORIGIN ?? 'http://localhost:3000').split(',').map((v) => v.trim()),
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  };
+}
+<% } else { %>
+import type { CorsConfig } from '../security.types.js';
+
+export function getCorsConfig(): CorsConfig {
+  return {
+    origins: (process.env.CORS_ORIGIN ?? 'http://localhost:3000').split(',').map((v) => v.trim()),
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  };
+}
+<% } %>

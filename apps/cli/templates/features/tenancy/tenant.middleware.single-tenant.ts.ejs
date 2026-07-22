@@ -1,0 +1,25 @@
+<% if (language === 'javascript') { %>
+import type { FastifyInstance, FastifyRequest } from 'fastify';
+import { setTenantContext } from './tenant.context.js';
+import { resolveTenantFromRequest } from './tenant.resolver.js';
+
+/** Single-tenant: bind one fixed tenant for every request. */
+export async function registerTenancyMiddleware(app) {
+  app.addHook('onRequest', async () => {
+    const tenant = resolveTenantFromRequest();
+    setTenantContext(tenant.tenantId, { slug: tenant.slug });
+  });
+}
+<% } else { %>
+import type { FastifyInstance } from 'fastify';
+import { setTenantContext } from './tenant.context.js';
+import { resolveTenantFromRequest } from './tenant.resolver.js';
+
+/** Single-tenant: bind one fixed tenant for every request. */
+export async function registerTenancyMiddleware(app: FastifyInstance): Promise<void> {
+  app.addHook('onRequest', async () => {
+    const tenant = resolveTenantFromRequest();
+    setTenantContext(tenant.tenantId, { slug: tenant.slug });
+  });
+}
+<% } %>

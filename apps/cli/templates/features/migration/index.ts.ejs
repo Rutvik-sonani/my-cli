@@ -1,0 +1,12 @@
+export type {
+  UpgradeAction,
+  UpgradeActionStatus,
+  UpgradeReport,
+  UpgradeReportSummary,
+  UpgradeScope,
+} from './migration.types.js';
+export { BackupService, createBackupService } from './backup/backup.service.js';
+export { ReportService, createReportService } from './reports/report.service.js';
+export { MIGRATIONS, listMigrations } from './migrations/registry.js';
+export { UpgradeService, createUpgradeService } from './upgrade.service.js';
+export { upgradeService, registerMigration } from './register-migration.js';

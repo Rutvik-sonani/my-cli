@@ -1,0 +1,41 @@
+<% if (language === 'javascript') { %>
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { randomUUID } from 'node:crypto';
+
+const storage = new AsyncLocalStorage();
+
+export function createCorrelationId() {
+  return randomUUID();
+}
+
+export function getCorrelation() {
+  return storage.getStore();
+}
+
+export function runWithCorrelation(state, fn) {
+  return storage.run(state, fn);
+}
+<% } else { %>
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { randomUUID } from 'node:crypto';
+
+export interface CorrelationState {
+  correlationId: string;
+  traceId: string;
+  spanId?: string;
+}
+
+const storage = new AsyncLocalStorage<CorrelationState>();
+
+export function createCorrelationId(): string {
+  return randomUUID();
+}
+
+export function getCorrelation(): CorrelationState | undefined {
+  return storage.getStore();
+}
+
+export function runWithCorrelation<T>(state: CorrelationState, fn: () => T): T {
+  return storage.run(state, fn);
+}
+<% } %>

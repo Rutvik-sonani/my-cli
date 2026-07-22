@@ -1,0 +1,17 @@
+<% if (language === 'javascript') { %>
+export async function sessionGuard(request) {
+  if (!request.identity?.sessionId) {
+    throw new Error('Session required');
+  }
+}
+<% } else { %>
+import type { FastifyRequest } from 'fastify';
+
+export async function sessionGuard(
+  request: FastifyRequest & { identity?: { sessionId: string } },
+): Promise<void> {
+  if (!request.identity?.sessionId) {
+    throw new Error('Session required');
+  }
+}
+<% } %>

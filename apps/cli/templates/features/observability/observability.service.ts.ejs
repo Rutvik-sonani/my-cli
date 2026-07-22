@@ -1,0 +1,54 @@
+<% if (language === 'javascript') { %>
+import { logger } from './logging/logger.js';
+import { metrics } from './metrics/metrics.registry.js';
+import { tracer } from './tracing/tracer.js';
+import { alerts } from './alerts/alert.manager.js';
+import { errorMonitor } from './errors/sentry.monitor.js';
+import { createCorrelationId, runWithCorrelation } from './correlation.js';
+
+export class ObservabilityService {
+  constructor() {
+    this.logger = logger;
+    this.metrics = metrics;
+    this.tracer = tracer;
+    this.alerts = alerts;
+    this.errors = errorMonitor;
+  }
+
+  withRequestContext(fn, options = {}) {
+    const correlationId = options.correlationId ?? createCorrelationId();
+    const traceId = options.traceId ?? correlationId;
+    return runWithCorrelation({ correlationId, traceId }, () => {
+      this.metrics.counter('http_requests_total', 'Total HTTP requests');
+      return fn();
+    });
+  }
+}
+<% } else { %>
+import { logger } from './logging/logger.js';
+import { metrics } from './metrics/metrics.registry.js';
+import { tracer } from './tracing/tracer.js';
+import { alerts } from './alerts/alert.manager.js';
+import { errorMonitor } from './errors/sentry.monitor.js';
+import { createCorrelationId, runWithCorrelation } from './correlation.js';
+
+export class ObservabilityService {
+  readonly logger = logger;
+  readonly metrics = metrics;
+  readonly tracer = tracer;
+  readonly alerts = alerts;
+  readonly errors = errorMonitor;
+
+  withRequestContext<T>(
+    fn: () => T,
+    options: { correlationId?: string; traceId?: string } = {},
+  ): T {
+    const correlationId = options.correlationId ?? createCorrelationId();
+    const traceId = options.traceId ?? correlationId;
+    return runWithCorrelation({ correlationId, traceId }, () => {
+      this.metrics.counter('http_requests_total', 'Total HTTP requests');
+      return fn();
+    });
+  }
+}
+<% } %>

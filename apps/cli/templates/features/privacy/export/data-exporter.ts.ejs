@@ -1,0 +1,52 @@
+<% if (language === 'javascript') { %>
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+
+export class DataExporter {
+  constructor(privacyService) {
+    this.privacyService = privacyService;
+  }
+
+  export(userId) {
+    return this.privacyService.exportUserData(userId);
+  }
+
+  async exportToFile(userId, outputDir = './data/privacy-exports') {
+    const data = await this.export(userId);
+    await mkdir(outputDir, { recursive: true });
+    const filePath = join(
+      outputDir,
+      `${userId}-${data.exportedAt.toISOString().replace(/[:.]/g, '-')}.json`,
+    );
+    await writeFile(filePath, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
+    return { export: data, filePath };
+  }
+}
+<% } else { %>
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import type { UserDataExport } from '../privacy.types.js';
+import { PrivacyService } from '../privacy.service.js';
+
+export class DataExporter {
+  constructor(private readonly privacyService: PrivacyService) {}
+
+  export(userId: string): Promise<UserDataExport> {
+    return this.privacyService.exportUserData(userId);
+  }
+
+  async exportToFile(
+    userId: string,
+    outputDir = './data/privacy-exports',
+  ): Promise<{ export: UserDataExport; filePath: string }> {
+    const data = await this.export(userId);
+    await mkdir(outputDir, { recursive: true });
+    const filePath = join(
+      outputDir,
+      `${userId}-${data.exportedAt.toISOString().replace(/[:.]/g, '-')}.json`,
+    );
+    await writeFile(filePath, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
+    return { export: data, filePath };
+  }
+}
+<% } %>

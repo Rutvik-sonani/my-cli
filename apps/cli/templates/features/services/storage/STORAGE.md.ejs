@@ -1,0 +1,28 @@
+# Storage — <%= appName %>
+
+File storage with S3-compatible or local disk backends.
+
+## Environment
+
+Provider: **<%= provider %>** — see `.env.example`.
+
+## Usage
+
+```typescript
+import { storage } from './src/services/storage/index.js';
+
+const result = await storage.upload('avatars/user-1.png', buffer, 'image/png');
+```
+
+<% if (includeUpload) { -%>
+## Upload endpoint
+
+Register the multipart upload plugin:
+
+```typescript
+import { registerUploadPlugin } from './src/services/storage/index.js';
+await registerUploadPlugin(app);
+```
+
+`POST /upload` accepts multipart file uploads.
+<% } -%>

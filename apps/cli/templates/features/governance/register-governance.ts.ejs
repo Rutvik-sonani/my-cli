@@ -1,0 +1,17 @@
+<% if (language === 'javascript') { %>
+import { createGovernanceService } from './governance.service.js';
+
+export const governanceService = createGovernanceService('<%= company %>');
+
+export function registerGovernance() {
+  return governanceService;
+}
+<% } else { %>
+import { createGovernanceService, type GovernanceService } from './governance.service.js';
+
+export const governanceService = createGovernanceService('<%= company %>');
+
+export function registerGovernance(): GovernanceService {
+  return governanceService;
+}
+<% } %>

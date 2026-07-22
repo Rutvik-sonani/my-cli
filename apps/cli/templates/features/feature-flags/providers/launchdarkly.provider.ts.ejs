@@ -1,0 +1,67 @@
+<% if (language === 'javascript') { %>
+import { DatabaseFeatureFlagProvider } from './database.provider.js';
+
+/**
+ * LaunchDarkly adapter for <%= appName %>.
+ * Wire `@launchdarkly/node-server-sdk` with LAUNCHDARKLY_SDK_KEY in production.
+ * Falls back to local evaluation until the SDK client is connected.
+ */
+export class LaunchDarklyFeatureFlagProvider {
+  constructor() {
+    this.id = 'launchdarkly';
+    this.fallback = new DatabaseFeatureFlagProvider();
+  }
+
+  async connect() {
+    // TODO: initialize LaunchDarkly client with process.env.LAUNCHDARKLY_SDK_KEY
+    await this.fallback.connect();
+  }
+
+  async disconnect() {
+    await this.fallback.disconnect();
+  }
+
+  evaluate(key, context) {
+    return this.fallback.evaluate(key, context);
+  }
+
+  isEnabled(key, context) {
+    return this.fallback.isEnabled(key, context);
+  }
+}
+<% } else { %>
+import type { FeatureFlagProvider } from '../feature-flag-provider.interface.js';
+import type {
+  FeatureFlagContext,
+  FeatureFlagEvaluation,
+  FeatureFlagProviderId,
+} from '../feature-flag.types.js';
+import { DatabaseFeatureFlagProvider } from './database.provider.js';
+
+/**
+ * LaunchDarkly adapter for <%= appName %>.
+ * Wire `@launchdarkly/node-server-sdk` with LAUNCHDARKLY_SDK_KEY in production.
+ * Falls back to local evaluation until the SDK client is connected.
+ */
+export class LaunchDarklyFeatureFlagProvider implements FeatureFlagProvider {
+  readonly id: FeatureFlagProviderId = 'launchdarkly';
+  private readonly fallback = new DatabaseFeatureFlagProvider();
+
+  async connect(): Promise<void> {
+    // TODO: initialize LaunchDarkly client with process.env.LAUNCHDARKLY_SDK_KEY
+    await this.fallback.connect();
+  }
+
+  async disconnect(): Promise<void> {
+    await this.fallback.disconnect();
+  }
+
+  evaluate(key: string, context?: FeatureFlagContext): Promise<FeatureFlagEvaluation> {
+    return this.fallback.evaluate(key, context);
+  }
+
+  isEnabled(key: string, context?: FeatureFlagContext): Promise<boolean> {
+    return this.fallback.isEnabled(key, context);
+  }
+}
+<% } %>

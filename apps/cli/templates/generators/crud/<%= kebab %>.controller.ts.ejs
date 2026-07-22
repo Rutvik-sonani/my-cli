@@ -1,0 +1,29 @@
+import type { <%= pascal %>Service } from './<%= kebab %>.service.js';
+import type { Create<%= pascal %>Dto, Update<%= pascal %>Dto } from './dto/index.js';
+import { validateCreate<%= pascal %>, validateUpdate<%= pascal %> } from './validator/<%= kebab %>.validator.js';
+
+export class <%= pascal %>Controller {
+  constructor(private readonly service: <%= pascal %>Service) {}
+
+  async list() {
+    return this.service.findAll();
+  }
+
+  async get(id: string) {
+    return this.service.findById(id);
+  }
+
+  async create(input: unknown) {
+    validateCreate<%= pascal %>(input);
+    return this.service.create(input as Create<%= pascal %>Dto);
+  }
+
+  async update(id: string, input: unknown) {
+    validateUpdate<%= pascal %>(input);
+    return this.service.update(id, input as Update<%= pascal %>Dto);
+  }
+
+  async remove(id: string) {
+    return this.service.remove(id);
+  }
+}

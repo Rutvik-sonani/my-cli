@@ -1,0 +1,56 @@
+<% if (language === 'javascript') { %>
+/**
+ * Renders a lightweight upgrade report.
+ */
+export class ReportService {
+  /** @param {import('../migration.types.js').UpgradeReport} report */
+  renderMarkdown(report) {
+    const lines = [
+      `# Upgrade Report — ${report.projectName}`,
+      '',
+      `- Version: ${report.fromVersion} → ${report.toVersion}`,
+      `- Applied: ${report.summary.applied}`,
+      `- Skipped: ${report.summary.skipped}`,
+      '',
+      '## Actions',
+      '',
+    ];
+    for (const action of report.actions) {
+      lines.push(`- [${action.scope}] ${action.description} (${action.status})`);
+    }
+    lines.push('');
+    return lines.join('\n');
+  }
+}
+
+export function createReportService() {
+  return new ReportService();
+}
+<% } else { %>
+import type { UpgradeReport } from '../migration.types.js';
+
+/** Renders a lightweight upgrade report. */
+export class ReportService {
+  renderMarkdown(report: UpgradeReport): string {
+    const lines = [
+      `# Upgrade Report — ${report.projectName}`,
+      '',
+      `- Version: ${report.fromVersion} → ${report.toVersion}`,
+      `- Applied: ${report.summary.applied}`,
+      `- Skipped: ${report.summary.skipped}`,
+      '',
+      '## Actions',
+      '',
+    ];
+    for (const action of report.actions) {
+      lines.push(`- [${action.scope}] ${action.description} (${action.status})`);
+    }
+    lines.push('');
+    return lines.join('\n');
+  }
+}
+
+export function createReportService(): ReportService {
+  return new ReportService();
+}
+<% } %>

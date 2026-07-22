@@ -1,0 +1,21 @@
+import { describe, expect, it } from 'vitest';
+import {
+  listMigrations,
+  registerMigration,
+} from '../../src/migration/index.js';
+
+describe('migration', () => {
+  it('lists registered migrations', () => {
+    expect(listMigrations().map((m) => m.id)).toEqual(
+      expect.arrayContaining(['ensure-paths', 'ensure-docs']),
+    );
+  });
+
+  it('plans an upgrade without applying changes', () => {
+    const service = registerMigration();
+    const plan = service.plan('1.0.0', '1.1.0');
+    expect(plan.dryRun).toBe(true);
+    expect(plan.summary.planned).toBeGreaterThan(0);
+    expect(service.render(plan)).toContain('Upgrade Report');
+  });
+});

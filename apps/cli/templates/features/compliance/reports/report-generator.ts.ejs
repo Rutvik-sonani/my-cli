@@ -1,0 +1,68 @@
+<% if (language === 'javascript') { %>
+export class ReportGenerator {
+  constructor(service) {
+    this.service = service;
+  }
+
+  generate() {
+    return this.service.generateReport();
+  }
+
+  toMarkdown(report = this.generate()) {
+    const lines = [
+      '# Compliance Report',
+      '',
+      `- Generated: ${report.generatedAt.toISOString()}`,
+      `- Frameworks: ${report.frameworks.join(', ')}`,
+      `- Pass: ${report.summary.pass}`,
+      `- Fail: ${report.summary.fail}`,
+      `- Warning: ${report.summary.warning}`,
+      `- N/A: ${report.summary.notApplicable}`,
+      '',
+      '## Checks',
+      '',
+    ];
+    for (const check of report.checks) {
+      lines.push(
+        `- [${check.status}] **${check.id}** (${check.framework}/${check.category}): ${check.title}`,
+      );
+    }
+    lines.push('');
+    return lines.join('\n');
+  }
+}
+<% } else { %>
+import type { ComplianceReport } from '../compliance.types.js';
+import { ComplianceService } from '../compliance.service.js';
+
+export class ReportGenerator {
+  constructor(private readonly service: ComplianceService) {}
+
+  generate(): ComplianceReport {
+    return this.service.generateReport();
+  }
+
+  toMarkdown(report: ComplianceReport = this.generate()): string {
+    const lines = [
+      '# Compliance Report',
+      '',
+      `- Generated: ${report.generatedAt.toISOString()}`,
+      `- Frameworks: ${report.frameworks.join(', ')}`,
+      `- Pass: ${report.summary.pass}`,
+      `- Fail: ${report.summary.fail}`,
+      `- Warning: ${report.summary.warning}`,
+      `- N/A: ${report.summary.notApplicable}`,
+      '',
+      '## Checks',
+      '',
+    ];
+    for (const check of report.checks) {
+      lines.push(
+        `- [${check.status}] **${check.id}** (${check.framework}/${check.category}): ${check.title}`,
+      );
+    }
+    lines.push('');
+    return lines.join('\n');
+  }
+}
+<% } %>

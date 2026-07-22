@@ -1,0 +1,236 @@
+{
+  "version": "1.0.0",
+  "plugins": [
+    {
+      "name": "@mycli/auth",
+      "slug": "auth",
+      "npmPackage": "@mycli/plugin-auth",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "Authentication (JWT, OAuth, MFA, …)",
+      "downloads": 1280,
+      "compatibility": ">=1.0.0",
+      "keywords": ["auth", "jwt", "oauth"]
+    },
+    {
+      "name": "@mycli/rbac",
+      "slug": "rbac",
+      "npmPackage": "@mycli/plugin-rbac",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "Role and permission based access control",
+      "downloads": 940,
+      "compatibility": ">=1.0.0",
+      "keywords": ["rbac", "permissions"]
+    },
+    {
+      "name": "@mycli/docker",
+      "slug": "docker",
+      "npmPackage": "@mycli/plugin-docker",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "Docker and Compose generation",
+      "downloads": 2104,
+      "compatibility": ">=1.0.0",
+      "keywords": ["docker", "containers"]
+    },
+    {
+      "name": "@mycli/prisma",
+      "slug": "prisma",
+      "npmPackage": "@mycli/plugin-prisma",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "Prisma ORM integration",
+      "downloads": 1800,
+      "compatibility": ">=1.0.0",
+      "keywords": ["prisma", "orm"]
+    },
+    {
+      "name": "@mycli/postgres",
+      "slug": "postgres",
+      "npmPackage": "@mycli/plugin-postgres",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "PostgreSQL database plugin",
+      "downloads": 760,
+      "compatibility": ">=1.0.0",
+      "keywords": ["postgres", "database"]
+    },
+    {
+      "name": "@mycli/mysql",
+      "slug": "mysql",
+      "npmPackage": "@mycli/plugin-mysql",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "MySQL database plugin",
+      "downloads": 520,
+      "compatibility": ">=1.0.0",
+      "keywords": ["mysql", "database"]
+    },
+    {
+      "name": "@mycli/mongodb",
+      "slug": "mongodb",
+      "npmPackage": "@mycli/plugin-mongodb",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "MongoDB database plugin",
+      "downloads": 480,
+      "compatibility": ">=1.0.0",
+      "keywords": ["mongodb", "database"]
+    },
+    {
+      "name": "@mycli/mariadb",
+      "slug": "mariadb",
+      "npmPackage": "@mycli/plugin-mariadb",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "MariaDB database plugin",
+      "downloads": 410,
+      "compatibility": ">=1.0.0",
+      "keywords": ["mariadb", "database"]
+    },
+    {
+      "name": "@mycli/sqlite",
+      "slug": "sqlite",
+      "npmPackage": "@mycli/plugin-sqlite",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "SQLite database plugin",
+      "downloads": 890,
+      "compatibility": ">=1.0.0",
+      "keywords": ["sqlite", "database"]
+    },
+    {
+      "name": "@mycli/redis",
+      "slug": "redis",
+      "npmPackage": "@mycli/plugin-redis",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "Redis database plugin",
+      "downloads": 650,
+      "compatibility": ">=1.0.0",
+      "keywords": ["redis", "database", "cache"]
+    },
+    {
+      "name": "@mycli/sqlserver",
+      "slug": "sqlserver",
+      "npmPackage": "@mycli/plugin-sqlserver",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "SQL Server database plugin",
+      "downloads": 320,
+      "compatibility": ">=1.0.0",
+      "keywords": ["sqlserver", "database"]
+    },
+    {
+      "name": "@mycli/cockroachdb",
+      "slug": "cockroachdb",
+      "npmPackage": "@mycli/plugin-cockroachdb",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "CockroachDB database plugin",
+      "downloads": 280,
+      "compatibility": ">=1.0.0",
+      "keywords": ["cockroachdb", "database"]
+    },
+    {
+      "name": "@mycli/swagger",
+      "slug": "swagger",
+      "npmPackage": "@mycli/plugin-swagger",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "Swagger / OpenAPI documentation",
+      "downloads": 890,
+      "compatibility": ">=1.0.0",
+      "keywords": ["swagger", "openapi", "api-docs"]
+    },
+    {
+      "name": "@mycli/kubernetes",
+      "slug": "kubernetes",
+      "npmPackage": "@mycli/plugin-kubernetes",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "Kubernetes manifests and Helm charts",
+      "downloads": 620,
+      "compatibility": ">=1.0.0",
+      "keywords": ["kubernetes", "k8s", "helm"]
+    },
+    {
+      "name": "@mycli/aws",
+      "slug": "aws",
+      "npmPackage": "@mycli/plugin-aws",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "AWS deployment via Terraform",
+      "downloads": 540,
+      "compatibility": ">=1.0.0",
+      "keywords": ["aws", "terraform", "cloud"]
+    },
+    {
+      "name": "@mycli/azure",
+      "slug": "azure",
+      "npmPackage": "@mycli/plugin-azure",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "Azure deployment via Terraform",
+      "downloads": 310,
+      "compatibility": ">=1.0.0",
+      "keywords": ["azure", "terraform", "cloud"]
+    },
+    {
+      "name": "@mycli/gcp",
+      "slug": "gcp",
+      "npmPackage": "@mycli/plugin-gcp",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "GCP deployment via Terraform",
+      "downloads": 290,
+      "compatibility": ">=1.0.0",
+      "keywords": ["gcp", "terraform", "cloud"]
+    },
+    {
+      "name": "@mycli/github",
+      "slug": "github",
+      "npmPackage": "@mycli/plugin-github",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "GitHub repository and Actions integration",
+      "downloads": 1100,
+      "compatibility": ">=1.0.0",
+      "keywords": ["github", "ci", "workflows"]
+    },
+    {
+      "name": "@mycli/railway",
+      "slug": "railway",
+      "npmPackage": "@mycli/plugin-railway",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "Railway cloud deployment",
+      "downloads": 430,
+      "compatibility": ">=1.0.0",
+      "keywords": ["railway", "deploy", "paas"]
+    },
+    {
+      "name": "@mycli/fly",
+      "slug": "fly",
+      "npmPackage": "@mycli/plugin-fly",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "Fly.io cloud deployment",
+      "downloads": 380,
+      "compatibility": ">=1.0.0",
+      "keywords": ["fly", "deploy", "paas"]
+    },
+    {
+      "name": "@mycli/ai",
+      "slug": "ai",
+      "npmPackage": "@mycli/plugin-ai",
+      "version": "1.0.0",
+      "author": "MyCLI",
+      "description": "AI-assisted code generation",
+      "downloads": 622,
+      "compatibility": ">=1.0.0",
+      "keywords": ["ai", "generate", "openai"]
+    }
+  ]
+}

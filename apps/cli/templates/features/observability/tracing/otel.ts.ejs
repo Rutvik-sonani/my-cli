@@ -1,0 +1,21 @@
+<% if (language === 'javascript') { %>
+/**
+ * OpenTelemetry bootstrap for <%= appName %>.
+ * Wire `@opentelemetry/sdk-node` when exporting to a collector.
+ */
+export async function startOpenTelemetry() {
+  if (process.env.TRACING_ENABLED === 'false') return;
+  // TODO: initialize NodeSDK with OTLP exporter using OTEL_SERVICE_NAME
+  return { serviceName: process.env.OTEL_SERVICE_NAME ?? '<%= appName %>' };
+}
+<% } else { %>
+/**
+ * OpenTelemetry bootstrap for <%= appName %>.
+ * Wire `@opentelemetry/sdk-node` when exporting to a collector.
+ */
+export async function startOpenTelemetry(): Promise<{ serviceName: string } | undefined> {
+  if (process.env.TRACING_ENABLED === 'false') return undefined;
+  // TODO: initialize NodeSDK with OTLP exporter using OTEL_SERVICE_NAME
+  return { serviceName: process.env.OTEL_SERVICE_NAME ?? '<%= appName %>' };
+}
+<% } %>

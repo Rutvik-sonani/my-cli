@@ -1,0 +1,30 @@
+<% if (language === 'javascript') { %>
+/**
+ * @typedef {Object} SearchProvider
+ * @property {string} id
+ * @property {() => Promise<void>} connect
+ * @property {() => Promise<void>} disconnect
+ * @property {(documents: object|object[]) => Promise<void>} index
+ * @property {(id: string) => Promise<boolean>} delete
+ * @property {(query: string, options?: object) => Promise<object>} search
+ */
+<% } else { %>
+import type {
+  SearchDocument,
+  SearchProviderId,
+  SearchQueryOptions,
+  SearchResult,
+} from './search.types.js';
+
+export interface SearchProvider {
+  readonly id: SearchProviderId;
+  connect(): Promise<void>;
+  disconnect(): Promise<void>;
+  index(documents: SearchDocument | SearchDocument[]): Promise<void>;
+  delete(id: string): Promise<boolean>;
+  search<T extends SearchDocument = SearchDocument>(
+    query: string,
+    options?: SearchQueryOptions,
+  ): Promise<SearchResult<T>>;
+}
+<% } %>

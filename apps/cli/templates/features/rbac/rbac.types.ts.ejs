@@ -1,0 +1,23 @@
+export interface Role {
+  id: string;
+  name: string;
+  description: string | null;
+}
+
+export interface Permission {
+  id: string;
+  name: string;
+  description: string | null;
+}
+
+export interface RolePermission {
+  roleId: string;
+  permissionId: string;
+}
+
+export interface UserRole {
+  userId: string;
+  roleId: string;
+}
+
+export const RBAC_TABLES = ['roles', 'permissions', 'role_permissions', 'user_roles'] as const;

@@ -1,0 +1,296 @@
+<% if (language === 'javascript') { %>
+/** @type {import('../compliance.types.js').DataRetentionRule[]} */
+export const DEFAULT_RETENTION_RULES = [
+<% if (hasGdpr) { -%>
+  {
+    id: 'retain-account',
+    dataCategory: 'account-profile',
+    retentionDays: 365 * 3,
+    legalBasis: 'contract',
+    framework: 'gdpr',
+  },
+  {
+    id: 'retain-logs',
+    dataCategory: 'application-logs',
+    retentionDays: 90,
+    legalBasis: 'legitimate-interest',
+    framework: 'gdpr',
+  },
+<% } -%>
+<% if (hasHipaa) { -%>
+  {
+    id: 'retain-phi',
+    dataCategory: 'phi',
+    retentionDays: 365 * 6,
+    legalBasis: 'legal-obligation',
+    framework: 'hipaa',
+  },
+<% } -%>
+<% if (hasSoc2) { -%>
+  {
+    id: 'retain-audit',
+    dataCategory: 'audit-trail',
+    retentionDays: 365,
+    legalBasis: 'security',
+    framework: 'soc2',
+  },
+<% } -%>
+<% if (hasIso27001) { -%>
+  {
+    id: 'retain-assets',
+    dataCategory: 'asset-inventory',
+    retentionDays: 365 * 2,
+    legalBasis: 'isms',
+    framework: 'iso27001',
+  },
+<% } -%>
+];
+
+/** @type {Array<{ id: string, framework: string, category: string, title: string, description: string, defaultStatus?: string }>} */
+export const CHECK_CATALOG = [
+<% if (hasGdpr) { -%>
+  {
+    id: 'gdpr-retention',
+    framework: 'gdpr',
+    category: 'data-retention',
+    title: 'Data retention policy documented',
+    description: 'Personal data retention periods are defined and enforced.',
+  },
+  {
+    id: 'gdpr-privacy-policy',
+    framework: 'gdpr',
+    category: 'privacy',
+    title: 'Privacy policy published',
+    description: 'A privacy policy describing processing purposes is available.',
+  },
+  {
+    id: 'gdpr-subject-rights',
+    framework: 'gdpr',
+    category: 'privacy',
+    title: 'Data subject rights workflow',
+    description: 'Export and deletion workflows exist for subject access requests.',
+  },
+<% } -%>
+<% if (hasHipaa) { -%>
+  {
+    id: 'hipaa-access-control',
+    framework: 'hipaa',
+    category: 'access',
+    title: 'PHI access controls',
+    description: 'Access to protected health information is role-restricted.',
+  },
+  {
+    id: 'hipaa-audit-log',
+    framework: 'hipaa',
+    category: 'audit',
+    title: 'PHI access audit logging',
+    description: 'Access to PHI is logged with actor and timestamp.',
+  },
+  {
+    id: 'hipaa-breach',
+    framework: 'hipaa',
+    category: 'incident',
+    title: 'Breach notification readiness',
+    description: 'Incident response covers breach notification timelines.',
+  },
+<% } -%>
+<% if (hasSoc2) { -%>
+  {
+    id: 'soc2-access',
+    framework: 'soc2',
+    category: 'access',
+    title: 'Logical access controls',
+    description: 'User access is provisioned, reviewed, and revoked.',
+  },
+  {
+    id: 'soc2-change',
+    framework: 'soc2',
+    category: 'change-management',
+    title: 'Change management process',
+    description: 'Production changes follow review and approval controls.',
+  },
+  {
+    id: 'soc2-monitoring',
+    framework: 'soc2',
+    category: 'monitoring',
+    title: 'System monitoring',
+    description: 'Security and availability signals are monitored.',
+  },
+<% } -%>
+<% if (hasIso27001) { -%>
+  {
+    id: 'iso-isms',
+    framework: 'iso27001',
+    category: 'governance',
+    title: 'ISMS policy',
+    description: 'An information security management system policy is defined.',
+  },
+  {
+    id: 'iso-risk',
+    framework: 'iso27001',
+    category: 'risk',
+    title: 'Risk assessment process',
+    description: 'Information security risks are assessed and treated.',
+  },
+  {
+    id: 'iso-assets',
+    framework: 'iso27001',
+    category: 'assets',
+    title: 'Asset inventory',
+    description: 'Information assets are inventoried and classified.',
+  },
+<% } -%>
+];
+<% } else { %>
+import type { ComplianceCheckStatus, ComplianceFramework, DataRetentionRule } from '../compliance.types.js';
+
+export interface ComplianceCatalogEntry {
+  id: string;
+  framework: ComplianceFramework;
+  category: string;
+  title: string;
+  description: string;
+  defaultStatus?: ComplianceCheckStatus;
+}
+
+export const DEFAULT_RETENTION_RULES: DataRetentionRule[] = [
+<% if (hasGdpr) { -%>
+  {
+    id: 'retain-account',
+    dataCategory: 'account-profile',
+    retentionDays: 365 * 3,
+    legalBasis: 'contract',
+    framework: 'gdpr',
+  },
+  {
+    id: 'retain-logs',
+    dataCategory: 'application-logs',
+    retentionDays: 90,
+    legalBasis: 'legitimate-interest',
+    framework: 'gdpr',
+  },
+<% } -%>
+<% if (hasHipaa) { -%>
+  {
+    id: 'retain-phi',
+    dataCategory: 'phi',
+    retentionDays: 365 * 6,
+    legalBasis: 'legal-obligation',
+    framework: 'hipaa',
+  },
+<% } -%>
+<% if (hasSoc2) { -%>
+  {
+    id: 'retain-audit',
+    dataCategory: 'audit-trail',
+    retentionDays: 365,
+    legalBasis: 'security',
+    framework: 'soc2',
+  },
+<% } -%>
+<% if (hasIso27001) { -%>
+  {
+    id: 'retain-assets',
+    dataCategory: 'asset-inventory',
+    retentionDays: 365 * 2,
+    legalBasis: 'isms',
+    framework: 'iso27001',
+  },
+<% } -%>
+];
+
+export const CHECK_CATALOG: ComplianceCatalogEntry[] = [
+<% if (hasGdpr) { -%>
+  {
+    id: 'gdpr-retention',
+    framework: 'gdpr',
+    category: 'data-retention',
+    title: 'Data retention policy documented',
+    description: 'Personal data retention periods are defined and enforced.',
+  },
+  {
+    id: 'gdpr-privacy-policy',
+    framework: 'gdpr',
+    category: 'privacy',
+    title: 'Privacy policy published',
+    description: 'A privacy policy describing processing purposes is available.',
+  },
+  {
+    id: 'gdpr-subject-rights',
+    framework: 'gdpr',
+    category: 'privacy',
+    title: 'Data subject rights workflow',
+    description: 'Export and deletion workflows exist for subject access requests.',
+  },
+<% } -%>
+<% if (hasHipaa) { -%>
+  {
+    id: 'hipaa-access-control',
+    framework: 'hipaa',
+    category: 'access',
+    title: 'PHI access controls',
+    description: 'Access to protected health information is role-restricted.',
+  },
+  {
+    id: 'hipaa-audit-log',
+    framework: 'hipaa',
+    category: 'audit',
+    title: 'PHI access audit logging',
+    description: 'Access to PHI is logged with actor and timestamp.',
+  },
+  {
+    id: 'hipaa-breach',
+    framework: 'hipaa',
+    category: 'incident',
+    title: 'Breach notification readiness',
+    description: 'Incident response covers breach notification timelines.',
+  },
+<% } -%>
+<% if (hasSoc2) { -%>
+  {
+    id: 'soc2-access',
+    framework: 'soc2',
+    category: 'access',
+    title: 'Logical access controls',
+    description: 'User access is provisioned, reviewed, and revoked.',
+  },
+  {
+    id: 'soc2-change',
+    framework: 'soc2',
+    category: 'change-management',
+    title: 'Change management process',
+    description: 'Production changes follow review and approval controls.',
+  },
+  {
+    id: 'soc2-monitoring',
+    framework: 'soc2',
+    category: 'monitoring',
+    title: 'System monitoring',
+    description: 'Security and availability signals are monitored.',
+  },
+<% } -%>
+<% if (hasIso27001) { -%>
+  {
+    id: 'iso-isms',
+    framework: 'iso27001',
+    category: 'governance',
+    title: 'ISMS policy',
+    description: 'An information security management system policy is defined.',
+  },
+  {
+    id: 'iso-risk',
+    framework: 'iso27001',
+    category: 'risk',
+    title: 'Risk assessment process',
+    description: 'Information security risks are assessed and treated.',
+  },
+  {
+    id: 'iso-assets',
+    framework: 'iso27001',
+    category: 'assets',
+    title: 'Asset inventory',
+    description: 'Information assets are inventoried and classified.',
+  },
+<% } -%>
+];
+<% } %>

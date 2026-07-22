@@ -1,0 +1,43 @@
+import { describe, expect, it } from 'vitest';
+import {
+  MemorySearchAdapter,
+  SearchService,
+  DocumentIndexer,
+  SearchQueryBuilder,
+  searchProvider,
+} from '../../src/search/index.js';
+
+describe('search platform', () => {
+  it('indexes and searches documents in memory', async () => {
+    const provider = new MemorySearchAdapter('<%= provider %>');
+    const service = new SearchService(provider);
+    const indexer = new DocumentIndexer(service);
+
+    await indexer.indexMany([
+      { id: '1', title: 'Red shoes', category: 'apparel' },
+      { id: '2', title: 'Blue jacket', category: 'apparel' },
+    ]);
+
+    const result = await service.search('shoes');
+    expect(result.hits.length).toBe(1);
+    expect(result.hits[0]?.document.id).toBe('1');
+  });
+
+  it('supports query builder filters', async () => {
+    const provider = new MemorySearchAdapter();
+    const service = new SearchService(provider);
+    await service.index([
+      { id: 'a', title: 'Alpha', status: 'active' },
+      { id: 'b', title: 'Beta', status: 'draft' },
+    ]);
+
+    const built = SearchQueryBuilder.create('alpha').filter('status', 'active').limit(10).build();
+    const result = await service.search(built.query, built.options);
+    expect(result.hits).toHaveLength(1);
+    expect(result.hits[0]?.document.id).toBe('a');
+  });
+
+  it('registers <%= provider %> provider', () => {
+    expect(searchProvider.id).toBe('<%= provider %>');
+  });
+});

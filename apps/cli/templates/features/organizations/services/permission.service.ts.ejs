@@ -1,0 +1,95 @@
+<% if (language === 'javascript') { %>
+const ROLE_PERMISSIONS = {
+  owner: [
+    'org:read', 'org:write', 'org:delete',
+    'team:read', 'team:write',
+    'member:read', 'member:write',
+    'project:read', 'project:write', 'project:delete',
+    'role:assign',
+  ],
+  admin: [
+    'org:read', 'org:write',
+    'team:read', 'team:write',
+    'member:read', 'member:write',
+    'project:read', 'project:write', 'project:delete',
+    'role:assign',
+  ],
+  member: ['org:read', 'team:read', 'member:read', 'project:read', 'project:write'],
+  viewer: ['org:read', 'team:read', 'member:read', 'project:read'],
+};
+
+export class PermissionService {
+  constructor(store) {
+    this.store = store;
+  }
+
+  permissionsForRole(role) {
+    return [...(ROLE_PERMISSIONS[role] ?? [])];
+  }
+
+  can(memberId, permission) {
+    const member = this.store.members.get(memberId);
+    if (!member) return false;
+    return (ROLE_PERMISSIONS[member.role] ?? []).includes(permission);
+  }
+
+  assert(memberId, permission) {
+    if (!this.can(memberId, permission)) {
+      throw new Error(`Permission denied: ${permission}`);
+    }
+  }
+}
+<% } else { %>
+import type { OrganizationPermission, OrganizationRole } from '../organization.types.js';
+import { OrganizationStore } from '../organization.store.js';
+
+const ROLE_PERMISSIONS: Record<OrganizationRole, OrganizationPermission[]> = {
+  owner: [
+    'org:read',
+    'org:write',
+    'org:delete',
+    'team:read',
+    'team:write',
+    'member:read',
+    'member:write',
+    'project:read',
+    'project:write',
+    'project:delete',
+    'role:assign',
+  ],
+  admin: [
+    'org:read',
+    'org:write',
+    'team:read',
+    'team:write',
+    'member:read',
+    'member:write',
+    'project:read',
+    'project:write',
+    'project:delete',
+    'role:assign',
+  ],
+  member: ['org:read', 'team:read', 'member:read', 'project:read', 'project:write'],
+  viewer: ['org:read', 'team:read', 'member:read', 'project:read'],
+};
+
+export class PermissionService {
+  constructor(private readonly store: OrganizationStore) {}
+
+  permissionsForRole(role: OrganizationRole): OrganizationPermission[] {
+    return [...ROLE_PERMISSIONS[role]];
+  }
+
+  can(memberId: string, permission: OrganizationPermission): boolean {
+    const member = this.store.members.get(memberId);
+    if (!member) return false;
+    return ROLE_PERMISSIONS[member.role].includes(permission);
+  }
+
+  assert(memberId: string, permission: OrganizationPermission): void {
+    if (!this.can(memberId, permission)) {
+      throw new Error(`Permission denied: ${permission}`);
+    }
+  }
+}
+<% } %>

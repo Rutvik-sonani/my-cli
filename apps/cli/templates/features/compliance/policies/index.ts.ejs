@@ -1,0 +1,62 @@
+<% if (language === 'javascript') { %>
+<% if (hasGdpr) { -%>
+import { gdprPolicy } from './gdpr.policy.js';
+<% } -%>
+<% if (hasHipaa) { -%>
+import { hipaaPolicy } from './hipaa.policy.js';
+<% } -%>
+<% if (hasSoc2) { -%>
+import { soc2Policy } from './soc2.policy.js';
+<% } -%>
+<% if (hasIso27001) { -%>
+import { iso27001Policy } from './iso27001.policy.js';
+<% } -%>
+
+export function listPolicies() {
+  return [
+<% if (hasGdpr) { -%>
+    gdprPolicy,
+<% } -%>
+<% if (hasHipaa) { -%>
+    hipaaPolicy,
+<% } -%>
+<% if (hasSoc2) { -%>
+    soc2Policy,
+<% } -%>
+<% if (hasIso27001) { -%>
+    iso27001Policy,
+<% } -%>
+  ];
+}
+<% } else { %>
+import type { CompliancePolicy } from '../compliance.types.js';
+<% if (hasGdpr) { -%>
+import { gdprPolicy } from './gdpr.policy.js';
+<% } -%>
+<% if (hasHipaa) { -%>
+import { hipaaPolicy } from './hipaa.policy.js';
+<% } -%>
+<% if (hasSoc2) { -%>
+import { soc2Policy } from './soc2.policy.js';
+<% } -%>
+<% if (hasIso27001) { -%>
+import { iso27001Policy } from './iso27001.policy.js';
+<% } -%>
+
+export function listPolicies(): CompliancePolicy[] {
+  return [
+<% if (hasGdpr) { -%>
+    gdprPolicy,
+<% } -%>
+<% if (hasHipaa) { -%>
+    hipaaPolicy,
+<% } -%>
+<% if (hasSoc2) { -%>
+    soc2Policy,
+<% } -%>
+<% if (hasIso27001) { -%>
+    iso27001Policy,
+<% } -%>
+  ];
+}
+<% } %>

@@ -1,0 +1,16 @@
+export class <%= pascal %>Resource {
+  static toJSON(entity: Record<string, unknown>) {
+    return {
+      id: entity.id,
+<% fields.forEach(function(field) { %>
+      <%= field.propertyName %>: entity.<%= field.propertyName %>,
+<% }); %>
+      createdAt: entity.createdAt,
+      updatedAt: entity.updatedAt,
+    };
+  }
+
+  static collection(entities: Array<Record<string, unknown>>) {
+    return entities.map((entity) => <%= pascal %>Resource.toJSON(entity));
+  }
+}

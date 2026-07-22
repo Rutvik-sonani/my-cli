@@ -1,0 +1,54 @@
+<% if (language === 'javascript') { %>
+import { InMemorySessionStore } from './session.store.js';
+
+export class SessionService {
+  constructor(store = new InMemorySessionStore()) {
+    this.store = store;
+  }
+
+  async create(user) {
+    const session = {
+      id: crypto.randomUUID(),
+      userId: user.id,
+      provider: user.provider,
+      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+    };
+    await this.store.create(session);
+    return session;
+  }
+
+  async get(sessionId) {
+    return this.store.get(sessionId);
+  }
+
+  async destroy(sessionId) {
+    await this.store.delete(sessionId);
+  }
+}
+<% } else { %>
+import { InMemorySessionStore, type IdentitySession } from './session.store.js';
+import type { IdentityUser } from '../identity-provider.interface.js';
+
+export class SessionService {
+  constructor(private readonly store = new InMemorySessionStore()) {}
+
+  async create(user: IdentityUser): Promise<IdentitySession> {
+    const session: IdentitySession = {
+      id: crypto.randomUUID(),
+      userId: user.id,
+      provider: user.provider,
+      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+    };
+    await this.store.create(session);
+    return session;
+  }
+
+  async get(sessionId: string): Promise<IdentitySession | null> {
+    return this.store.get(sessionId);
+  }
+
+  async destroy(sessionId: string): Promise<void> {
+    await this.store.delete(sessionId);
+  }
+}
+<% } %>

@@ -1,0 +1,48 @@
+<% if (language === 'javascript') { %>
+import { createMarketplaceClient } from './client/marketplace.client.js';
+
+/**
+ * High-level marketplace service for <%= appName %>.
+ */
+export class MarketplaceService {
+  constructor() {
+    this.client = createMarketplaceClient();
+  }
+
+  search(query) {
+    return this.client.search(query);
+  }
+
+  get(name) {
+    return this.client.get(name);
+  }
+}
+
+export function createMarketplaceService() {
+  return new MarketplaceService();
+}
+<% } else { %>
+import type { MarketplaceTemplate, TemplateSearchResult } from './marketplace.types.js';
+import { createMarketplaceClient, MarketplaceClient } from './client/marketplace.client.js';
+
+/** High-level marketplace service for <%= appName %>. */
+export class MarketplaceService {
+  private readonly client: MarketplaceClient;
+
+  constructor() {
+    this.client = createMarketplaceClient();
+  }
+
+  search(query?: string): Promise<TemplateSearchResult> {
+    return this.client.search(query);
+  }
+
+  get(name: string): Promise<MarketplaceTemplate | undefined> {
+    return this.client.get(name);
+  }
+}
+
+export function createMarketplaceService(): MarketplaceService {
+  return new MarketplaceService();
+}
+<% } %>

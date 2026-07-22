@@ -1,0 +1,9 @@
+/** Database-per-tenant resolver — map tenant id to connection URL. */
+export function resolveTenantDatabaseUrl(tenantId: string): string {
+  const envKey = `DATABASE_URL_${tenantId.replace(/[^a-zA-Z0-9_]/g, '_').toUpperCase()}`;
+  const url = process.env[envKey];
+  if (!url) {
+    throw new Error(`Missing tenant database URL env: ${envKey}`);
+  }
+  return url;
+}

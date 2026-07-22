@@ -1,0 +1,37 @@
+import { describe, expect, it } from 'vitest';
+import { auditService, computeStateDiff } from '../../src/audit/index.js';
+import { AuditRepository } from '../../src/audit/audit.repository.js';
+
+describe('audit platform', () => {
+  it('records role change with before/after state', async () => {
+    const record = await auditService.record(
+      { userId: 'admin-1', ip: '127.0.0.1', userAgent: 'vitest' },
+      {
+        action: 'role.update',
+        resource: 'user:42',
+        beforeState: { role: 'customer' },
+        afterState: { role: 'admin' },
+      },
+    );
+
+    expect(record.userId).toBe('admin-1');
+    expect(record.beforeState?.role).toBe('customer');
+    expect(record.afterState?.role).toBe('admin');
+  });
+
+  it('computes state diff for audit trail', () => {
+    const diff = computeStateDiff({ role: 'customer' }, { role: 'admin' });
+    expect(diff.role).toEqual({ before: 'customer', after: 'admin' });
+  });
+
+  it('queries records by resource via repository', async () => {
+    await auditService.record(
+      { userId: 'admin-1' },
+      { action: 'user.create', resource: 'user:99', afterState: { email: 'a@b.com' } },
+    );
+
+    const repo = new AuditRepository();
+    const records = await repo.findByResource('user:99');
+    expect(records.length).toBeGreaterThan(0);
+  });
+});

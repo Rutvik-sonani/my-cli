@@ -1,0 +1,52 @@
+# Migration & Upgrade — <%= appName %>
+
+Enterprise-safe upgrades for CLI, plugins, templates, and generated projects.
+
+## Safety rules
+
+1. **Never overwrite user changes** unless `--force` is set
+2. **Backup** key files before project upgrades
+3. Write **migration records** under `.mycli/migrations/`
+4. Emit **UPGRADE_REPORT.md** after every run
+
+## Scopes
+
+| Scope | Purpose |
+|-------|---------|
+| `project` | Generated project scaffold migrations |
+| `cli` | CLI compatibility notes |
+| `plugin` | Installed plugin upgrade checks |
+| `template` | Marketplace template upgrade stamps |
+
+## Layout
+
+```
+src/migration/
+  migrations/
+  backup/
+  reports/
+.mycli/upgrade-backups/
+.mycli/migrations/
+UPGRADE_REPORT.md
+MIGRATION.md
+```
+
+## CLI
+
+```bash
+my upgrade setup
+my upgrade
+my upgrade --scope project,template
+my upgrade --dry-run
+my upgrade --force
+```
+
+## Usage
+
+```ts
+import { registerMigration } from './src/migration/index.js';
+
+const upgrade = registerMigration();
+const plan = upgrade.plan('1.0.0', '1.1.0');
+console.log(upgrade.render(plan));
+```

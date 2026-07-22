@@ -1,0 +1,22 @@
+<% if (language === 'javascript') { %>
+/** @type {import('../compliance.types.js').CompliancePolicy} */
+export const gdprPolicy = {
+  id: 'policy-gdpr',
+  framework: 'gdpr',
+  name: 'GDPR Privacy Policy',
+  version: '1.0.0',
+  summary:
+    '<%= appName %> processes personal data under lawful bases, documents retention, and supports subject rights.',
+};
+<% } else { %>
+import type { CompliancePolicy } from '../compliance.types.js';
+
+export const gdprPolicy: CompliancePolicy = {
+  id: 'policy-gdpr',
+  framework: 'gdpr',
+  name: 'GDPR Privacy Policy',
+  version: '1.0.0',
+  summary:
+    '<%= appName %> processes personal data under lawful bases, documents retention, and supports subject rights.',
+};
+<% } %>

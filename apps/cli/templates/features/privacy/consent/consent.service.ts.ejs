@@ -1,0 +1,58 @@
+<% if (language === 'javascript') { %>
+export class ConsentService {
+  constructor(store) {
+    this.store = store;
+  }
+
+  grant(userId, purpose, options) {
+    return this.store.record(userId, purpose, 'granted', options);
+  }
+
+  deny(userId, purpose, options) {
+    return this.store.record(userId, purpose, 'denied', options);
+  }
+
+  withdraw(userId, purpose, options) {
+    return this.store.record(userId, purpose, 'withdrawn', options);
+  }
+
+  list(userId) {
+    return this.store.listByUser(userId);
+  }
+}
+<% } else { %>
+import type { ConsentRecord, ConsentStatus } from '../privacy.types.js';
+import { ConsentStore } from './consent.store.js';
+
+export class ConsentService {
+  constructor(private readonly store: ConsentStore) {}
+
+  grant(
+    userId: string,
+    purpose: string,
+    options?: { source?: string; metadata?: Record<string, unknown> },
+  ): Promise<ConsentRecord> {
+    return this.store.record(userId, purpose, 'granted' satisfies ConsentStatus, options);
+  }
+
+  deny(
+    userId: string,
+    purpose: string,
+    options?: { source?: string; metadata?: Record<string, unknown> },
+  ): Promise<ConsentRecord> {
+    return this.store.record(userId, purpose, 'denied', options);
+  }
+
+  withdraw(
+    userId: string,
+    purpose: string,
+    options?: { source?: string; metadata?: Record<string, unknown> },
+  ): Promise<ConsentRecord> {
+    return this.store.record(userId, purpose, 'withdrawn', options);
+  }
+
+  list(userId: string): Promise<ConsentRecord[]> {
+    return this.store.listByUser(userId);
+  }
+}
+<% } %>

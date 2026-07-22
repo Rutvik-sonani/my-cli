@@ -1,0 +1,6 @@
+{
+  "name": "crud",
+  "version": "2.0.0",
+  "description": "Full CRUD module with field-aware model, DTO, validator, seeder, swagger, tests",
+  "engine": "ejs"
+}

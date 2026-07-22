@@ -1,0 +1,16 @@
+import type { <%= pascal %> } from '../../../domain/<%= kebab %>/entities/<%= pascal %>.js';
+
+<% if (language === 'javascript') { %>
+/**
+ * Repository port — implemented in infrastructure, consumed by application layer.
+ * @typedef {object} I<%= pascal %>Repository
+ * @property {(entity: import('../../../domain/<%= kebab %>/entities/<%= pascal %>.js').<%= pascal %>) => Promise<void>} save
+ * @property {(id: string) => Promise<import('../../../domain/<%= kebab %>/entities/<%= pascal %>.js').<%= pascal %> | null>} findById
+ */
+export {};
+<% } else { %>
+export interface I<%= pascal %>Repository {
+  save(entity: <%= pascal %>): Promise<void>;
+  findById(id: string): Promise<<%= pascal %> | null>;
+}
+<% } %>

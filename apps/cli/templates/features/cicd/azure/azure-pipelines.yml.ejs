@@ -1,0 +1,19 @@
+trigger:
+  - <%= branch %>
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '<%= nodeVersion %>.x'
+    displayName: Install Node.js
+  - script: <%= installCommand %>
+    displayName: Install dependencies
+  - script: <%= lintCommand %>
+    displayName: Lint
+  - script: <%= testCommand %>
+    displayName: Test
+  - script: <%= buildCommand %>
+    displayName: Build

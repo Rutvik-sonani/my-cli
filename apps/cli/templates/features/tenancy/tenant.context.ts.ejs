@@ -1,0 +1,62 @@
+import { AsyncLocalStorage } from 'node:async_hooks';
+
+<% if (language === 'javascript') { %>
+export const storage = new AsyncLocalStorage();
+
+export function runWithTenant(tenantId, fn, meta = {}) {
+  return storage.run({ tenantId, ...meta }, fn);
+}
+
+export function getTenantId() {
+  return storage.getStore()?.tenantId ?? process.env.DEFAULT_TENANT ?? 'default';
+}
+
+export function getTenantSlug() {
+  return storage.getStore()?.slug ?? process.env.TENANT_SLUG ?? getTenantId();
+}
+
+export function getTenantSchema() {
+  return storage.getStore()?.schema;
+}
+
+export function getTenantDatabaseUrl() {
+  return storage.getStore()?.databaseUrl;
+}
+
+export function setTenantContext(tenantId, meta = {}) {
+  storage.enterWith({ tenantId, ...meta });
+}
+<% } else { %>
+export interface TenantContextState {
+  tenantId: string;
+  slug?: string;
+  schema?: string;
+  databaseUrl?: string;
+}
+
+const storage = new AsyncLocalStorage<TenantContextState>();
+
+export function runWithTenant<T>(tenantId: string, fn: () => T, meta: Partial<TenantContextState> = {}): T {
+  return storage.run({ tenantId, ...meta }, fn);
+}
+
+export function getTenantId(): string {
+  return storage.getStore()?.tenantId ?? process.env.DEFAULT_TENANT ?? 'default';
+}
+
+export function getTenantSlug(): string {
+  return storage.getStore()?.slug ?? process.env.TENANT_SLUG ?? getTenantId();
+}
+
+export function getTenantSchema(): string | undefined {
+  return storage.getStore()?.schema;
+}
+
+export function getTenantDatabaseUrl(): string | undefined {
+  return storage.getStore()?.databaseUrl;
+}
+
+export function setTenantContext(tenantId: string, meta: Partial<TenantContextState> = {}): void {
+  storage.enterWith({ tenantId, ...meta });
+}
+<% } %>

@@ -1,0 +1,9 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "plugins/official/*"
+  - "plugins/official-tests"
+  - "plugins/community/*"
+allowBuilds:
+  '@biomejs/biome': true
+  esbuild: true

@@ -1,0 +1,13 @@
+import { Schema, model } from 'mongoose';
+
+const userRoleSchema = new Schema(
+  {
+    userId: { type: String, required: true, index: true },
+    roleId: { type: String, required: true, index: true },
+  },
+  { collection: 'user_roles' },
+);
+
+userRoleSchema.index({ userId: 1, roleId: 1 }, { unique: true });
+
+export const UserRoleModel = model('UserRole', userRoleSchema);

@@ -1,0 +1,37 @@
+import { randomBytes, scrypt as scryptCb } from 'node:crypto';
+import { promisify } from 'node:util';
+import { connectDatabase } from './connection.js';
+import { UserModel } from './models/user.model.js';
+
+const scrypt = promisify(scryptCb);
+
+async function hashPassword(password: string): Promise<string> {
+  const salt = randomBytes(16).toString('hex');
+  const derived = (await scrypt(password, salt, 64)) as Buffer;
+  return `${salt}:${derived.toString('hex')}`;
+}
+
+async function main() {
+  await connectDatabase();
+<% if (includeUser) { %>
+  await UserModel.updateOne(
+    { email: 'admin@example.com' },
+    {
+      $setOnInsert: {
+        email: 'admin@example.com',
+        name: 'Admin',
+        passwordHash: await hashPassword('Admin123!'),
+        emailVerified: true,
+      },
+    },
+    { upsert: true },
+  );
+  console.log('Seeded admin user: admin@example.com');
+<% } %>
+  process.exit(0);
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

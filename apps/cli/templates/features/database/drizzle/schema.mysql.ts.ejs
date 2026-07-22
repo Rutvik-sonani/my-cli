@@ -1,0 +1,68 @@
+import { mysqlTable, char, varchar, boolean, timestamp, text, primaryKey, unique } from 'drizzle-orm/mysql-core';
+
+<% if (includeUser) { %>
+export const users = mysqlTable('users', {
+  id: char('id', { length: 36 }).primaryKey(),
+  email: varchar('email', { length: 255 }).notNull().unique(),
+  passwordHash: varchar('password_hash', { length: 255 }).notNull(),
+  name: varchar('name', { length: 255 }),
+  emailVerified: boolean('email_verified').notNull().default(false),
+  mfaSecret: varchar('mfa_secret', { length: 255 }),
+  mfaEnabled: boolean('mfa_enabled').notNull().default(false),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow().onUpdateNow(),
+});
+
+export const refreshTokens = mysqlTable('refresh_tokens', {
+  id: char('id', { length: 36 }).primaryKey(),
+  token: varchar('token', { length: 512 }).notNull().unique(),
+  userId: char('user_id', { length: 36 }).notNull(),
+  expiresAt: timestamp('expires_at').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+export const oAuthAccounts = mysqlTable(
+  'oauth_accounts',
+  {
+    id: char('id', { length: 36 }).primaryKey(),
+    userId: char('user_id', { length: 36 }).notNull(),
+    provider: varchar('provider', { length: 50 }).notNull(),
+    providerUserId: varchar('provider_user_id', { length: 255 }).notNull(),
+  },
+  (t) => [unique('oauth_provider_user_unique').on(t.provider, t.providerUserId)],
+);
+<% } %>
+
+<% if (includeRbac) { %>
+export const roles = mysqlTable('roles', {
+  id: char('id', { length: 36 }).primaryKey(),
+  name: varchar('name', { length: 100 }).notNull().unique(),
+  description: text('description'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+export const permissions = mysqlTable('permissions', {
+  id: char('id', { length: 36 }).primaryKey(),
+  name: varchar('name', { length: 150 }).notNull().unique(),
+  description: text('description'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+export const rolePermissions = mysqlTable(
+  'role_permissions',
+  {
+    roleId: char('role_id', { length: 36 }).notNull(),
+    permissionId: char('permission_id', { length: 36 }).notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.roleId, t.permissionId] })],
+);
+
+export const userRoles = mysqlTable(
+  'user_roles',
+  {
+    userId: char('user_id', { length: 36 }).notNull(),
+    roleId: char('role_id', { length: 36 }).notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.roleId] })],
+);
+<% } %>

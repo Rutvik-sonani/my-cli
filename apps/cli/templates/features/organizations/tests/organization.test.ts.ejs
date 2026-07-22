@@ -1,0 +1,42 @@
+import { describe, expect, it } from 'vitest';
+import {
+  organizationPlatform,
+  registerOrganization,
+} from '../../src/organizations/index.js';
+
+describe('organization platform', () => {
+  it('manages companies, teams, members, projects, and roles', () => {
+    const platform = registerOrganization();
+    const org = platform.organizations.create('Acme Corp');
+    expect(org.slug).toBe('acme-corp');
+
+    const team = platform.teams.create(org.id, 'Platform');
+    const member = platform.members.add(org.id, {
+      userId: 'u1',
+      email: 'owner@acme.com',
+      role: 'owner',
+    });
+    platform.members.assignTeam(member.id, team.id);
+
+    const project = platform.projects.create(org.id, 'Checkout API', { teamId: team.id });
+    expect(project.slug).toBe('checkout-api');
+
+    expect(platform.permissions.can(member.id, 'org:delete')).toBe(true);
+    expect(platform.members.listByOrganization(org.id)).toHaveLength(1);
+    expect(platform.teams.listByOrganization(org.id)).toHaveLength(1);
+    expect(platform.projects.listByOrganization(org.id)).toHaveLength(1);
+  });
+
+  it('enforces viewer permissions', () => {
+    const org = organizationPlatform.organizations.create('Beta Inc');
+    const viewer = organizationPlatform.members.add(org.id, {
+      userId: 'u2',
+      email: 'viewer@beta.com',
+      role: 'viewer',
+    });
+    expect(organizationPlatform.permissions.can(viewer.id, 'project:write')).toBe(false);
+    expect(() =>
+      organizationPlatform.permissions.assert(viewer.id, 'member:write'),
+    ).toThrow(/Permission denied/);
+  });
+});

@@ -1,0 +1,127 @@
+<% if (language === 'javascript') { %>
+import { MemorySearchAdapter } from './memory.adapter.js';
+
+/**
+ * Meilisearch adapter for <%= appName %>.
+ * Uses meilisearch SDK when MEILISEARCH_HOST is reachable; falls back to memory.
+ */
+export class MeilisearchSearchAdapter {
+  constructor() {
+    this.id = 'meilisearch';
+    this.fallback = new MemorySearchAdapter('meilisearch');
+    this.indexName = process.env.SEARCH_INDEX ?? '<%= appName %>';
+    this.client = null;
+  }
+
+  async connect() {
+    try {
+      const { MeiliSearch } = await import('meilisearch');
+      this.client = new MeiliSearch({
+        host: process.env.MEILISEARCH_HOST ?? 'http://localhost:7700',
+        apiKey: process.env.MEILISEARCH_API_KEY,
+      });
+    } catch {
+      this.client = null;
+    }
+    await this.fallback.connect();
+  }
+
+  async disconnect() {
+    this.client = null;
+    await this.fallback.disconnect();
+  }
+
+  async index(documents) {
+    if (!this.client) return this.fallback.index(documents);
+    const list = Array.isArray(documents) ? documents : [documents];
+    await this.client.index(this.indexName).addDocuments(list);
+  }
+
+  async delete(id) {
+    if (!this.client) return this.fallback.delete(id);
+    await this.client.index(this.indexName).deleteDocument(id);
+    return true;
+  }
+
+  async search(query, options = {}) {
+    if (!this.client) return this.fallback.search(query, options);
+    const result = await this.client.index(this.indexName).search(query, {
+      limit: options.limit,
+      offset: options.offset,
+    });
+    return {
+      query,
+      hits: result.hits.map((hit) => ({ document: hit, score: 1 })),
+      total: result.estimatedTotalHits ?? result.hits.length,
+      tookMs: result.processingTimeMs ?? 0,
+    };
+  }
+}
+<% } else { %>
+import type { SearchProvider } from '../search-provider.interface.js';
+import type {
+  SearchDocument,
+  SearchProviderId,
+  SearchQueryOptions,
+  SearchResult,
+} from '../search.types.js';
+import { MemorySearchAdapter } from './memory.adapter.js';
+
+/**
+ * Meilisearch adapter for <%= appName %>.
+ * Uses meilisearch SDK when available; falls back to in-memory search.
+ */
+export class MeilisearchSearchAdapter implements SearchProvider {
+  readonly id: SearchProviderId = 'meilisearch';
+  private readonly fallback = new MemorySearchAdapter('meilisearch');
+  private readonly indexName = process.env.SEARCH_INDEX ?? '<%= appName %>';
+  private client: { index: (name: string) => any } | null = null;
+
+  async connect(): Promise<void> {
+    try {
+      const { MeiliSearch } = await import('meilisearch');
+      this.client = new MeiliSearch({
+        host: process.env.MEILISEARCH_HOST ?? 'http://localhost:7700',
+        apiKey: process.env.MEILISEARCH_API_KEY,
+      });
+    } catch {
+      this.client = null;
+    }
+    await this.fallback.connect();
+  }
+
+  async disconnect(): Promise<void> {
+    this.client = null;
+    await this.fallback.disconnect();
+  }
+
+  async index(documents: SearchDocument | SearchDocument[]): Promise<void> {
+    if (!this.client) return this.fallback.index(documents);
+    const list = Array.isArray(documents) ? documents : [documents];
+    await this.client.index(this.indexName).addDocuments(list);
+  }
+
+  async delete(id: string): Promise<boolean> {
+    if (!this.client) return this.fallback.delete(id);
+    await this.client.index(this.indexName).deleteDocument(id);
+    return true;
+  }
+
+  async search<T extends SearchDocument = SearchDocument>(
+    query: string,
+    options: SearchQueryOptions = {},
+  ): Promise<SearchResult<T>> {
+    if (!this.client) return this.fallback.search<T>(query, options);
+    const result = await this.client.index(this.indexName).search(query, {
+      limit: options.limit,
+      offset: options.offset,
+    });
+    return {
+      query,
+      hits: result.hits.map((hit: T) => ({ document: hit, score: 1 })),
+      total: result.estimatedTotalHits ?? result.hits.length,
+      tookMs: result.processingTimeMs ?? 0,
+    };
+  }
+}
+<% } %>

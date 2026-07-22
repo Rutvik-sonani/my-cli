@@ -1,0 +1,56 @@
+# Audit Platform — <%= appName %>
+
+Track important system actions with full actor context and before/after state.
+
+## Storage backend
+
+**<%= storage %>**
+
+## Recorded fields
+
+| Field | Description |
+|-------|-------------|
+| User | Actor user id |
+| Action | What happened (e.g. `role.update`) |
+| Resource | Target entity (e.g. `user:123`) |
+| Timestamp | When it occurred |
+| IP | Client IP address |
+| Device | User agent / device hint |
+| Before State | Snapshot before change |
+| After State | Snapshot after change |
+
+## Example
+
+```ts
+import { auditService, computeStateDiff } from './src/audit/index.js';
+
+await auditService.record(
+  { userId: 'admin-1', ip: '127.0.0.1', userAgent: 'curl/8.0' },
+  {
+    action: 'role.update',
+    resource: 'user:42',
+    beforeState: { role: 'customer' },
+    afterState: { role: 'admin' },
+  },
+);
+
+const diff = computeStateDiff({ role: 'customer' }, { role: 'admin' });
+// { role: { before: 'customer', after: 'admin' } }
+```
+
+## Middleware
+
+```ts
+import { registerAuditMiddleware } from './src/audit/index.js';
+
+await registerAuditMiddleware(app);
+```
+
+## Query
+
+```ts
+import { AuditRepository } from './src/audit/index.js';
+
+const repo = new AuditRepository();
+const events = await repo.findByResource('user:42');
+```

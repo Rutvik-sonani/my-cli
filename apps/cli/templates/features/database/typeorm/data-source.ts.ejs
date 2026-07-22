@@ -1,0 +1,25 @@
+import 'reflect-metadata';
+import { DataSource } from 'typeorm';
+import { User } from './entities/user.entity.js';
+<% if (includeRbac) { %>
+import { Role } from './entities/role.entity.js';
+import { Permission } from './entities/permission.entity.js';
+import { RolePermission } from './entities/role-permission.entity.js';
+import { UserRole } from './entities/user-role.entity.js';
+<% } %>
+
+export const AppDataSource = new DataSource({
+  type: '<%= typeormType %>' as const,
+  url: process.env.DATABASE_URL,
+  synchronize: process.env.NODE_ENV !== 'production',
+  logging: process.env.NODE_ENV === 'development',
+  entities: [User<% if (includeRbac) { %>, Role, Permission, RolePermission, UserRole<% } %>],
+  migrations: ['src/database/migrations/*.ts'],
+});
+
+export async function initializeDatabase(): Promise<DataSource> {
+  if (!AppDataSource.isInitialized) {
+    await AppDataSource.initialize();
+  }
+  return AppDataSource;
+}

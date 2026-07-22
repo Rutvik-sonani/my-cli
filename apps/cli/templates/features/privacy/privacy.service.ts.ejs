@@ -1,0 +1,141 @@
+<% if (language === 'javascript') { %>
+import { ConsentStore } from './consent/consent.store.js';
+import { ConsentService } from './consent/consent.service.js';
+import { CookieTracker } from './cookies/cookie-tracker.js';
+import { ProcessingRegistry } from './processing/processing-registry.js';
+
+export class InMemoryPrivacyUserStore {
+  constructor() {
+    this.profiles = new Map();
+  }
+
+  setProfile(userId, profile) {
+    this.profiles.set(userId, { ...profile });
+  }
+
+  async getProfile(userId) {
+    return this.profiles.get(userId) ?? null;
+  }
+
+  async deleteProfile(userId) {
+    return this.profiles.delete(userId);
+  }
+}
+
+export class PrivacyService {
+  constructor(options = {}) {
+    this.userStore = options.userStore ?? new InMemoryPrivacyUserStore();
+    this.consents = options.consentStore ?? new ConsentStore();
+    this.cookies = options.cookieTracker ?? new CookieTracker();
+    this.processing = options.processingRegistry ?? new ProcessingRegistry();
+    this.consentService = new ConsentService(this.consents);
+    this.tombstoneOnDelete = options.tombstoneOnDelete ?? true;
+  }
+
+  async exportUserData(userId) {
+    const profile = (await this.userStore.getProfile(userId)) ?? { userId };
+    return {
+      userId,
+      exportedAt: new Date(),
+      profile,
+      consents: await this.consents.listByUser(userId),
+      cookies: await this.cookies.listByUser(userId),
+      processingRecords: await this.processing.listByUser(userId),
+    };
+  }
+
+  async deleteUserData(userId) {
+    const removedConsents = await this.consents.deleteByUser(userId);
+    const removedCookies = await this.cookies.deleteByUser(userId);
+    const removedProcessingRecords = await this.processing.deleteByUser(userId);
+    await this.userStore.deleteProfile(userId);
+    return {
+      userId,
+      deletedAt: new Date(),
+      removedConsents,
+      removedCookies,
+      removedProcessingRecords,
+      tombstone: this.tombstoneOnDelete,
+    };
+  }
+}
+<% } else { %>
+import type {
+  PrivacyUserStore,
+  UserDataDeletionResult,
+  UserDataExport,
+} from './privacy.types.js';
+import { ConsentStore } from './consent/consent.store.js';
+import { ConsentService } from './consent/consent.service.js';
+import { CookieTracker } from './cookies/cookie-tracker.js';
+import { ProcessingRegistry } from './processing/processing-registry.js';
+
+export class InMemoryPrivacyUserStore implements PrivacyUserStore {
+  private readonly profiles = new Map<string, Record<string, unknown>>();
+
+  setProfile(userId: string, profile: Record<string, unknown>): void {
+    this.profiles.set(userId, { ...profile });
+  }
+
+  async getProfile(userId: string): Promise<Record<string, unknown> | null> {
+    return this.profiles.get(userId) ?? null;
+  }
+
+  async deleteProfile(userId: string): Promise<boolean> {
+    return this.profiles.delete(userId);
+  }
+}
+
+export interface PrivacyServiceOptions {
+  userStore?: PrivacyUserStore;
+  consentStore?: ConsentStore;
+  cookieTracker?: CookieTracker;
+  processingRegistry?: ProcessingRegistry;
+  tombstoneOnDelete?: boolean;
+}
+
+export class PrivacyService {
+  private readonly userStore: PrivacyUserStore;
+  readonly consents: ConsentStore;
+  readonly cookies: CookieTracker;
+  readonly processing: ProcessingRegistry;
+  readonly consentService: ConsentService;
+  private readonly tombstoneOnDelete: boolean;
+
+  constructor(options: PrivacyServiceOptions = {}) {
+    this.userStore = options.userStore ?? new InMemoryPrivacyUserStore();
+    this.consents = options.consentStore ?? new ConsentStore();
+    this.cookies = options.cookieTracker ?? new CookieTracker();
+    this.processing = options.processingRegistry ?? new ProcessingRegistry();
+    this.consentService = new ConsentService(this.consents);
+    this.tombstoneOnDelete = options.tombstoneOnDelete ?? true;
+  }
+
+  async exportUserData(userId: string): Promise<UserDataExport> {
+    const profile = (await this.userStore.getProfile(userId)) ?? { userId };
+    return {
+      userId,
+      exportedAt: new Date(),
+      profile,
+      consents: await this.consents.listByUser(userId),
+      cookies: await this.cookies.listByUser(userId),
+      processingRecords: await this.processing.listByUser(userId),
+    };
+  }
+
+  async deleteUserData(userId: string): Promise<UserDataDeletionResult> {
+    const removedConsents = await this.consents.deleteByUser(userId);
+    const removedCookies = await this.cookies.deleteByUser(userId);
+    const removedProcessingRecords = await this.processing.deleteByUser(userId);
+    await this.userStore.deleteProfile(userId);
+    return {
+      userId,
+      deletedAt: new Date(),
+      removedConsents,
+      removedCookies,
+      removedProcessingRecords,
+      tombstone: this.tombstoneOnDelete,
+    };
+  }
+}
+<% } %>

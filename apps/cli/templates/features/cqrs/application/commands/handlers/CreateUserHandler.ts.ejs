@@ -1,0 +1,42 @@
+<% if (language === 'javascript') { %>
+import { UserCreatedEvent } from '../../events/UserCreatedEvent.js';
+
+export class CreateUserHandler {
+  constructor(store, eventBus) {
+    this.store = store;
+    this.eventBus = eventBus;
+  }
+
+  async handle(command) {
+    const id = crypto.randomUUID();
+    const user = { id, email: command.email };
+    this.store.set(id, user);
+    await this.eventBus.publish(UserCreatedEvent.create(id, command.email));
+    return { id, email: user.email };
+  }
+}
+<% } else { %>
+import type { EventBus } from '../../../../cqrs/event-bus.js';
+import { UserCreatedEvent } from '../../events/UserCreatedEvent.js';
+import type { CreateUserCommand } from '../CreateUserCommand.js';
+
+export interface UserRecord {
+  id: string;
+  email: string;
+}
+
+export class CreateUserHandler {
+  constructor(
+    private readonly store: Map<string, UserRecord>,
+    private readonly eventBus: EventBus,
+  ) {}
+
+  async handle(command: CreateUserCommand): Promise<UserRecord> {
+    const id = crypto.randomUUID();
+    const user: UserRecord = { id, email: command.email };
+    this.store.set(id, user);
+    await this.eventBus.publish(UserCreatedEvent.create(id, command.email));
+    return user;
+  }
+}
+<% } %>

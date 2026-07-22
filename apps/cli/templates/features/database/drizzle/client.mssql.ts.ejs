@@ -1,0 +1,8 @@
+import { drizzle } from 'drizzle-orm/node-mssql';
+import sql from 'mssql';
+import * as schema from './schema.js';
+
+const pool = await sql.connect(process.env.DATABASE_URL!);
+
+export const db = drizzle(pool, { schema });
+export { schema };

@@ -1,0 +1,56 @@
+<% if (language === 'javascript') { %>
+import Redis from 'ioredis';
+import { JsonEventSerializer } from '../serializer.js';
+import { withRetry } from '../retry.policy.js';
+import { DeadLetterQueue } from '../dead-letter/dead-letter.queue.js';
+import type { EventPublisher } from './event-publisher.interface.js';
+
+export class RedisEventPublisher {
+  constructor(options = {}) {
+    this.stream = options.stream ?? process.env.REDIS_STREAM ?? '<%= appName %>:events';
+    this.redis = options.redis ?? new Redis(process.env.REDIS_URL ?? 'redis://localhost:6379');
+    this.serializer = new JsonEventSerializer();
+    this.deadLetter = new DeadLetterQueue();
+  }
+
+  async publish(envelope) {
+    const payload = this.serializer.serialize(envelope);
+    await withRetry(async () => {
+      await this.redis.xadd(this.stream, '*', 'event', payload);
+    });
+  }
+
+  async close() {
+    await this.redis.quit();
+  }
+}
+<% } else { %>
+import Redis from 'ioredis';
+import { JsonEventSerializer, type EventEnvelope } from '../serializer.js';
+import { withRetry } from '../retry.policy.js';
+import { DeadLetterQueue } from '../dead-letter/dead-letter.queue.js';
+import type { EventPublisher } from './event-publisher.interface.js';
+
+export class RedisEventPublisher implements EventPublisher {
+  private readonly redis: Redis;
+  private readonly stream: string;
+  private readonly serializer = new JsonEventSerializer();
+  readonly deadLetter = new DeadLetterQueue();
+
+  constructor(options: { redis?: Redis; stream?: string } = {}) {
+    this.stream = options.stream ?? process.env.REDIS_STREAM ?? '<%= appName %>:events';
+    this.redis = options.redis ?? new Redis(process.env.REDIS_URL ?? 'redis://localhost:6379');
+  }
+
+  async publish<T>(envelope: EventEnvelope<T>): Promise<void> {
+    const payload = this.serializer.serialize(envelope);
+    await withRetry(async () => {
+      await this.redis.xadd(this.stream, '*', 'event', payload);
+    });
+  }
+
+  async close(): Promise<void> {
+    await this.redis.quit();
+  }
+}
+<% } %>

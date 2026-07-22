@@ -1,0 +1,38 @@
+<% if (language === 'javascript') { %>
+export class FeatureFlagService {
+  constructor(provider) {
+    this.provider = provider;
+  }
+
+  getProvider() {
+    return this.provider;
+  }
+
+  isEnabled(key, context) {
+    return this.provider.isEnabled(key, context);
+  }
+
+  evaluate(key, context) {
+    return this.provider.evaluate(key, context);
+  }
+}
+<% } else { %>
+import type { FeatureFlagProvider } from './feature-flag-provider.interface.js';
+import type { FeatureFlagContext, FeatureFlagEvaluation } from './feature-flag.types.js';
+
+export class FeatureFlagService {
+  constructor(private readonly provider: FeatureFlagProvider) {}
+
+  getProvider(): FeatureFlagProvider {
+    return this.provider;
+  }
+
+  isEnabled(key: string, context?: FeatureFlagContext): Promise<boolean> {
+    return this.provider.isEnabled(key, context);
+  }
+
+  evaluate(key: string, context?: FeatureFlagContext): Promise<FeatureFlagEvaluation> {
+    return this.provider.evaluate(key, context);
+  }
+}
+<% } %>

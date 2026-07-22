@@ -1,0 +1,10 @@
+export { MemorySearchAdapter } from './memory.adapter.js';
+<% if (isMeilisearch) { -%>
+export { MeilisearchSearchAdapter } from './meilisearch.adapter.js';
+<% } -%>
+<% if (isElasticsearch) { -%>
+export { ElasticsearchSearchAdapter } from './elasticsearch.adapter.js';
+<% } -%>
+<% if (isAlgolia) { -%>
+export { AlgoliaSearchAdapter } from './algolia.adapter.js';
+<% } -%>

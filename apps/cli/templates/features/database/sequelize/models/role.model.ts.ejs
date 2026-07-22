@@ -1,0 +1,25 @@
+import { DataTypes, Model, Optional } from 'sequelize';
+import { sequelize } from '../config.js';
+
+interface RoleAttributes {
+  id: string;
+  name: string;
+  description?: string | null;
+}
+
+type RoleCreation = Optional<RoleAttributes, 'id' | 'description'>;
+
+export class Role extends Model<RoleAttributes, RoleCreation> implements RoleAttributes {
+  declare id: string;
+  declare name: string;
+  declare description?: string | null;
+}
+
+Role.init(
+  {
+    id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
+    name: { type: DataTypes.STRING, allowNull: false, unique: true },
+    description: { type: DataTypes.TEXT, allowNull: true },
+  },
+  { sequelize, tableName: 'roles', underscored: true },
+);

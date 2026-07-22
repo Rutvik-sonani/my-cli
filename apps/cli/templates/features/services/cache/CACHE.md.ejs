@@ -1,0 +1,21 @@
+# Cache — <%= appName %>
+
+Redis-backed cache service for <%= appName %>.
+
+## Environment
+
+```env
+REDIS_URL=redis://localhost:6379
+CACHE_TTL_SECONDS=3600
+```
+
+## Usage
+
+```typescript
+import { cache } from './src/services/cache/index.js';
+
+await cache.set('user:1', { id: 1, name: 'Ada' });
+const user = await cache.get<{ id: number; name: string }>('user:1');
+```
+
+Provider: **<%= provider %>**

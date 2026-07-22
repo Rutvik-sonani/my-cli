@@ -1,0 +1,44 @@
+<% if (language === 'javascript') { %>
+export class TenantMigrationRunner {
+  constructor(connectionManager) {
+    this.connectionManager = connectionManager;
+  }
+
+  async runForTenant(tenantSlug, migrationSql) {
+    const connection = this.connectionManager.getConnection(tenantSlug);
+    for (const sql of migrationSql) {
+      await connection.query(sql);
+    }
+  }
+
+  async runForAllTenants(tenants, migrationSql) {
+    for (const tenant of tenants) {
+      await this.runForTenant(tenant.slug, migrationSql);
+    }
+  }
+}
+<% } else { %>
+import type { Tenant } from '../entities/Tenant.js';
+import type { TenantConnectionManager } from './tenant-connection-manager.js';
+
+export interface MigratableConnection {
+  query(sql: string): Promise<unknown>;
+}
+
+export class TenantMigrationRunner {
+  constructor(private readonly connectionManager: TenantConnectionManager) {}
+
+  async runForTenant(tenantSlug: string, migrationSql: string[]): Promise<void> {
+    const connection = this.connectionManager.getConnection(tenantSlug) as MigratableConnection;
+    for (const sql of migrationSql) {
+      await connection.query(sql);
+    }
+  }
+
+  async runForAllTenants(tenants: Tenant[], migrationSql: string[]): Promise<void> {
+    for (const tenant of tenants) {
+      await this.runForTenant(tenant.slug, migrationSql);
+    }
+  }
+}
+<% } %>

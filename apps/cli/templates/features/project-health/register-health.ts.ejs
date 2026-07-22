@@ -1,0 +1,17 @@
+<% if (language === 'javascript') { %>
+import { createHealthService } from './health.service.js';
+
+export const healthService = createHealthService();
+
+export function registerProjectHealth() {
+  return healthService;
+}
+<% } else { %>
+import { createHealthService, type HealthService } from './health.service.js';
+
+export const healthService = createHealthService();
+
+export function registerProjectHealth(): HealthService {
+  return healthService;
+}
+<% } %>

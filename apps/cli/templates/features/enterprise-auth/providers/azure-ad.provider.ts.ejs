@@ -1,0 +1,47 @@
+<% if (language === 'javascript') { %>
+import { authenticateOidc } from '../strategies/oidc.strategy.js';
+
+export class AzureAdIdentityProvider {
+  constructor() {
+    this.id = 'azure-ad';
+    this.protocol = 'oidc';
+  }
+
+  async authenticate(input) {
+    const profile = await authenticateOidc(this, input);
+    return { ...profile, provider: this.id, claims: profile.claims ?? {} };
+  }
+
+  async verifyCallback({ code, redirectUri }) {
+    const tenant = process.env.AZURE_AD_TENANT_ID ?? 'common';
+    return {
+      id: code.slice(0, 8),
+      claims: { tenant, issuer: `https://login.microsoftonline.com/${tenant}/v2.0`, code, redirectUri },
+    };
+  }
+}
+<% } else { %>
+import type { IdentityProvider, IdentityUser } from '../identity-provider.interface.js';
+import { authenticateOidc } from '../strategies/oidc.strategy.js';
+
+export class AzureAdIdentityProvider implements IdentityProvider {
+  readonly id = 'azure-ad' as const;
+  readonly protocol = 'oidc' as const;
+
+  async authenticate(input: Record<string, unknown>): Promise<IdentityUser> {
+    const profile = await authenticateOidc(this, {
+      code: String(input.code ?? ''),
+      redirectUri: String(input.redirectUri ?? ''),
+    });
+    return { id: profile.id, email: profile.email, name: profile.name, provider: this.id, claims: profile.claims };
+  }
+
+  async verifyCallback(input: { code: string; redirectUri: string }) {
+    const tenant = process.env.AZURE_AD_TENANT_ID ?? 'common';
+    return {
+      id: input.code.slice(0, 8),
+      claims: { tenant, issuer: `https://login.microsoftonline.com/${tenant}/v2.0`, ...input },
+    };
+  }
+}
+<% } %>

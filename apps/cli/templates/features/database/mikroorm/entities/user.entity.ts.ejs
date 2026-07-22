@@ -1,0 +1,26 @@
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { randomUUID } from 'node:crypto';
+
+@Entity({ tableName: 'users' })
+export class User {
+  @PrimaryKey()
+  id: string = randomUUID();
+
+  @Property({ unique: true })
+  email!: string;
+
+  @Property({ fieldName: 'password_hash' })
+  passwordHash!: string;
+
+  @Property({ nullable: true })
+  name?: string;
+
+  @Property({ fieldName: 'email_verified', default: false })
+  emailVerified = false;
+
+  @Property({ fieldName: 'created_at', onCreate: () => new Date() })
+  createdAt = new Date();
+
+  @Property({ fieldName: 'updated_at', onUpdate: () => new Date() })
+  updatedAt = new Date();
+}

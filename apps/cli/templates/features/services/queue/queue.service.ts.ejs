@@ -1,0 +1,33 @@
+import { Queue, Worker, type Job } from 'bullmq';
+import { getRedisClient } from './redis.client.js';
+
+const connection = getRedisClient();
+const prefix = process.env.QUEUE_PREFIX ?? '<%= appName %>';
+
+export type JobHandler<T = unknown> = (job: Job<T>) => Promise<void>;
+
+export class QueueService {
+  private readonly queues = new Map<string, Queue>();
+
+  getQueue(name: string): Queue {
+    const key = `${prefix}:${name}`;
+    let queue = this.queues.get(key);
+    if (!queue) {
+      queue = new Queue(key, { connection });
+      this.queues.set(key, queue);
+    }
+    return queue;
+  }
+
+  async dispatch<T>(queueName: string, jobName: string, data: T): Promise<void> {
+    const queue = this.getQueue(queueName);
+    await queue.add(jobName, data);
+  }
+
+  registerWorker<T>(queueName: string, handler: JobHandler<T>): Worker {
+    const key = `${prefix}:${queueName}`;
+    return new Worker(key, handler as JobHandler, { connection });
+  }
+}
+
+export const queueService = new QueueService();

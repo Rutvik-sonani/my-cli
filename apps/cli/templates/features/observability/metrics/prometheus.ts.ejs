@@ -1,0 +1,43 @@
+<% if (language === 'javascript') { %>
+import { metrics } from './metrics.registry.js';
+
+/** Application / business / custom metrics helpers for Prometheus scrape endpoint. */
+export function recordHttpRequest(route, status) {
+  metrics.counter('http_requests_total', 'Total HTTP requests', { route, status: String(status) });
+}
+
+export function recordBusinessEvent(name) {
+  metrics.counter('business_events_total', 'Business domain events', { event: name });
+}
+
+export function recordDuration(name, ms, labels) {
+  metrics.observe(name, 'Duration histogram', ms, labels);
+}
+
+export function prometheusText() {
+  return metrics.scrape();
+}
+<% } else { %>
+import type { MetricLabels } from '../observability.types.js';
+import { metrics } from './metrics.registry.js';
+
+/** Application / business / custom metrics helpers for Prometheus scrape endpoint. */
+export function recordHttpRequest(route: string, status: number): void {
+  metrics.counter('http_requests_total', 'Total HTTP requests', {
+    route,
+    status: String(status),
+  });
+}
+
+export function recordBusinessEvent(name: string): void {
+  metrics.counter('business_events_total', 'Business domain events', { event: name });
+}
+
+export function recordDuration(name: string, ms: number, labels?: MetricLabels): void {
+  metrics.observe(name, 'Duration histogram', ms, labels);
+}
+
+export function prometheusText(): string {
+  return metrics.scrape();
+}
+<% } %>

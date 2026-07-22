@@ -1,0 +1,113 @@
+<% if (hasPrisma) { %>
+import { prisma } from '../../database/prisma.client.js';
+import type { Permission, Role } from './rbac.types.js';
+
+export class RbacRepository {
+  async findRoleByName(name: string): Promise<Role | null> {
+    return prisma.role.findUnique({ where: { name } });
+  }
+
+  async findPermissionByName(name: string): Promise<Permission | null> {
+    return prisma.permission.findUnique({ where: { name } });
+  }
+
+  async createRole(name: string, description?: string): Promise<Role> {
+    return prisma.role.create({ data: { name, description: description ?? null } });
+  }
+
+  async createPermission(name: string, description?: string): Promise<Permission> {
+    return prisma.permission.create({ data: { name, description: description ?? null } });
+  }
+
+  async assignPermission(roleId: string, permissionId: string): Promise<void> {
+    await prisma.rolePermission.upsert({
+      where: { roleId_permissionId: { roleId, permissionId } },
+      create: { roleId, permissionId },
+      update: {},
+    });
+  }
+
+  async assignRole(userId: string, roleId: string): Promise<void> {
+    await prisma.userRole.upsert({
+      where: { userId_roleId: { userId, roleId } },
+      create: { userId, roleId },
+      update: {},
+    });
+  }
+
+  async userRoles(userId: string): Promise<Role[]> {
+    const rows = await prisma.userRole.findMany({
+      where: { userId },
+      include: { role: true },
+    });
+    return rows.map((r) => r.role);
+  }
+
+  async rolePermissions(roleId: string): Promise<Permission[]> {
+    const rows = await prisma.rolePermission.findMany({
+      where: { roleId },
+      include: { permission: true },
+    });
+    return rows.map((r) => r.permission);
+  }
+}
+<% } else { %>
+import type { Permission, Role } from './rbac.types.js';
+
+export class RbacRepository {
+  private readonly roles = new Map<string, Role>();
+  private readonly permissions = new Map<string, Permission>();
+  private readonly rolePermissions = new Map<string, Set<string>>();
+  private readonly userRoles = new Map<string, Set<string>>();
+
+  async findRoleByName(name: string): Promise<Role | null> {
+    return [...this.roles.values()].find((r) => r.name === name) ?? null;
+  }
+
+  async findPermissionByName(name: string): Promise<Permission | null> {
+    return [...this.permissions.values()].find((p) => p.name === name) ?? null;
+  }
+
+  async createRole(name: string, description?: string): Promise<Role> {
+    const role: Role = { id: crypto.randomUUID(), name, description: description ?? null };
+    this.roles.set(role.id, role);
+    this.rolePermissions.set(role.id, new Set());
+    return role;
+  }
+
+  async createPermission(name: string, description?: string): Promise<Permission> {
+    const permission: Permission = {
+      id: crypto.randomUUID(),
+      name,
+      description: description ?? null,
+    };
+    this.permissions.set(permission.id, permission);
+    return permission;
+  }
+
+  async assignPermission(roleId: string, permissionId: string): Promise<void> {
+    const permission = this.permissions.get(permissionId);
+    if (permission) {
+      this.rolePermissions.get(roleId)?.add(permission.name);
+    }
+  }
+
+  async assignRole(userId: string, roleId: string): Promise<void> {
+    const role = this.roles.get(roleId);
+    if (!role) return;
+    const set = this.userRoles.get(userId) ?? new Set();
+    set.add(role.name);
+    this.userRoles.set(userId, set);
+  }
+
+  async userRoles(userId: string): Promise<Role[]> {
+    const names = this.userRoles.get(userId) ?? new Set();
+    return [...this.roles.values()].filter((r) => names.has(r.name));
+  }
+
+  async rolePermissions(roleId: string): Promise<Permission[]> {
+    const names = this.rolePermissions.get(roleId) ?? new Set();
+    return [...this.permissions.values()].filter((p) => names.has(p.name));
+  }
+}
+<% } %>

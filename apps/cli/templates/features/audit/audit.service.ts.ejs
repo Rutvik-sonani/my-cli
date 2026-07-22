@@ -1,0 +1,112 @@
+<% if (language === 'javascript') { %>
+export function computeStateDiff(before, after) {
+  const diff = {};
+  const keys = new Set([...Object.keys(before ?? {}), ...Object.keys(after ?? {})]);
+  for (const key of keys) {
+    const prev = before?.[key];
+    const next = after?.[key];
+    if (prev !== next) diff[key] = { before: prev, after: next };
+  }
+  return diff;
+}
+
+export class AuditService {
+  constructor(storage) {
+    this.storage = storage;
+  }
+
+  getStorage() {
+    return this.storage;
+  }
+
+  async record(context, event) {
+    const record = {
+      id: crypto.randomUUID(),
+      userId: context.userId,
+      action: event.action,
+      resource: event.resource,
+      timestamp: new Date(),
+      ip: context.ip,
+      device: context.device ?? context.userAgent,
+      beforeState: event.beforeState ?? null,
+      afterState: event.afterState ?? null,
+      metadata: event.metadata,
+    };
+    await this.storage.save(record);
+    return record;
+  }
+
+  async listByResource(resource) {
+    return this.storage.findByResource(resource);
+  }
+
+  async listByUser(userId) {
+    return this.storage.findByUser(userId);
+  }
+}
+<% } else { %>
+import type { AuditRecord } from './audit-record.js';
+import type { AuditStorage } from './storage/audit-storage.interface.js';
+
+export interface AuditContext {
+  userId: string;
+  ip?: string;
+  device?: string;
+  userAgent?: string;
+}
+
+export interface AuditEventInput {
+  action: string;
+  resource: string;
+  beforeState?: Record<string, unknown> | null;
+  afterState?: Record<string, unknown> | null;
+  metadata?: Record<string, unknown>;
+}
+
+export function computeStateDiff(
+  before: Record<string, unknown> | null | undefined,
+  after: Record<string, unknown> | null | undefined,
+): Record<string, { before: unknown; after: unknown }> {
+  const diff: Record<string, { before: unknown; after: unknown }> = {};
+  const keys = new Set([...Object.keys(before ?? {}), ...Object.keys(after ?? {})]);
+  for (const key of keys) {
+    const prev = before?.[key];
+    const next = after?.[key];
+    if (prev !== next) diff[key] = { before: prev, after: next };
+  }
+  return diff;
+}
+
+export class AuditService {
+  constructor(private readonly storage: AuditStorage) {}
+
+  getStorage(): AuditStorage {
+    return this.storage;
+  }
+
+  async record(context: AuditContext, event: AuditEventInput): Promise<AuditRecord> {
+    const record: AuditRecord = {
+      id: crypto.randomUUID(),
+      userId: context.userId,
+      action: event.action,
+      resource: event.resource,
+      timestamp: new Date(),
+      ip: context.ip,
+      device: context.device ?? context.userAgent,
+      beforeState: event.beforeState ?? null,
+      afterState: event.afterState ?? null,
+      metadata: event.metadata,
+    };
+    await this.storage.save(record);
+    return record;
+  }
+
+  async listByResource(resource: string): Promise<AuditRecord[]> {
+    return this.storage.findByResource(resource);
+  }
+
+  async listByUser(userId: string): Promise<AuditRecord[]> {
+    return this.storage.findByUser(userId);
+  }
+}
+<% } %>

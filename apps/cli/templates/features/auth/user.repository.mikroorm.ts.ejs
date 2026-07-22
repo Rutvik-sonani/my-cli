@@ -1,0 +1,77 @@
+import { MikroORM } from '@mikro-orm/core';
+import config from '../../database/mikro-orm.config.js';
+import { User } from '../../database/entities/user.entity.js';
+
+export interface AuthUserRecord {
+  id: string;
+  email: string;
+  passwordHash: string;
+  name: string | null;
+  emailVerified: boolean;
+  mfaSecret?: string | null;
+  mfaEnabled?: boolean;
+}
+
+let ormPromise: Promise<MikroORM> | undefined;
+
+async function getOrm(): Promise<MikroORM> {
+  ormPromise ??= MikroORM.init(config);
+  return ormPromise;
+}
+
+export class UserRepository {
+  async findByEmail(email: string): Promise<AuthUserRecord | null> {
+    const orm = await getOrm();
+    const user = await orm.em.findOne(User, { email: email.toLowerCase() });
+    return user ? this.toRecord(user) : null;
+  }
+
+  async findById(id: string): Promise<AuthUserRecord | null> {
+    const orm = await getOrm();
+    const user = await orm.em.findOne(User, { id });
+    return user ? this.toRecord(user) : null;
+  }
+
+  async findByOAuth(_provider: string, _providerUserId: string): Promise<AuthUserRecord | null> {
+    return null;
+  }
+
+  async create(input: {
+    email: string;
+    passwordHash?: string;
+    name?: string;
+    emailVerified?: boolean;
+  }): Promise<AuthUserRecord> {
+    const orm = await getOrm();
+    const user = orm.em.create(User, {
+      email: input.email.toLowerCase(),
+      passwordHash: input.passwordHash ?? '',
+      name: input.name ?? null,
+      emailVerified: input.emailVerified ?? false,
+    });
+    await orm.em.persistAndFlush(user);
+    return this.toRecord(user);
+  }
+
+  async linkOAuthAccount(_input: {
+    userId: string;
+    provider: string;
+    providerUserId: string;
+  }): Promise<void> {}
+
+  async enableMfa(_userId: string, _secret: string): Promise<void> {}
+
+  async saveRefreshToken(_userId: string, _token: string, _expiresAt: Date): Promise<void> {}
+
+  async deleteRefreshToken(_token: string): Promise<void> {}
+
+  private toRecord(user: User): AuthUserRecord {
+    return {
+      id: user.id,
+      email: user.email,
+      passwordHash: user.passwordHash,
+      name: user.name ?? null,
+      emailVerified: user.emailVerified,
+    };
+  }
+}

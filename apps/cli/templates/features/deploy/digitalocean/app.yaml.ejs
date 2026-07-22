@@ -1,0 +1,17 @@
+name: <%= appName %>
+region: <%= region %>
+services:
+  - name: api
+    github:
+      branch: main
+      deploy_on_push: true
+    source_dir: /
+    build_command: pnpm install && pnpm build
+    run_command: node dist/index.js
+    http_port: <%= port %>
+    instance_count: <%= minReplicas %>
+    instance_size_slug: basic-xxs
+    envs:
+      - key: NODE_ENV
+        value: <%= environment %>
+        scope: RUN_TIME

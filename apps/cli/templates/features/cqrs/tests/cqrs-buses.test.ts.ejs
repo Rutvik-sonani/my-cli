@@ -1,0 +1,39 @@
+import { describe, expect, it, beforeEach } from 'vitest';
+import { commandBus, queryBus, eventBus, registerCqrsHandlers } from '../../src/cqrs/register-handlers.js';
+import { CreateUserCommand } from '../../src/application/commands/CreateUserCommand.js';
+import { GetUserQuery } from '../../src/application/queries/GetUserQuery.js';
+import { UserCreatedEvent } from '../../src/application/events/UserCreatedEvent.js';
+
+describe('CQRS buses', () => {
+  beforeEach(() => {
+    registerCqrsHandlers();
+  });
+
+  it('registers handlers and dispatches create/get user flow', async () => {
+
+    expect(commandBus.has(CreateUserCommand.type)).toBe(true);
+    expect(queryBus.has(GetUserQuery.type)).toBe(true);
+
+    const created = await commandBus.execute(new CreateUserCommand('demo@example.com'));
+    expect(created.email).toBe('demo@example.com');
+
+    const found = await queryBus.execute(new GetUserQuery(created.id));
+    expect(found.id).toBe(created.id);
+  });
+
+  it('rejects invalid create user command via validation middleware', async () => {
+    await expect(commandBus.execute(new CreateUserCommand('not-an-email'))).rejects.toThrow(
+      'Invalid email',
+    );
+  });
+
+  it('publishes user created events', async () => {
+    const seen: string[] = [];
+    eventBus.subscribe(UserCreatedEvent.type, async (event) => {
+      seen.push(event.payload.id);
+    });
+
+    const created = await commandBus.execute(new CreateUserCommand('event@example.com'));
+    expect(seen).toContain(created.id);
+  });
+});

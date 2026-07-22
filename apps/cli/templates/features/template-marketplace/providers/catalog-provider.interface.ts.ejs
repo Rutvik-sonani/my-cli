@@ -1,0 +1,17 @@
+<% if (language === 'javascript') { %>
+/**
+ * @typedef {Object} CatalogProvider
+ * @property {() => Promise<import('../marketplace.types.js').MarketplaceTemplate[]>} list
+ * @property {(query?: string) => Promise<import('../marketplace.types.js').MarketplaceTemplate[]>} search
+ */
+export {};
+<% } else { %>
+import type { MarketplaceTemplate } from '../marketplace.types.js';
+
+/** Catalog provider interface for public / private / organization sources. */
+export interface CatalogProvider {
+  readonly id: string;
+  list(): Promise<MarketplaceTemplate[]>;
+  search(query?: string): Promise<MarketplaceTemplate[]>;
+}
+<% } %>

@@ -1,0 +1,115 @@
+<% if (language === 'javascript') { %>
+export class MemberService {
+  constructor(store) {
+    this.store = store;
+  }
+
+  add(organizationId, input) {
+    if (!this.store.organizations.has(organizationId)) {
+      throw new Error(`Organization not found: ${organizationId}`);
+    }
+    const member = {
+      id: crypto.randomUUID(),
+      organizationId,
+      userId: input.userId,
+      email: input.email,
+      role: input.role ?? process.env.ORGANIZATION_DEFAULT_ROLE ?? 'member',
+      teamIds: input.teamIds ?? [],
+      joinedAt: new Date(),
+    };
+    this.store.members.set(member.id, member);
+    return member;
+  }
+
+  listByOrganization(organizationId) {
+    return [...this.store.members.values()].filter(
+      (member) => member.organizationId === organizationId,
+    );
+  }
+
+  assignTeam(memberId, teamId) {
+    const member = this.requireMember(memberId);
+    const team = this.store.teams.get(teamId);
+    if (!team || team.organizationId !== member.organizationId) {
+      throw new Error(`Team not found in organization: ${teamId}`);
+    }
+    if (!member.teamIds.includes(teamId)) member.teamIds.push(teamId);
+    return member;
+  }
+
+  setRole(memberId, role) {
+    const member = this.requireMember(memberId);
+    member.role = role;
+    return member;
+  }
+
+  remove(memberId) {
+    return this.store.members.delete(memberId);
+  }
+
+  requireMember(id) {
+    const member = this.store.members.get(id);
+    if (!member) throw new Error(`Member not found: ${id}`);
+    return member;
+  }
+}
+<% } else { %>
+import type { Member, OrganizationRole } from '../organization.types.js';
+import { OrganizationStore } from '../organization.store.js';
+
+export class MemberService {
+  constructor(private readonly store: OrganizationStore) {}
+
+  add(
+    organizationId: string,
+    input: { userId: string; email: string; role?: OrganizationRole; teamIds?: string[] },
+  ): Member {
+    if (!this.store.organizations.has(organizationId)) {
+      throw new Error(`Organization not found: ${organizationId}`);
+    }
+    const member: Member = {
+      id: crypto.randomUUID(),
+      organizationId,
+      userId: input.userId,
+      email: input.email,
+      role: input.role ?? ((process.env.ORGANIZATION_DEFAULT_ROLE as OrganizationRole) || 'member'),
+      teamIds: input.teamIds ?? [],
+      joinedAt: new Date(),
+    };
+    this.store.members.set(member.id, member);
+    return member;
+  }
+
+  listByOrganization(organizationId: string): Member[] {
+    return [...this.store.members.values()].filter(
+      (member) => member.organizationId === organizationId,
+    );
+  }
+
+  assignTeam(memberId: string, teamId: string): Member {
+    const member = this.requireMember(memberId);
+    const team = this.store.teams.get(teamId);
+    if (!team || team.organizationId !== member.organizationId) {
+      throw new Error(`Team not found in organization: ${teamId}`);
+    }
+    if (!member.teamIds.includes(teamId)) member.teamIds.push(teamId);
+    return member;
+  }
+
+  setRole(memberId: string, role: OrganizationRole): Member {
+    const member = this.requireMember(memberId);
+    member.role = role;
+    return member;
+  }
+
+  remove(memberId: string): boolean {
+    return this.store.members.delete(memberId);
+  }
+
+  private requireMember(id: string): Member {
+    const member = this.store.members.get(id);
+    if (!member) throw new Error(`Member not found: ${id}`);
+    return member;
+  }
+}
+<% } %>

@@ -1,0 +1,21 @@
+<% if (language === 'javascript') { %>
+import { AuditService } from './audit.service.js';
+<% if (storage === 'file') { -%>
+import { FileAuditStorage } from './storage/file-audit.storage.js';
+<% } else { -%>
+import { MemoryAuditStorage } from './storage/memory-audit.storage.js';
+<% } -%>
+
+const storage = <% if (storage === 'file') { %>new FileAuditStorage()<% } else { %>new MemoryAuditStorage()<% } %>;
+export const auditService = new AuditService(storage);
+<% } else { %>
+import { AuditService } from './audit.service.js';
+<% if (storage === 'file') { -%>
+import { FileAuditStorage } from './storage/file-audit.storage.js';
+<% } else { -%>
+import { MemoryAuditStorage } from './storage/memory-audit.storage.js';
+<% } -%>
+
+const storage = <% if (storage === 'file') { %>new FileAuditStorage()<% } else { %>new MemoryAuditStorage()<% } %>;
+export const auditService = new AuditService(storage);
+<% } %>

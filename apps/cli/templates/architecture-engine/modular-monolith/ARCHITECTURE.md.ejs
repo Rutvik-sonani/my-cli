@@ -1,0 +1,23 @@
+# <%= appName %> — Modular Monolith
+
+Single deployable application with **strict module boundaries**. Each feature is a self-contained module under `src/modules/<feature>/`.
+
+## Structure
+
+```
+src/
+  modules/<feature>/   # controller, service, repository, routes, tests
+  shared/
+    kernel/            # shared domain primitives
+    contracts/         # cross-module interfaces
+    infrastructure/    # DB, cache, messaging adapters
+  bootstrap/             # module registration
+```
+
+## Rules
+
+1. Modules do not import sibling modules directly — use `shared/contracts` or events.
+2. `shared/kernel` has no dependency on `src/modules`.
+3. Use `my make module <name>` to scaffold new feature modules.
+
+See `.architecture/MODULE_BOUNDARIES.md`.

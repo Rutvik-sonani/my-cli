@@ -1,0 +1,76 @@
+<% if (language === 'javascript') { %>
+import amqp from 'amqplib';
+import { JsonEventSerializer } from '../serializer.js';
+import { withRetry } from '../retry.policy.js';
+import { DeadLetterQueue } from '../dead-letter/dead-letter.queue.js';
+
+export class RabbitEventPublisher {
+  constructor(options = {}) {
+    this.exchange = options.exchange ?? process.env.RABBITMQ_EXCHANGE ?? '<%= appName %>.events';
+    this.url = options.url ?? process.env.RABBITMQ_URL ?? 'amqp://guest:guest@localhost:5672';
+    this.serializer = new JsonEventSerializer();
+    this.deadLetter = new DeadLetterQueue();
+    this.connection = null;
+    this.channel = null;
+  }
+
+  async publish(envelope) {
+    if (!this.channel) {
+      this.connection = await amqp.connect(this.url);
+      this.channel = await this.connection.createChannel();
+      await this.channel.assertExchange(this.exchange, 'topic', { durable: true });
+    }
+    await withRetry(async () => {
+      this.channel.publish(this.exchange, envelope.type, Buffer.from(this.serializer.serialize(envelope)), {
+        persistent: true,
+      });
+    });
+  }
+
+  async close() {
+    await this.channel?.close();
+    await this.connection?.close();
+  }
+}
+<% } else { %>
+import amqp, { type Channel, type Connection } from 'amqplib';
+import { JsonEventSerializer, type EventEnvelope } from '../serializer.js';
+import { withRetry } from '../retry.policy.js';
+import { DeadLetterQueue } from '../dead-letter/dead-letter.queue.js';
+import type { EventPublisher } from './event-publisher.interface.js';
+
+export class RabbitEventPublisher implements EventPublisher {
+  private readonly exchange: string;
+  private readonly url: string;
+  private connection: Connection | null = null;
+  private channel: Channel | null = null;
+  private readonly serializer = new JsonEventSerializer();
+  readonly deadLetter = new DeadLetterQueue();
+
+  constructor(options: { url?: string; exchange?: string } = {}) {
+    this.exchange = options.exchange ?? process.env.RABBITMQ_EXCHANGE ?? '<%= appName %>.events';
+    this.url = options.url ?? process.env.RABBITMQ_URL ?? 'amqp://guest:guest@localhost:5672';
+  }
+
+  async publish<T>(envelope: EventEnvelope<T>): Promise<void> {
+    if (!this.channel) {
+      this.connection = await amqp.connect(this.url);
+      this.channel = await this.connection.createChannel();
+      await this.channel.assertExchange(this.exchange, 'topic', { durable: true });
+    }
+    await withRetry(async () => {
+      this.channel!.publish(
+        this.exchange,
+        envelope.type,
+        Buffer.from(this.serializer.serialize(envelope)),
+        { persistent: true },
+      );
+    });
+  }
+
+  async close(): Promise<void> {
+    await this.channel?.close();
+    await this.connection?.close();
+  }
+}
+<% } %>

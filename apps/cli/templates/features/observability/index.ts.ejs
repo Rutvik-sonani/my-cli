@@ -1,0 +1,29 @@
+export type {
+  AlertEvent,
+  AlertSeverity,
+  ErrorEvent,
+  LogContext,
+  LogLevel,
+  MetricLabels,
+  TraceSpan,
+} from './observability.types.js';
+export {
+  createCorrelationId,
+  getCorrelation,
+  runWithCorrelation,
+} from './correlation.js';
+export { logger } from './logging/logger.js';
+export { withContext, logInfo } from './logging/context-logger.js';
+export { MetricsRegistry, metrics } from './metrics/metrics.registry.js';
+export {
+  recordHttpRequest,
+  recordBusinessEvent,
+  recordDuration,
+  prometheusText,
+} from './metrics/prometheus.js';
+export { Tracer, tracer } from './tracing/tracer.js';
+export { startOpenTelemetry } from './tracing/otel.js';
+export { AlertManager, alerts } from './alerts/alert.manager.js';
+export { SentryMonitor, errorMonitor } from './errors/sentry.monitor.js';
+export { ObservabilityService } from './observability.service.js';
+export { observability, registerObservability } from './register-observability.js';

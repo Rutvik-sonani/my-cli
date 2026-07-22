@@ -1,0 +1,15 @@
+/**
+ * MVC route registration for <%= appName %>.
+ * Import controllers and mount them on the <%= backend %> app instance.
+ */
+<% if (language === 'javascript') { %>
+export async function registerRoutes(app) {
+  app.get('/health', async () => ({ ok: true, architecture: 'mvc' }));
+}
+<% } else { %>
+import type { FastifyInstance } from 'fastify';
+
+export async function registerRoutes(app: FastifyInstance): Promise<void> {
+  app.get('/health', async () => ({ ok: true, architecture: 'mvc' }));
+}
+<% } %>

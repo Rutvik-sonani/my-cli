@@ -1,0 +1,171 @@
+<% if (language === 'javascript') { %>
+function tokenize(text) {
+  return text
+    .toLowerCase()
+    .split(/[^a-z0-9]+/i)
+    .filter(Boolean);
+}
+
+function documentText(doc) {
+  return Object.values(doc)
+    .filter((value) => typeof value === 'string' || typeof value === 'number')
+    .map(String)
+    .join(' ');
+}
+
+function scoreDocument(doc, terms) {
+  if (terms.length === 0) return 0;
+  const haystack = tokenize(documentText(doc));
+  let score = 0;
+  for (const term of terms) {
+    if (haystack.includes(term)) score += 1;
+    if (String(doc.id).toLowerCase() === term) score += 2;
+  }
+  return score;
+}
+
+export class MemorySearchAdapter {
+  constructor(id = 'meilisearch') {
+    this.id = id;
+    this.store = new Map();
+    this.connected = false;
+  }
+
+  async connect() {
+    this.connected = true;
+  }
+
+  async disconnect() {
+    this.connected = false;
+  }
+
+  async index(documents) {
+    if (!this.connected) await this.connect();
+    const list = Array.isArray(documents) ? documents : [documents];
+    for (const doc of list) this.store.set(doc.id, { ...doc });
+  }
+
+  async delete(id) {
+    return this.store.delete(id);
+  }
+
+  async search(query, options = {}) {
+    if (!this.connected) await this.connect();
+    const started = Date.now();
+    const terms = tokenize(query);
+    const hits = [];
+    for (const doc of this.store.values()) {
+      if (options.filter) {
+        let ok = true;
+        for (const [key, expected] of Object.entries(options.filter)) {
+          if (doc[key] !== expected) ok = false;
+        }
+        if (!ok) continue;
+      }
+      const score = terms.length === 0 ? 1 : scoreDocument(doc, terms);
+      if (score > 0) hits.push({ document: doc, score });
+    }
+    hits.sort((a, b) => b.score - a.score);
+    const offset = options.offset ?? 0;
+    const limit = options.limit ?? 20;
+    return {
+      query,
+      hits: hits.slice(offset, offset + limit),
+      total: hits.length,
+      tookMs: Date.now() - started,
+    };
+  }
+}
+<% } else { %>
+import type { SearchProvider } from '../search-provider.interface.js';
+import type {
+  SearchDocument,
+  SearchHit,
+  SearchProviderId,
+  SearchQueryOptions,
+  SearchResult,
+} from '../search.types.js';
+
+function tokenize(text: string): string[] {
+  return text
+    .toLowerCase()
+    .split(/[^a-z0-9]+/i)
+    .filter(Boolean);
+}
+
+function documentText(doc: SearchDocument): string {
+  return Object.values(doc)
+    .filter((value) => typeof value === 'string' || typeof value === 'number')
+    .map(String)
+    .join(' ');
+}
+
+function scoreDocument(doc: SearchDocument, terms: string[]): number {
+  if (terms.length === 0) return 0;
+  const haystack = tokenize(documentText(doc));
+  let score = 0;
+  for (const term of terms) {
+    if (haystack.includes(term)) score += 1;
+    if (String(doc.id).toLowerCase() === term) score += 2;
+  }
+  return score;
+}
+
+export class MemorySearchAdapter implements SearchProvider {
+  readonly id: SearchProviderId;
+  private readonly store = new Map<string, SearchDocument>();
+  private connected = false;
+
+  constructor(id: SearchProviderId = 'meilisearch') {
+    this.id = id;
+  }
+
+  async connect(): Promise<void> {
+    this.connected = true;
+  }
+
+  async disconnect(): Promise<void> {
+    this.connected = false;
+  }
+
+  async index(documents: SearchDocument | SearchDocument[]): Promise<void> {
+    if (!this.connected) await this.connect();
+    const list = Array.isArray(documents) ? documents : [documents];
+    for (const doc of list) this.store.set(doc.id, { ...doc });
+  }
+
+  async delete(id: string): Promise<boolean> {
+    return this.store.delete(id);
+  }
+
+  async search<T extends SearchDocument = SearchDocument>(
+    query: string,
+    options: SearchQueryOptions = {},
+  ): Promise<SearchResult<T>> {
+    if (!this.connected) await this.connect();
+    const started = Date.now();
+    const terms = tokenize(query);
+    const hits: SearchHit<T>[] = [];
+    for (const doc of this.store.values()) {
+      if (options.filter) {
+        let ok = true;
+        for (const [key, expected] of Object.entries(options.filter)) {
+          if (doc[key] !== expected) ok = false;
+        }
+        if (!ok) continue;
+      }
+      const score = terms.length === 0 ? 1 : scoreDocument(doc, terms);
+      if (score > 0) hits.push({ document: doc as T, score });
+    }
+    hits.sort((a, b) => b.score - a.score);
+    const offset = options.offset ?? 0;
+    const limit = options.limit ?? 20;
+    return {
+      query,
+      hits: hits.slice(offset, offset + limit),
+      total: hits.length,
+      tookMs: Date.now() - started,
+    };
+  }
+}
+<% } %>

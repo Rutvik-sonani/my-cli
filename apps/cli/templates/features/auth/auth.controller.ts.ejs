@@ -1,0 +1,166 @@
+import type { FastifyReply, FastifyRequest } from 'fastify';
+import { AuthService } from './auth.service.js';
+
+export class AuthController {
+  readonly auth = new AuthService();
+
+  register = async (
+    request: FastifyRequest<{ Body: { email: string; password: string; name?: string } }>,
+    reply: FastifyReply,
+  ) => {
+    const tokens = await this.auth.register(request.body);
+    return reply.status(201).send(tokens);
+  };
+
+  login = async (
+    request: FastifyRequest<{ Body: { email: string; password: string; mfaCode?: string } }>,
+    reply: FastifyReply,
+  ) => {
+    const tokens = await this.auth.login(request.body, request);
+    if (tokens.mfaRequired) {
+      return reply.status(403).send({ mfaRequired: true });
+    }
+    return reply.send(tokens);
+  };
+
+  logout = async (
+    request: FastifyRequest<{ Body: { refreshToken?: string } }>,
+    reply: FastifyReply,
+  ) => {
+    await this.auth.logout(request.body?.refreshToken, request);
+    return reply.status(204).send();
+  };
+
+<% if (hasRefresh) { %>
+  refresh = async (
+    request: FastifyRequest<{ Body: { refreshToken: string } }>,
+    reply: FastifyReply,
+  ) => {
+    const tokens = await this.auth.refresh(request.body.refreshToken);
+    return reply.send(tokens);
+  };
+<% } %>
+
+  me = async (request: FastifyRequest, reply: FastifyReply) => {
+    const userId = (request as FastifyRequest & { user?: { sub: string } }).user?.sub;
+<% if (hasSession) { %>
+    const sessionUserId = this.auth.sessions.getUserId(request);
+    const resolvedId = userId ?? sessionUserId;
+<% } else { %>
+    const resolvedId = userId;
+<% } %>
+    if (!resolvedId) {
+      return reply.status(401).send({ error: 'Unauthorized' });
+    }
+    const profile = await this.auth.getProfile(resolvedId);
+    return reply.send(profile);
+  };
+
+<% if (hasOAuth) { %>
+  oauthStart = async (
+    request: FastifyRequest<{ Params: { provider: string } }>,
+    reply: FastifyReply,
+  ) => {
+    const provider = request.params.provider as 'google' | 'github' | 'facebook';
+    const url = await this.auth.startOAuth(provider);
+    return reply.redirect(url);
+  };
+
+  oauthCallback = async (
+    request: FastifyRequest<{ Params: { provider: string }; Querystring: { code?: string; state?: string } }>,
+    reply: FastifyReply,
+  ) => {
+    const provider = request.params.provider as 'google' | 'github' | 'facebook';
+    const { code, state } = request.query;
+    if (!code || !state) {
+      return reply.status(400).send({ error: 'Missing code or state' });
+    }
+    const tokens = await this.auth.completeOAuth(provider, code, state);
+    return reply.send(tokens);
+  };
+<% } %>
+
+<% if (hasMagicLink) { %>
+  magicLinkSend = async (
+    request: FastifyRequest<{ Body: { email: string } }>,
+    reply: FastifyReply,
+  ) => {
+    const result = await this.auth.sendMagicLink(request.body.email);
+    return reply.send({ message: 'Magic link sent', ...result });
+  };
+
+  magicLinkVerify = async (
+    request: FastifyRequest<{ Querystring: { token?: string } }>,
+    reply: FastifyReply,
+  ) => {
+    const token = request.query.token;
+    if (!token) return reply.status(400).send({ error: 'Missing token' });
+    const tokens = await this.auth.verifyMagicLink(token, request);
+    return reply.send(tokens);
+  };
+<% } %>
+
+<% if (hasOtp) { %>
+  otpSend = async (
+    request: FastifyRequest<{ Body: { destination: string } }>,
+    reply: FastifyReply,
+  ) => {
+    await this.auth.sendOtp(request.body.destination);
+    return reply.send({ message: 'OTP sent' });
+  };
+
+  otpVerify = async (
+    request: FastifyRequest<{ Body: { destination: string; code: string } }>,
+    reply: FastifyReply,
+  ) => {
+    const tokens = await this.auth.verifyOtp(request.body.destination, request.body.code, request);
+    return reply.send(tokens);
+  };
+<% } %>
+
+<% if (hasMfa) { %>
+  mfaEnroll = async (request: FastifyRequest, reply: FastifyReply) => {
+    const userId = (request as FastifyRequest & { user?: { sub: string } }).user?.sub;
+    if (!userId) return reply.status(401).send({ error: 'Unauthorized' });
+    const enrollment = await this.auth.enrollMfa(userId);
+    return reply.send(enrollment);
+  };
+<% } %>
+
+<% if (hasPasskeys) { %>
+  passkeyRegisterOptions = async (request: FastifyRequest, reply: FastifyReply) => {
+    const userId = (request as FastifyRequest & { user?: { sub: string } }).user?.sub;
+    if (!userId) return reply.status(401).send({ error: 'Unauthorized' });
+    const profile = await this.auth.getProfile(userId);
+    const options = await this.auth.passkeyRegistrationOptions(
+      userId,
+      profile.email,
+      profile.name ?? profile.email,
+    );
+    return reply.send(options);
+  };
+
+  passkeyRegisterVerify = async (
+    request: FastifyRequest<{ Body: unknown }>,
+    reply: FastifyReply,
+  ) => {
+    const userId = (request as FastifyRequest & { user?: { sub: string } }).user?.sub;
+    if (!userId) return reply.status(401).send({ error: 'Unauthorized' });
+    const verified = await this.auth.passkeyRegistrationVerify(userId, request.body);
+    return reply.send({ verified });
+  };
+
+  passkeyAuthOptions = async (_request: FastifyRequest, reply: FastifyReply) => {
+    const options = await this.auth.passkeyAuthenticationOptions();
+    return reply.send(options);
+  };
+
+  passkeyAuthVerify = async (
+    request: FastifyRequest<{ Body: unknown }>,
+    reply: FastifyReply,
+  ) => {
+    const tokens = await this.auth.passkeyAuthenticationVerify(request.body, request);
+    return reply.send(tokens);
+  };
+<% } %>
+}

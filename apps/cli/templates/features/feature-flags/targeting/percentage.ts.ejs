@@ -1,0 +1,16 @@
+<% if (language === 'javascript') { %>
+import { createHash } from 'node:crypto';
+
+export function percentageBucket(flagKey, userId) {
+  const hash = createHash('sha256').update(`${flagKey}:${userId}`).digest();
+  return hash[0] % 100;
+}
+<% } else { %>
+import { createHash } from 'node:crypto';
+
+/** Stable 0–99 bucket for percentage rollout. */
+export function percentageBucket(flagKey: string, userId: string): number {
+  const hash = createHash('sha256').update(`${flagKey}:${userId}`).digest();
+  return hash[0]! % 100;
+}
+<% } %>

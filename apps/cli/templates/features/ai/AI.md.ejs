@@ -1,0 +1,31 @@
+# AI — <%= appName %>
+
+AI-assisted scaffolding for <%= appName %> using **<%= provider %>**.
+
+## Environment
+
+```env
+AI_PROVIDER=<%= provider %>
+OPENAI_API_KEY=
+OPENAI_MODEL=gpt-4o-mini
+ANTHROPIC_API_KEY=
+OLLAMA_HOST=http://localhost:11434
+```
+
+## Usage
+
+```bash
+my ai generate module user
+my ai generate crud product --fields name:string,price:number
+my ai generate service billing --dry-run
+```
+
+Programmatic:
+
+```typescript
+import { complete, buildModulePrompt } from './src/ai/index.js';
+
+const text = await complete({ prompt: buildModulePrompt('user', 'email:email') });
+```
+
+Install via plugin: `my plugin install @mycli/ai`

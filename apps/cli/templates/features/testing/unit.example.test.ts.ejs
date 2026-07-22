@@ -1,0 +1,11 @@
+<% if (unit === 'vitest') { %>
+import { describe, expect, it } from 'vitest';
+<% } else { %>
+import { describe, expect, it } from '@jest/globals';
+<% } %>
+
+describe('example', () => {
+  it('works', () => {
+    expect(1 + 1).toBe(2);
+  });
+});

@@ -1,0 +1,11 @@
+{
+  "name": "@mycli/redis",
+  "version": "1.0.0",
+  "description": "Official MyCLI redis plugin",
+  "main": "dist/index.js",
+  "compatibility": ">=1.0.0",
+  "author": "MyCLI",
+  "slug": "redis",
+  "npmPackage": "@mycli/plugin-redis",
+  "keywords": ["redis", "mycli", "database"]
+}

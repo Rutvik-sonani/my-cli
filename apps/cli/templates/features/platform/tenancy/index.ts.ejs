@@ -1,0 +1,14 @@
+export {
+  runWithTenant,
+  getTenantId,
+  getTenantSchema,
+  getTenantDatabaseUrl,
+  setTenantContext,
+} from './tenant.context.js';
+export type { TenantContext } from './tenant.context.js';
+export { registerTenancyMiddleware } from './tenant.middleware.js';
+<% if (tenancyMode === 'schema-per-tenant') { %>
+export { resolveTenantSchema } from './tenant.resolver.js';
+<% } else if (tenancyMode === 'db-per-tenant') { %>
+export { resolveTenantDatabaseUrl } from './tenant.resolver.js';
+<% } %>

@@ -1,0 +1,62 @@
+<% if (orm === 'prisma') { %>
+import { prisma } from '../../database/prisma.client.js';
+<% } %>
+import { randomBytes, createHash } from 'node:crypto';
+
+function hashToken(token: string): string {
+  return createHash('sha256').update(token).digest('hex');
+}
+
+function parseDuration(value: string, fallbackMs: number): number {
+  const match = /^(\d+)([smhd])$/.exec(value);
+  if (!match) return fallbackMs;
+  const amount = Number(match[1]);
+  const unit = match[2];
+  const multipliers: Record<string, number> = { s: 1000, m: 60_000, h: 3_600_000, d: 86_400_000 };
+  return amount * (multipliers[unit] ?? 60_000);
+}
+
+export class MagicLinkRepository {
+  private readonly ttlMs = parseDuration(process.env.MAGIC_LINK_EXPIRES_IN ?? '15m', 900_000);
+
+  async create(email: string): Promise<string> {
+    const token = randomBytes(32).toString('base64url');
+    const tokenHash = hashToken(token);
+    const expiresAt = new Date(Date.now() + this.ttlMs);
+<% if (orm === 'prisma') { %>
+    await prisma.magicLinkToken.create({
+      data: { email: email.toLowerCase(), tokenHash, expiresAt },
+    });
+<% } else { %>
+    memoryTokens.set(tokenHash, { email: email.toLowerCase(), expiresAt, usedAt: null });
+<% } %>
+    return token;
+  }
+
+  async verify(token: string): Promise<string | null> {
+    const tokenHash = hashToken(token);
+<% if (orm === 'prisma') { %>
+    const row = await prisma.magicLinkToken.findFirst({
+      where: { tokenHash, usedAt: null, expiresAt: { gt: new Date() } },
+    });
+    if (!row) return null;
+    await prisma.magicLinkToken.update({
+      where: { id: row.id },
+      data: { usedAt: new Date() },
+    });
+    return row.email;
+<% } else { %>
+    const row = memoryTokens.get(tokenHash);
+    if (!row || row.usedAt || row.expiresAt < new Date()) return null;
+    row.usedAt = new Date();
+    return row.email;
+<% } %>
+  }
+}
+<% if (orm !== 'prisma') { %>
+
+const memoryTokens = new Map<
+  string,
+  { email: string; expiresAt: Date; usedAt: Date | null }
+>();
+<% } %>

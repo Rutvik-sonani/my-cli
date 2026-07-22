@@ -1,0 +1,11 @@
+{
+  "name": "@mycli/auth",
+  "version": "1.0.0",
+  "description": "Official authentication plugin for MyCLI",
+  "main": "dist/index.js",
+  "compatibility": ">=1.0.0",
+  "author": "MyCLI",
+  "slug": "auth",
+  "npmPackage": "@mycli/plugin-auth",
+  "keywords": ["auth", "jwt", "oauth"]
+}

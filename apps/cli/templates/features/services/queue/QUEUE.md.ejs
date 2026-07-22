@@ -1,0 +1,20 @@
+# Queue — <%= appName %>
+
+BullMQ job queue backed by Redis.
+
+## Environment
+
+```env
+REDIS_URL=redis://localhost:6379
+QUEUE_PREFIX=<%= appName %>
+```
+
+## Usage
+
+```typescript
+import { queueService } from './src/services/queue/index.js';
+
+await queueService.dispatch('default', 'send-welcome', { userId: 1 });
+```
+
+Provider: **<%= provider %>**

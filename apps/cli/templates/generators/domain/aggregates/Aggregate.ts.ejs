@@ -1,0 +1,48 @@
+import { <%= pascal %> } from '../entities/<%= pascal %>.js';
+import { <%= pascal %>Created } from '../events/<%= pascal %>Created.js';
+
+<% if (language === 'javascript') { %>
+export class <%= pascal %>Aggregate {
+  constructor(entity, pendingEvents = []) {
+    this.entity = entity;
+    this.pendingEvents = pendingEvents;
+  }
+
+  static register(id, email) {
+    const entity = new <%= pascal %>({ id, email });
+    const event = new <%= pascal %>Created(id, email);
+    return new <%= pascal %>Aggregate(entity, [event]);
+  }
+
+  pullEvents() {
+    const events = [...this.pendingEvents];
+    this.pendingEvents = [];
+    return events;
+  }
+}
+<% } else { %>
+import type { Email } from '../value-objects/Email.js';
+
+export class <%= pascal %>Aggregate {
+  private pendingEvents: <%= pascal %>Created[] = [];
+
+  private constructor(public readonly entity: <%= pascal %>) {}
+
+  static register(id: string, email: Email): <%= pascal %>Aggregate {
+    const entity = new <%= pascal %>({ id, email });
+    const aggregate = new <%= pascal %>Aggregate(entity);
+    aggregate.record(new <%= pascal %>Created(id, email));
+    return aggregate;
+  }
+
+  private record(event: <%= pascal %>Created): void {
+    this.pendingEvents.push(event);
+  }
+
+  pullEvents(): <%= pascal %>Created[] {
+    const events = [...this.pendingEvents];
+    this.pendingEvents = [];
+    return events;
+  }
+}
+<% } %>

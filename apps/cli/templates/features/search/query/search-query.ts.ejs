@@ -1,0 +1,62 @@
+<% if (language === 'javascript') { %>
+export class SearchQueryBuilder {
+  constructor(query = '') {
+    this.query = query;
+    this.options = {};
+  }
+
+  static create(query = '') {
+    return new SearchQueryBuilder(query);
+  }
+
+  limit(value) {
+    this.options.limit = value;
+    return this;
+  }
+
+  offset(value) {
+    this.options.offset = value;
+    return this;
+  }
+
+  filter(key, value) {
+    this.options.filter = { ...(this.options.filter ?? {}), [key]: value };
+    return this;
+  }
+
+  build() {
+    return { query: this.query, options: this.options };
+  }
+}
+<% } else { %>
+import type { SearchQueryOptions } from '../search.types.js';
+
+export class SearchQueryBuilder {
+  private options: SearchQueryOptions = {};
+
+  constructor(private query = '') {}
+
+  static create(query = ''): SearchQueryBuilder {
+    return new SearchQueryBuilder(query);
+  }
+
+  limit(value: number): this {
+    this.options.limit = value;
+    return this;
+  }
+
+  offset(value: number): this {
+    this.options.offset = value;
+    return this;
+  }
+
+  filter(key: string, value: string | number | boolean): this {
+    this.options.filter = { ...(this.options.filter ?? {}), [key]: value };
+    return this;
+  }
+
+  build(): { query: string; options: SearchQueryOptions } {
+    return { query: this.query, options: this.options };
+  }
+}
+<% } %>

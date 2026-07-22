@@ -1,0 +1,51 @@
+<% if (language === 'javascript') { %>
+import { createDocumentationGenerator } from './generators/documentation.generator.js';
+
+/**
+ * Documentation service for <%= appName %>.
+ */
+export class DocumentationService {
+  constructor() {
+    this.generator = createDocumentationGenerator();
+  }
+
+  list() {
+    return this.generator.list();
+  }
+
+  plan() {
+    return this.generator.plan();
+  }
+}
+
+export function createDocumentationService() {
+  return new DocumentationService();
+}
+<% } else { %>
+import {
+  createDocumentationGenerator,
+  DocumentationGenerator,
+} from './generators/documentation.generator.js';
+import type { DocumentationDocument } from './documentation.types.js';
+
+/** Documentation service for <%= appName %>. */
+export class DocumentationService {
+  private readonly generator: DocumentationGenerator;
+
+  constructor() {
+    this.generator = createDocumentationGenerator();
+  }
+
+  list(): DocumentationDocument[] {
+    return this.generator.list();
+  }
+
+  plan(): Array<DocumentationDocument & { status: 'planned' }> {
+    return this.generator.plan();
+  }
+}
+
+export function createDocumentationService(): DocumentationService {
+  return new DocumentationService();
+}
+<% } %>

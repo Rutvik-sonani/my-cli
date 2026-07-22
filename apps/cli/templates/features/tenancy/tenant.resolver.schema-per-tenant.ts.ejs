@@ -1,0 +1,11 @@
+<% if (language === 'javascript') { %>
+export function resolveTenantSchema(tenantId) {
+  const prefix = process.env.TENANT_SCHEMA_PREFIX ?? 'tenant_';
+  return `${prefix}${tenantId.replace(/[^a-zA-Z0-9_]/g, '_')}`;
+}
+<% } else { %>
+export function resolveTenantSchema(tenantId: string): string {
+  const prefix = process.env.TENANT_SCHEMA_PREFIX ?? 'tenant_';
+  return `${prefix}${tenantId.replace(/[^a-zA-Z0-9_]/g, '_')}`;
+}
+<% } %>

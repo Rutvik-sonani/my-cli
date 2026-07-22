@@ -1,0 +1,31 @@
+export interface <%= pascal %>JobPayload {
+  /** Job payload — extend with your fields */
+  id?: string;
+  attempt?: number;
+  [key: string]: unknown;
+}
+
+export class <%= pascal %>Job {
+  static readonly queue = '<%= kebab %>';
+  static readonly name = '<%= kebab %>';
+
+  static async handle(payload: <%= pascal %>JobPayload): Promise<void> {
+    const attempt = payload.attempt ?? 1;
+    console.log(`[<%= kebab %>] processing job (attempt ${attempt})`, payload);
+    await <%= pascal %>Job.process(payload);
+  }
+
+  /** Override / extend with domain work for this job. */
+  static async process(payload: <%= pascal %>JobPayload): Promise<void> {
+    if (!payload || typeof payload !== 'object') {
+      throw new Error('<%= pascal %>Job received an invalid payload');
+    }
+  }
+}
+
+export async function enqueue<%= pascal %>Job(
+  payload: <%= pascal %>JobPayload,
+  enqueue: (queue: string, data: <%= pascal %>JobPayload) => Promise<void>,
+): Promise<void> {
+  await enqueue(<%= pascal %>Job.queue, payload);
+}

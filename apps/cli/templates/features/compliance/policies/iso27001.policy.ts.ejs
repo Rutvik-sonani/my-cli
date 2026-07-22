@@ -1,0 +1,22 @@
+<% if (language === 'javascript') { %>
+/** @type {import('../compliance.types.js').CompliancePolicy} */
+export const iso27001Policy = {
+  id: 'policy-iso27001',
+  framework: 'iso27001',
+  name: 'ISO 27001 ISMS Policy',
+  version: '1.0.0',
+  summary:
+    '<%= appName %> operates an information security management system covering risk and assets.',
+};
+<% } else { %>
+import type { CompliancePolicy } from '../compliance.types.js';
+
+export const iso27001Policy: CompliancePolicy = {
+  id: 'policy-iso27001',
+  framework: 'iso27001',
+  name: 'ISO 27001 ISMS Policy',
+  version: '1.0.0',
+  summary:
+    '<%= appName %> operates an information security management system covering risk and assets.',
+};
+<% } %>

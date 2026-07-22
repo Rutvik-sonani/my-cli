@@ -1,0 +1,11 @@
+{
+  "name": "module",
+  "version": "2.0.0",
+  "description": "Full feature module with controller, service, repository, DTO, validator, routes, middleware, events, swagger, tests",
+  "engine": "ejs",
+  "variables": [
+    { "name": "pascal", "required": true },
+    { "name": "kebab", "required": true },
+    { "name": "fields", "type": "array" }
+  ]
+}

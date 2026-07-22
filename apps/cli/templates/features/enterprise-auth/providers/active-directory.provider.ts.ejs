@@ -1,0 +1,49 @@
+<% if (language === 'javascript') { %>
+import { authenticateLdap } from '../strategies/ldap.strategy.js';
+
+export class ActiveDirectoryIdentityProvider {
+  constructor() {
+    this.id = 'active-directory';
+    this.protocol = 'ldap';
+  }
+
+  async authenticate(input) {
+    const profile = await authenticateLdap(this, input);
+    return { ...profile, provider: this.id, claims: profile.claims ?? {} };
+  }
+
+  async bindAndSearch({ username, password }) {
+    return {
+      id: username,
+      email: `${username}@ad.local`,
+      name: username,
+      claims: { adUrl: process.env.AD_LDAP_URL, username },
+    };
+  }
+}
+<% } else { %>
+import type { IdentityProvider, IdentityUser } from '../identity-provider.interface.js';
+import { authenticateLdap } from '../strategies/ldap.strategy.js';
+
+export class ActiveDirectoryIdentityProvider implements IdentityProvider {
+  readonly id = 'active-directory' as const;
+  readonly protocol = 'ldap' as const;
+
+  async authenticate(input: Record<string, unknown>): Promise<IdentityUser> {
+    const profile = await authenticateLdap(this, {
+      username: String(input.username ?? ''),
+      password: String(input.password ?? ''),
+    });
+    return { id: profile.id, email: profile.email, name: profile.name, provider: this.id, claims: profile.claims };
+  }
+
+  async bindAndSearch(input: { username: string; password: string }) {
+    return {
+      id: input.username,
+      email: `${input.username}@ad.local`,
+      name: input.username,
+      claims: { adUrl: process.env.AD_LDAP_URL, username: input.username },
+    };
+  }
+}
+<% } %>

@@ -1,0 +1,31 @@
+<% if (language === 'javascript') { %>
+export class <%= pascal %>Event {
+  static type = '<%= kebab %>';
+  static version = 1;
+
+  constructor(payload) {
+    this.type = <%= pascal %>Event.type;
+    this.version = <%= pascal %>Event.version;
+    this.payload = payload;
+    this.occurredAt = new Date();
+  }
+
+  static create(payload) {
+    return new <%= pascal %>Event(payload);
+  }
+}
+<% } else { %>
+export class <%= pascal %>Event {
+  static readonly type = '<%= kebab %>' as const;
+  static readonly version = 1;
+  readonly type = <%= pascal %>Event.type;
+  readonly version = <%= pascal %>Event.version;
+  readonly occurredAt = new Date();
+
+  constructor(public readonly payload: Record<string, unknown>) {}
+
+  static create(payload: Record<string, unknown>): <%= pascal %>Event {
+    return new <%= pascal %>Event(payload);
+  }
+}
+<% } %>

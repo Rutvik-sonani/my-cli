@@ -1,0 +1,18 @@
+{{- define "<%= appName %>.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{- define "<%= appName %>.fullname" -}}
+{{- printf "%s-%s" .Release.Name .Chart.Name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{- define "<%= appName %>.labels" -}}
+app.kubernetes.io/name: {{ include "<%= appName %>.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{- define "<%= appName %>.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "<%= appName %>.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

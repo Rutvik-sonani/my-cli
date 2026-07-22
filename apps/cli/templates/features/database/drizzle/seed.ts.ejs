@@ -1,0 +1,59 @@
+import { randomBytes, scrypt as scryptCb, timingSafeEqual } from 'node:crypto';
+import { promisify } from 'node:util';
+import { eq } from 'drizzle-orm';
+import { db, schema } from './client.js';
+
+const scrypt = promisify(scryptCb);
+const { users<% if (includeRbac) { %>, roles, permissions, rolePermissions, userRoles<% } %> } = schema;
+
+async function hashPassword(password: string): Promise<string> {
+  const salt = randomBytes(16).toString('hex');
+  const derived = (await scrypt(password, salt, 64)) as Buffer;
+  return `${salt}:${derived.toString('hex')}`;
+}
+
+function newId(): string {
+  return crypto.randomUUID();
+}
+
+async function main() {
+<% if (includeUser) { %>
+  const adminId = newId();
+  await db
+    .insert(users)
+    .values({
+      id: adminId,
+      email: 'admin@example.com',
+      name: 'Admin',
+      passwordHash: await hashPassword('Admin123!'),
+      emailVerified: true,
+    })
+    .onConflictDoNothing();
+
+  console.log('Seeded admin user: admin@example.com');
+<% if (includeRbac) { %>
+  const adminRoleId = newId();
+  const readPermId = newId();
+
+  await db.insert(roles).values({ id: adminRoleId, name: 'admin', description: 'Administrator' }).onConflictDoNothing();
+  await db
+    .insert(permissions)
+    .values({ id: readPermId, name: 'user.read', description: 'Read users' })
+    .onConflictDoNothing();
+
+  await db
+    .insert(rolePermissions)
+    .values({ roleId: adminRoleId, permissionId: readPermId })
+    .onConflictDoNothing();
+
+  const existing = await db.select().from(users).where(eq(users.email, 'admin@example.com')).limit(1);
+  const userId = existing[0]?.id ?? adminId;
+  await db.insert(userRoles).values({ userId, roleId: adminRoleId }).onConflictDoNothing();
+<% } %>
+<% } %>
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

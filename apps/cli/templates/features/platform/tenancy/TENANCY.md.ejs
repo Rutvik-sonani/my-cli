@@ -1,0 +1,42 @@
+# Tenancy — <%= appName %>
+
+Strategy: **<%= tenancyMode %>**
+
+Multi-tenant context via AsyncLocalStorage and request header resolution.
+
+## Modes
+
+| Mode | Description |
+|------|-------------|
+| `single-db` | Shared database; filter rows by tenant id in application code |
+| `schema-per-tenant` | PostgreSQL schema per tenant (`tenant_<id>`) |
+| `db-per-tenant` | Dedicated `DATABASE_URL_<TENANT>` env var per tenant |
+
+## Environment
+
+```env
+TENANT_HEADER=x-tenant-id
+DEFAULT_TENANT=default
+<% if (tenancyMode === 'schema-per-tenant') { %>
+TENANT_SCHEMA_PREFIX=tenant_
+<% } else if (tenancyMode === 'db-per-tenant') { %>
+DATABASE_URL_ACME=postgresql://...
+DATABASE_URL_GLOBEX=postgresql://...
+<% } %>
+```
+
+## Usage
+
+```typescript
+import { registerTenancyMiddleware, getTenantId<% if (tenancyMode === 'schema-per-tenant') { %>, getTenantSchema<% } else if (tenancyMode === 'db-per-tenant') { %>, getTenantDatabaseUrl<% } %> } from './src/platform/tenancy/index.js';
+
+await registerTenancyMiddleware(app);
+const tenant = getTenantId();
+<% if (tenancyMode === 'schema-per-tenant') { %>
+const schema = getTenantSchema();
+<% } else if (tenancyMode === 'db-per-tenant') { %>
+const databaseUrl = getTenantDatabaseUrl();
+<% } %>
+```
+
+Run `my add tenancy --mode <%= tenancyMode %>` to regenerate this module.

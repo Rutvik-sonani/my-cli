@@ -1,0 +1,23 @@
+export interface Organization {
+  id: string;
+  name: string;
+  slug: string;
+  plan: 'free' | 'pro' | 'enterprise';
+  createdAt: Date;
+}
+
+export class OrganizationService {
+  async list(): Promise<Organization[]> {
+    return [];
+  }
+
+  async create(input: { name: string; slug: string }): Promise<Organization> {
+    return {
+      id: crypto.randomUUID(),
+      name: input.name,
+      slug: input.slug,
+      plan: 'free',
+      createdAt: new Date(),
+    };
+  }
+}

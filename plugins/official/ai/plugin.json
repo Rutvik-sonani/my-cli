@@ -1,0 +1,11 @@
+{
+  "name": "@mycli/ai",
+  "version": "1.0.0",
+  "description": "Official MyCLI AI plugin",
+  "main": "dist/index.js",
+  "compatibility": ">=1.0.0",
+  "author": "MyCLI",
+  "slug": "ai",
+  "npmPackage": "@mycli/plugin-ai",
+  "keywords": ["ai", "mycli", "generate"]
+}

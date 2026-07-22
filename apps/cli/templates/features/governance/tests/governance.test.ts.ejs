@@ -1,0 +1,66 @@
+import { describe, expect, it } from 'vitest';
+import {
+  createGovernanceService,
+  registerGovernance,
+} from '../../src/governance/index.js';
+
+describe('governance', () => {
+  it('loads company policy with required engineering rules', () => {
+    const service = registerGovernance();
+    const rules = service.listRules();
+    expect(rules.map((r) => r.id)).toEqual(
+      expect.arrayContaining([
+        'req-database-postgres',
+        'req-docker',
+        'req-auth',
+        'req-rbac',
+        'req-security',
+        'req-audit',
+        'req-tests',
+        'req-cicd',
+        'req-docs',
+      ]),
+    );
+  });
+
+  it('passes when project meets company standards', () => {
+    const service = createGovernanceService('<%= company %>');
+    const report = service.check({
+      projectName: '<%= appName %>',
+      database: 'postgresql',
+      features: {
+        docker: true,
+        auth: true,
+        rbac: true,
+        security: true,
+        audit: true,
+        testing: true,
+      },
+      scripts: { test: 'vitest run' },
+      existingPaths: [
+        'Dockerfile',
+        'src/security',
+        'src/audit',
+        'tests',
+        '.github/workflows',
+        'README.md',
+        'SECURITY.md',
+      ],
+    });
+    expect(report.compliant).toBe(true);
+    expect(report.summary.fail).toBe(0);
+  });
+
+  it('fails when PostgreSQL is missing', () => {
+    const service = createGovernanceService('<%= company %>');
+    const report = service.check({
+      projectName: '<%= appName %>',
+      database: 'mysql',
+      features: { auth: true, rbac: true },
+      scripts: {},
+      existingPaths: [],
+    });
+    expect(report.compliant).toBe(false);
+    expect(report.results.find((r) => r.ruleId === 'req-database-postgres')?.status).toBe('fail');
+  });
+});

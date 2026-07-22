@@ -1,0 +1,20 @@
+<% if (language === 'javascript') { %>
+export function createValidationMiddleware(validator) {
+  return async (message, next) => {
+    await validator(message);
+    return next();
+  };
+}
+<% } else { %>
+export type BusMiddleware<T> = (message: T, next: () => Promise<unknown>) => Promise<unknown>;
+export type Validator<T> = (message: T) => void | Promise<void>;
+
+export function createValidationMiddleware<T extends { type: string }>(
+  validator: Validator<T>,
+): BusMiddleware<T> {
+  return async (message, next) => {
+    await validator(message);
+    return next();
+  };
+}
+<% } %>

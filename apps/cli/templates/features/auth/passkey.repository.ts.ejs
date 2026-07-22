@@ -1,0 +1,108 @@
+<% if (orm === 'prisma') { %>
+import { prisma } from '../../database/prisma.client.js';
+<% } %>
+
+export interface PasskeyRecord {
+  id: string;
+  userId: string;
+  credentialId: string;
+  publicKey: Uint8Array;
+  counter: number;
+  transports?: string[];
+}
+
+export class PasskeyRepository {
+<% if (orm === 'prisma') { %>
+  async save(input: {
+    userId: string;
+    credentialId: string;
+    publicKey: Uint8Array;
+    counter: number;
+    transports?: string[];
+  }): Promise<PasskeyRecord> {
+    const row = await prisma.passkeyCredential.create({
+      data: {
+        userId: input.userId,
+        credentialId: input.credentialId,
+        publicKey: Buffer.from(input.publicKey),
+        counter: BigInt(input.counter),
+        transports: input.transports ?? [],
+      },
+    });
+    return {
+      id: row.id,
+      userId: row.userId,
+      credentialId: row.credentialId,
+      publicKey: new Uint8Array(row.publicKey),
+      counter: Number(row.counter),
+      transports: row.transports,
+    };
+  }
+
+  async findByCredentialId(credentialId: string): Promise<PasskeyRecord | null> {
+    const row = await prisma.passkeyCredential.findUnique({ where: { credentialId } });
+    if (!row) return null;
+    return {
+      id: row.id,
+      userId: row.userId,
+      credentialId: row.credentialId,
+      publicKey: new Uint8Array(row.publicKey),
+      counter: Number(row.counter),
+      transports: row.transports,
+    };
+  }
+
+  async updateCounter(credentialId: string, counter: number): Promise<void> {
+    await prisma.passkeyCredential.update({
+      where: { credentialId },
+      data: { counter: BigInt(counter) },
+    });
+  }
+
+  async listByUserId(userId: string): Promise<PasskeyRecord[]> {
+    const rows = await prisma.passkeyCredential.findMany({ where: { userId } });
+    return rows.map((row) => ({
+      id: row.id,
+      userId: row.userId,
+      credentialId: row.credentialId,
+      publicKey: new Uint8Array(row.publicKey),
+      counter: Number(row.counter),
+      transports: row.transports,
+    }));
+  }
+<% } else { %>
+  private readonly store = new Map<string, PasskeyRecord>();
+
+  async save(input: {
+    userId: string;
+    credentialId: string;
+    publicKey: Uint8Array;
+    counter: number;
+    transports?: string[];
+  }): Promise<PasskeyRecord> {
+    const record: PasskeyRecord = {
+      id: crypto.randomUUID(),
+      userId: input.userId,
+      credentialId: input.credentialId,
+      publicKey: input.publicKey,
+      counter: input.counter,
+      transports: input.transports,
+    };
+    this.store.set(input.credentialId, record);
+    return record;
+  }
+
+  async findByCredentialId(credentialId: string): Promise<PasskeyRecord | null> {
+    return this.store.get(credentialId) ?? null;
+  }
+
+  async updateCounter(credentialId: string, counter: number): Promise<void> {
+    const record = this.store.get(credentialId);
+    if (record) record.counter = counter;
+  }
+
+  async listByUserId(userId: string): Promise<PasskeyRecord[]> {
+    return [...this.store.values()].filter((r) => r.userId === userId);
+  }
+<% } %>
+}

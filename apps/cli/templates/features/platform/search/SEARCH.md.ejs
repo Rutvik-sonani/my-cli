@@ -1,0 +1,29 @@
+# Search — <%= appName %>
+
+Full-text search via **<%= provider %>**.
+
+## Environment
+
+<% if (provider === 'elasticsearch') { -%>
+```env
+SEARCH_PROVIDER=elasticsearch
+ELASTICSEARCH_URL=http://localhost:9200
+SEARCH_INDEX=<%= appName %>
+```
+<% } else { -%>
+```env
+SEARCH_PROVIDER=meilisearch
+MEILISEARCH_HOST=http://localhost:7700
+MEILISEARCH_API_KEY=
+SEARCH_INDEX=<%= appName %>
+```
+<% } -%>
+
+## Usage
+
+```typescript
+import { search } from './src/platform/search/index.js';
+
+await search.index({ id: '1', title: 'Hello' });
+const hits = await search.search('hello');
+```

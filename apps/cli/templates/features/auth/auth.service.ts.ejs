@@ -1,0 +1,272 @@
+import { TokenService } from './token.service.js';
+import { PasswordService } from './password.service.js';
+import { UserRepository } from './user.repository.js';
+<% if (hasOAuth) { %>import { OAuthService, type OAuthProvider } from './oauth.service.js';
+<% } %>
+<% if (hasSession) { %>import { SessionService } from './session.service.js';
+<% } %>
+<% if (hasMagicLink) { %>import { MagicLinkService } from './magic-link.service.js';
+<% } %>
+<% if (hasOtp) { %>import { OtpService } from './otp.service.js';
+<% } %>
+<% if (hasMfa) { %>import { MfaService } from './mfa.service.js';
+<% } %>
+<% if (hasPasskeys) { %>import { PasskeysService } from './passkeys.service.js';
+import { PasskeyChallengeStore } from './passkey-challenge.store.js';
+<% } %>
+import type { FastifyRequest } from 'fastify';
+
+export interface RegisterInput {
+  email: string;
+  password: string;
+  name?: string;
+}
+
+export interface LoginInput {
+  email: string;
+  password: string;
+  mfaCode?: string;
+}
+
+export interface AuthTokens {
+  accessToken: string;
+  refreshToken?: string;
+  mfaRequired?: boolean;
+}
+
+export class AuthService {
+  private readonly tokens = new TokenService();
+  private readonly passwords = new PasswordService();
+  private readonly users = new UserRepository();
+<% if (hasOAuth) { %>
+  private readonly oauth = new OAuthService();
+<% } %>
+<% if (hasSession) { %>
+  readonly sessions = new SessionService();
+<% } %>
+<% if (hasMagicLink) { %>
+  private readonly magicLinks = new MagicLinkService();
+<% } %>
+<% if (hasOtp) { %>
+  private readonly otp = new OtpService();
+<% } %>
+<% if (hasMfa) { %>
+  private readonly mfa = new MfaService();
+<% } %>
+<% if (hasPasskeys) { %>
+  readonly passkeys = new PasskeysService();
+  private readonly passkeyChallenges = new PasskeyChallengeStore();
+<% } %>
+
+  async register(input: RegisterInput): Promise<AuthTokens> {
+    const existing = await this.users.findByEmail(input.email);
+    if (existing) {
+      throw Object.assign(new Error('Email already registered'), { status: 409 });
+    }
+    const passwordHash = await this.passwords.hash(input.password);
+    const user = await this.users.create({
+      email: input.email,
+      passwordHash,
+      name: input.name,
+    });
+    return this.issueTokens(user.id, user.email);
+  }
+
+  async login(input: LoginInput, request?: FastifyRequest): Promise<AuthTokens> {
+    const user = await this.users.findByEmail(input.email);
+    if (!user || !(await this.passwords.verify(input.password, user.passwordHash))) {
+      throw Object.assign(new Error('Invalid credentials'), { status: 401 });
+    }
+<% if (hasMfa) { %>
+    if (user.mfaEnabled) {
+      if (!input.mfaCode || !user.mfaSecret || !this.mfa.verify(input.mfaCode, user.mfaSecret)) {
+        return { accessToken: '', mfaRequired: true };
+      }
+    }
+<% } %>
+    const tokens = await this.issueTokens(user.id, user.email);
+<% if (hasSession) { %>
+    if (request) this.sessions.setUser(request, user.id);
+<% } %>
+    return tokens;
+  }
+
+  async refresh(refreshToken: string): Promise<AuthTokens> {
+    const payload = await this.tokens.verifyRefresh(refreshToken);
+    const userId = payload.sub;
+    if (!userId) {
+      throw Object.assign(new Error('Invalid refresh token'), { status: 401 });
+    }
+    const user = await this.users.findById(userId);
+    if (!user) {
+      throw Object.assign(new Error('User not found'), { status: 401 });
+    }
+    await this.users.deleteRefreshToken(refreshToken);
+    return this.issueTokens(user.id, user.email);
+  }
+
+  async logout(refreshToken?: string, request?: FastifyRequest): Promise<void> {
+    if (refreshToken) {
+      await this.users.deleteRefreshToken(refreshToken);
+    }
+<% if (hasSession) { %>
+    if (request) this.sessions.destroy(request);
+<% } %>
+  }
+
+  async getProfile(userId: string) {
+    const user = await this.users.findById(userId);
+    if (!user) {
+      throw Object.assign(new Error('User not found'), { status: 404 });
+    }
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      emailVerified: user.emailVerified,
+<% if (hasMfa) { %>
+      mfaEnabled: user.mfaEnabled ?? false,
+<% } %>
+    };
+  }
+
+<% if (hasOAuth) { %>
+  async startOAuth(provider: OAuthProvider): Promise<string> {
+    return this.oauth.createAuthorizationUrl(provider);
+  }
+
+  async completeOAuth(provider: OAuthProvider, code: string, state: string): Promise<AuthTokens> {
+    const { profile } = await this.oauth.handleCallback(provider, code, state);
+    let user = await this.users.findByOAuth(profile.provider, profile.providerUserId);
+    if (!user) {
+      user = await this.users.findByEmail(profile.email);
+      if (!user) {
+        user = await this.users.create({
+          email: profile.email,
+          name: profile.name,
+          emailVerified: true,
+        });
+      }
+      await this.users.linkOAuthAccount({
+        userId: user.id,
+        provider: profile.provider,
+        providerUserId: profile.providerUserId,
+      });
+    }
+    return this.issueTokens(user.id, user.email);
+  }
+<% } %>
+
+<% if (hasMagicLink) { %>
+  async sendMagicLink(email: string): Promise<{ sent: boolean; url?: string }> {
+    const link = await this.magicLinks.sendLink(email);
+    return { sent: true, url: link.devUrl };
+  }
+
+  async verifyMagicLink(token: string, request?: FastifyRequest): Promise<AuthTokens> {
+    const email = await this.magicLinks.verify(token);
+    if (!email) {
+      throw Object.assign(new Error('Invalid or expired magic link'), { status: 400 });
+    }
+    let user = await this.users.findByEmail(email);
+    if (!user) {
+      user = await this.users.create({ email, emailVerified: true });
+    }
+<% if (hasSession) { %>
+    if (request) this.sessions.setUser(request, user.id);
+<% } %>
+    return this.issueTokens(user.id, user.email);
+  }
+<% } %>
+
+<% if (hasOtp) { %>
+  async sendOtp(destination: string) {
+    return this.otp.send(destination);
+  }
+
+  async verifyOtp(destination: string, code: string, request?: FastifyRequest): Promise<AuthTokens> {
+    const ok = await this.otp.verify(destination, code);
+    if (!ok) {
+      throw Object.assign(new Error('Invalid OTP'), { status: 401 });
+    }
+    let user = await this.users.findByEmail(destination);
+    if (!user) {
+      user = await this.users.create({ email: destination, emailVerified: true });
+    }
+<% if (hasSession) { %>
+    if (request) this.sessions.setUser(request, user.id);
+<% } %>
+    return this.issueTokens(user.id, user.email);
+  }
+<% } %>
+
+<% if (hasMfa) { %>
+  async enrollMfa(userId: string) {
+    const user = await this.users.findById(userId);
+    if (!user) throw Object.assign(new Error('User not found'), { status: 404 });
+    const secret = this.mfa.generateSecret();
+    await this.users.enableMfa(userId, secret);
+    return {
+      secret,
+      otpauthUrl: this.mfa.generateOtpAuthUrl(user.email, secret),
+    };
+  }
+<% } %>
+
+<% if (hasPasskeys) { %>
+  async passkeyRegistrationOptions(userId: string, userName: string, displayName: string) {
+    const options = await this.passkeys.generateRegistrationOptions({
+      userId,
+      userName,
+      userDisplayName: displayName,
+    });
+    await this.passkeyChallenges.save(userId, options.challenge, 'registration');
+    return options;
+  }
+
+  async passkeyRegistrationVerify(userId: string, response: unknown) {
+    const expectedChallenge = await this.passkeyChallenges.consume(userId, 'registration');
+    if (!expectedChallenge) {
+      throw Object.assign(new Error('Registration challenge expired'), { status: 400 });
+    }
+    return this.passkeys.verifyRegistration(userId, response as never, expectedChallenge);
+  }
+
+  async passkeyAuthenticationOptions(userId?: string) {
+    const options = await this.passkeys.generateAuthenticationOptions(userId);
+    await this.passkeyChallenges.save(userId ?? null, options.challenge, 'authentication');
+    return options;
+  }
+
+  async passkeyAuthenticationVerify(response: unknown, request?: FastifyRequest): Promise<AuthTokens> {
+    const expectedChallenge = await this.passkeyChallenges.consume(null, 'authentication');
+    if (!expectedChallenge) {
+      throw Object.assign(new Error('Authentication challenge expired'), { status: 400 });
+    }
+    const verifiedUserId = await this.passkeys.verifyAuthentication(response as never, expectedChallenge);
+    if (!verifiedUserId) {
+      throw Object.assign(new Error('Passkey verification failed'), { status: 401 });
+    }
+    const user = await this.users.findById(verifiedUserId);
+    if (!user) {
+      throw Object.assign(new Error('User not found'), { status: 404 });
+    }
+<% if (hasSession) { %>
+    if (request) this.sessions.setUser(request, user.id);
+<% } %>
+    return this.issueTokens(user.id, user.email);
+  }
+<% } %>
+
+  private async issueTokens(userId: string, email: string): Promise<AuthTokens> {
+    const accessToken = await this.tokens.signAccess({ sub: userId, email });
+<% if (hasRefresh) { %>
+    const refreshToken = await this.tokens.signRefresh({ sub: userId });
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    await this.users.saveRefreshToken(userId, refreshToken, expiresAt);
+    return { accessToken, refreshToken };
+<% } else { %>
+    return { accessToken };
+<% } %>
+  }
+}

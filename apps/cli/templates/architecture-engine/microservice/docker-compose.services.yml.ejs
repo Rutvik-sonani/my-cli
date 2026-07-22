@@ -1,0 +1,10 @@
+# Local multi-service compose for <%= appName %>
+# Extend with one service block per microservice.
+
+services:
+  api-gateway:
+    build: ./services/api-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development

@@ -1,0 +1,23 @@
+FROM node:<%= nodeVersion %>-alpine AS base
+WORKDIR /app
+ENV NODE_ENV=production
+
+FROM base AS deps
+COPY package.json pnpm-lock.yaml* package-lock.json* yarn.lock* bun.lockb* ./
+RUN if [ -f pnpm-lock.yaml ]; then corepack enable && pnpm i --frozen-lockfile; \
+  elif [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+  elif [ -f bun.lockb ]; then bun install --frozen-lockfile; \
+  else npm ci; fi
+
+FROM base AS build
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
+
+FROM base AS runner
+USER node
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/package.json ./package.json
+EXPOSE <%= port %>
+CMD ["node", "dist/index.js"]

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <%= appName %>
+  namespace: <%= appName %>
+  labels:
+    app: <%= appName %>
+spec:
+  replicas: <%= replicas %>
+  selector:
+    matchLabels:
+      app: <%= appName %>
+  template:
+    metadata:
+      labels:
+        app: <%= appName %>
+    spec:
+      containers:
+        - name: <%= appName %>
+          image: <%= image %>
+          ports:
+            - containerPort: <%= port %>
+          envFrom:
+            - configMapRef:
+                name: <%= appName %>-config
+          resources:
+            requests:
+              cpu: <%= cpuRequest %>
+              memory: <%= memoryRequest %>
+            limits:
+              cpu: <%= cpuLimit %>
+              memory: <%= memoryLimit %>
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: <%= port %>
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: <%= port %>
+            initialDelaySeconds: 5
+            periodSeconds: 10

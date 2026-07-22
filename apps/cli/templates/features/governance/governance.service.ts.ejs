@@ -1,0 +1,78 @@
+<% if (language === 'javascript') { %>
+import { createCompanyPolicy } from './policy/company-policy.js';
+import { GovernanceChecker } from './checker/governance.checker.js';
+
+/**
+ * Company governance service for <%= appName %>.
+ */
+export class GovernanceService {
+  constructor(company = '<%= company %>') {
+    this.policy = createCompanyPolicy(company);
+  }
+
+  getPolicy() {
+    return this.policy;
+  }
+
+  listRules() {
+    return [...this.policy.rules];
+  }
+
+  createChecker() {
+    return new GovernanceChecker(this.policy);
+  }
+
+  /**
+   * @param {import('./checker/governance.checker.js').ProjectSnapshot | { projectName: string, database?: string, features?: Record<string, boolean>, scripts?: Record<string, string>, existingPaths?: string[] }} snapshot
+   */
+  check(snapshot) {
+    return this.createChecker().check({
+      projectName: snapshot.projectName,
+      database: snapshot.database,
+      features: snapshot.features ?? {},
+      scripts: snapshot.scripts ?? {},
+      existingPaths: snapshot.existingPaths ?? [],
+    });
+  }
+}
+
+export function createGovernanceService(company = '<%= company %>') {
+  return new GovernanceService(company);
+}
+<% } else { %>
+import type { GovernancePolicy, GovernanceReport, GovernanceRule } from './governance.types.js';
+import { createCompanyPolicy } from './policy/company-policy.js';
+import {
+  GovernanceChecker,
+  type ProjectSnapshot,
+} from './checker/governance.checker.js';
+
+/** Company governance service for <%= appName %>. */
+export class GovernanceService {
+  private readonly policy: GovernancePolicy;
+
+  constructor(company = '<%= company %>') {
+    this.policy = createCompanyPolicy(company);
+  }
+
+  getPolicy(): GovernancePolicy {
+    return this.policy;
+  }
+
+  listRules(): GovernanceRule[] {
+    return [...this.policy.rules];
+  }
+
+  createChecker(): GovernanceChecker {
+    return new GovernanceChecker(this.policy);
+  }
+
+  check(snapshot: ProjectSnapshot): GovernanceReport {
+    return this.createChecker().check(snapshot);
+  }
+}
+
+export function createGovernanceService(company = '<%= company %>'): GovernanceService {
+  return new GovernanceService(company);
+}
+<% } %>

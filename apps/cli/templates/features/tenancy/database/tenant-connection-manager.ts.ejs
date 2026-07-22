@@ -1,0 +1,56 @@
+<% if (language === 'javascript') { %>
+import { resolveTenantDatabaseUrl } from '../tenant.resolver.js';
+
+export class TenantConnectionManager {
+  constructor(factory) {
+    this.factory = factory;
+    this.cache = new Map();
+  }
+
+  getConnection(tenantSlug) {
+    const cached = this.cache.get(tenantSlug);
+    if (cached) return cached;
+    const url = resolveTenantDatabaseUrl(tenantSlug);
+    if (!url) throw new Error(`Missing database URL for tenant: ${tenantSlug}`);
+    const connection = this.factory(url);
+    this.cache.set(tenantSlug, connection);
+    return connection;
+  }
+
+  async closeAll() {
+    for (const connection of this.cache.values()) {
+      await connection.close?.();
+    }
+    this.cache.clear();
+  }
+}
+<% } else { %>
+import { resolveTenantDatabaseUrl } from '../tenant.resolver.js';
+
+export interface TenantConnection {
+  close?(): Promise<void>;
+}
+
+export class TenantConnectionManager {
+  private readonly cache = new Map<string, TenantConnection>();
+
+  constructor(private readonly factory: (databaseUrl: string) => TenantConnection) {}
+
+  getConnection(tenantSlug: string): TenantConnection {
+    const cached = this.cache.get(tenantSlug);
+    if (cached) return cached;
+    const url = resolveTenantDatabaseUrl(tenantSlug);
+    if (!url) throw new Error(`Missing database URL for tenant: ${tenantSlug}`);
+    const connection = this.factory(url);
+    this.cache.set(tenantSlug, connection);
+    return connection;
+  }
+
+  async closeAll(): Promise<void> {
+    for (const connection of this.cache.values()) {
+      await connection.close?.();
+    }
+    this.cache.clear();
+  }
+}
+<% } %>

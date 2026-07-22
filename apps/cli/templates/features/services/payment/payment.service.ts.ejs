@@ -1,0 +1,41 @@
+import Stripe from 'stripe';
+
+export interface CreateCheckoutInput {
+  priceId: string;
+  customerEmail: string;
+  successUrl: string;
+  cancelUrl: string;
+}
+
+export class PaymentService {
+  private stripe: Stripe | null = null;
+
+  private getStripe(): Stripe {
+    if (!this.stripe) {
+      const key = process.env.STRIPE_SECRET_KEY;
+      if (!key) throw new Error('STRIPE_SECRET_KEY is not configured');
+      this.stripe = new Stripe(key);
+    }
+    return this.stripe;
+  }
+
+  async createCheckoutSession(input: CreateCheckoutInput): Promise<string> {
+    const session = await this.getStripe().checkout.sessions.create({
+      mode: 'payment',
+      customer_email: input.customerEmail,
+      line_items: [{ price: input.priceId, quantity: 1 }],
+      success_url: input.successUrl,
+      cancel_url: input.cancelUrl,
+    });
+    if (!session.url) throw new Error('Stripe session URL missing');
+    return session.url;
+  }
+
+  constructWebhookEvent(payload: Buffer, signature: string): Stripe.Event {
+    const secret = process.env.STRIPE_WEBHOOK_SECRET;
+    if (!secret) throw new Error('STRIPE_WEBHOOK_SECRET is not configured');
+    return this.getStripe().webhooks.constructEvent(payload, signature, secret);
+  }
+}
+
+export const payment = new PaymentService();

@@ -1,0 +1,17 @@
+<% if (language === 'javascript') { %>
+export class <%= pascal %>Command {
+  static type = '<%= kebab %>.execute';
+
+  constructor(payload = {}) {
+    this.type = <%= pascal %>Command.type;
+    this.payload = payload;
+  }
+}
+<% } else { %>
+export class <%= pascal %>Command {
+  static readonly type = '<%= kebab %>.execute' as const;
+  readonly type = <%= pascal %>Command.type;
+
+  constructor(public readonly payload: Record<string, unknown> = {}) {}
+}
+<% } %>

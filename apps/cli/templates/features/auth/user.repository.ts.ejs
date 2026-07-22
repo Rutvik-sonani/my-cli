@@ -1,0 +1,227 @@
+<% if (orm === 'prisma') { %>
+import { prisma } from '../../database/prisma.client.js';
+<% } else if (orm === 'drizzle') { %>
+import { and, eq } from 'drizzle-orm';
+import { db, schema } from '../../database/client.js';
+const { users, refreshTokens, oAuthAccounts } = schema;
+<% } %>
+
+export interface AuthUserRecord {
+  id: string;
+  email: string;
+  passwordHash: string;
+  name: string | null;
+  emailVerified: boolean;
+  mfaSecret?: string | null;
+  mfaEnabled?: boolean;
+}
+
+export class UserRepository {
+<% if (orm === 'prisma') { %>
+  async findByEmail(email: string): Promise<AuthUserRecord | null> {
+    return prisma.user.findUnique({ where: { email: email.toLowerCase() } });
+  }
+
+  async findById(id: string): Promise<AuthUserRecord | null> {
+    return prisma.user.findUnique({ where: { id } });
+  }
+
+  async findByOAuth(provider: string, providerUserId: string): Promise<AuthUserRecord | null> {
+    const account = await prisma.oAuthAccount.findUnique({
+      where: { provider_providerUserId: { provider, providerUserId } },
+      include: { user: true },
+    });
+    return account?.user ?? null;
+  }
+
+  async create(input: {
+    email: string;
+    passwordHash?: string;
+    name?: string;
+    emailVerified?: boolean;
+  }): Promise<AuthUserRecord> {
+    return prisma.user.create({
+      data: {
+        email: input.email.toLowerCase(),
+        passwordHash: input.passwordHash ?? '',
+        name: input.name ?? null,
+        emailVerified: input.emailVerified ?? false,
+      },
+    });
+  }
+
+  async linkOAuthAccount(input: {
+    userId: string;
+    provider: string;
+    providerUserId: string;
+  }): Promise<void> {
+    await prisma.oAuthAccount.upsert({
+      where: {
+        provider_providerUserId: {
+          provider: input.provider,
+          providerUserId: input.providerUserId,
+        },
+      },
+      create: input,
+      update: { userId: input.userId },
+    });
+  }
+
+  async enableMfa(userId: string, secret: string): Promise<void> {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { mfaSecret: secret, mfaEnabled: true },
+    });
+  }
+
+  async saveRefreshToken(userId: string, token: string, expiresAt: Date): Promise<void> {
+    await prisma.refreshToken.create({ data: { userId, token, expiresAt } });
+  }
+
+  async deleteRefreshToken(token: string): Promise<void> {
+    await prisma.refreshToken.deleteMany({ where: { token } });
+  }
+<% } else if (orm === 'drizzle') { %>
+  async findByEmail(email: string): Promise<AuthUserRecord | null> {
+    const rows = await db.select().from(users).where(eq(users.email, email.toLowerCase())).limit(1);
+    const row = rows[0];
+    if (!row) return null;
+    return {
+      id: row.id,
+      email: row.email,
+      passwordHash: row.passwordHash,
+      name: row.name,
+      emailVerified: row.emailVerified,
+      mfaSecret: row.mfaSecret ?? null,
+      mfaEnabled: row.mfaEnabled ?? false,
+    };
+  }
+
+  async findById(id: string): Promise<AuthUserRecord | null> {
+    const rows = await db.select().from(users).where(eq(users.id, id)).limit(1);
+    const row = rows[0];
+    if (!row) return null;
+    return {
+      id: row.id,
+      email: row.email,
+      passwordHash: row.passwordHash,
+      name: row.name,
+      emailVerified: row.emailVerified,
+      mfaSecret: row.mfaSecret ?? null,
+      mfaEnabled: row.mfaEnabled ?? false,
+    };
+  }
+
+  async findByOAuth(provider: string, providerUserId: string): Promise<AuthUserRecord | null> {
+    const accounts = await db
+      .select()
+      .from(oAuthAccounts)
+      .where(and(eq(oAuthAccounts.provider, provider), eq(oAuthAccounts.providerUserId, providerUserId)))
+      .limit(1);
+    const account = accounts[0];
+    if (!account) return null;
+    return this.findById(account.userId);
+  }
+
+  async create(input: {
+    email: string;
+    passwordHash?: string;
+    name?: string;
+    emailVerified?: boolean;
+  }): Promise<AuthUserRecord> {
+    const rows = await db
+      .insert(users)
+      .values({
+        email: input.email.toLowerCase(),
+        passwordHash: input.passwordHash ?? '',
+        name: input.name ?? null,
+        emailVerified: input.emailVerified ?? false,
+      })
+      .returning();
+    const row = rows[0]!;
+    return {
+      id: row.id,
+      email: row.email,
+      passwordHash: row.passwordHash,
+      name: row.name,
+      emailVerified: row.emailVerified,
+      mfaSecret: row.mfaSecret ?? null,
+      mfaEnabled: row.mfaEnabled ?? false,
+    };
+  }
+
+  async linkOAuthAccount(input: {
+    userId: string;
+    provider: string;
+    providerUserId: string;
+  }): Promise<void> {
+    await db.insert(oAuthAccounts).values(input).onConflictDoNothing();
+  }
+
+  async enableMfa(userId: string, secret: string): Promise<void> {
+    await db.update(users).set({ mfaSecret: secret, mfaEnabled: true }).where(eq(users.id, userId));
+  }
+
+  async saveRefreshToken(userId: string, token: string, expiresAt: Date): Promise<void> {
+    await db.insert(refreshTokens).values({ userId, token, expiresAt });
+  }
+
+  async deleteRefreshToken(token: string): Promise<void> {
+    await db.delete(refreshTokens).where(eq(refreshTokens.token, token));
+  }
+<% } else { %>
+  private readonly users = new Map<string, AuthUserRecord>();
+  private readonly oauth = new Map<string, string>();
+
+  async findByEmail(email: string): Promise<AuthUserRecord | null> {
+    return [...this.users.values()].find((u) => u.email === email.toLowerCase()) ?? null;
+  }
+
+  async findById(id: string): Promise<AuthUserRecord | null> {
+    return this.users.get(id) ?? null;
+  }
+
+  async findByOAuth(provider: string, providerUserId: string): Promise<AuthUserRecord | null> {
+    const userId = this.oauth.get(`${provider}:${providerUserId}`);
+    return userId ? this.findById(userId) : null;
+  }
+
+  async create(input: {
+    email: string;
+    passwordHash?: string;
+    name?: string;
+    emailVerified?: boolean;
+  }): Promise<AuthUserRecord> {
+    const user: AuthUserRecord = {
+      id: crypto.randomUUID(),
+      email: input.email.toLowerCase(),
+      passwordHash: input.passwordHash ?? '',
+      name: input.name ?? null,
+      emailVerified: input.emailVerified ?? false,
+      mfaSecret: null,
+      mfaEnabled: false,
+    };
+    this.users.set(user.id, user);
+    return user;
+  }
+
+  async linkOAuthAccount(input: {
+    userId: string;
+    provider: string;
+    providerUserId: string;
+  }): Promise<void> {
+    this.oauth.set(`${input.provider}:${input.providerUserId}`, input.userId);
+  }
+
+  async enableMfa(userId: string, secret: string): Promise<void> {
+    const user = this.users.get(userId);
+    if (user) {
+      user.mfaSecret = secret;
+      user.mfaEnabled = true;
+    }
+  }
+
+  async saveRefreshToken(_userId: string, _token: string, _expiresAt: Date): Promise<void> {}
+  async deleteRefreshToken(_token: string): Promise<void> {}
+<% } %>
+}

@@ -1,0 +1,73 @@
+<% if (language === 'javascript') { %>
+import { createCorrelationId, getCorrelation } from '../correlation.js';
+
+export class Tracer {
+  constructor() {
+    this.spans = [];
+  }
+
+  startSpan(name, options = {}) {
+    const correlation = getCorrelation();
+    const span = {
+      traceId: options.traceId ?? correlation?.traceId ?? createCorrelationId(),
+      spanId: createCorrelationId().slice(0, 16),
+      parentSpanId: options.parentSpanId ?? correlation?.spanId,
+      name,
+      startTime: Date.now(),
+      attributes: options.attributes,
+    };
+    this.spans.push(span);
+    return span;
+  }
+
+  endSpan(span) {
+    span.endTime = Date.now();
+    return span;
+  }
+
+  listSpans() {
+    return [...this.spans];
+  }
+}
+
+export const tracer = new Tracer();
+<% } else { %>
+import type { TraceSpan } from '../observability.types.js';
+import { createCorrelationId, getCorrelation } from '../correlation.js';
+
+export class Tracer {
+  private readonly spans: TraceSpan[] = [];
+
+  startSpan(
+    name: string,
+    options: {
+      traceId?: string;
+      parentSpanId?: string;
+      attributes?: Record<string, string | number | boolean>;
+    } = {},
+  ): TraceSpan {
+    const correlation = getCorrelation();
+    const span: TraceSpan = {
+      traceId: options.traceId ?? correlation?.traceId ?? createCorrelationId(),
+      spanId: createCorrelationId().slice(0, 16),
+      parentSpanId: options.parentSpanId ?? correlation?.spanId,
+      name,
+      startTime: Date.now(),
+      attributes: options.attributes,
+    };
+    this.spans.push(span);
+    return span;
+  }
+
+  endSpan(span: TraceSpan): TraceSpan {
+    span.endTime = Date.now();
+    return span;
+  }
+
+  listSpans(): TraceSpan[] {
+    return [...this.spans];
+  }
+}
+
+export const tracer = new Tracer();
+<% } %>

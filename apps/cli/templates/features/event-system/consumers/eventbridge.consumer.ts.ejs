@@ -1,0 +1,67 @@
+<% if (language === 'javascript') { %>
+import { JsonEventSerializer } from '../serializer.js';
+import { withRetry } from '../retry.policy.js';
+import { DeadLetterQueue } from '../dead-letter/dead-letter.queue.js';
+
+/**
+ * EventBridge consumption is typically handled by Lambda/SQS targets.
+ * This local consumer replays Detail payloads for development/testing.
+ */
+export class EventBridgeConsumer {
+  constructor() {
+    this.serializer = new JsonEventSerializer();
+    this.handlers = new Map();
+    this.deadLetter = new DeadLetterQueue();
+  }
+
+  on(type, handler) {
+    const list = this.handlers.get(type) ?? [];
+    list.push(handler);
+    this.handlers.set(type, list);
+  }
+
+  async handleDetail(rawDetail, detailType) {
+    try {
+      const envelope = this.serializer.deserialize(rawDetail);
+      const handlers = this.handlers.get(detailType ?? envelope.type) ?? [];
+      for (const handler of handlers) {
+        await withRetry(() => handler(envelope));
+      }
+    } catch (error) {
+      this.deadLetter.push(this.serializer.deserialize(rawDetail), error);
+    }
+  }
+}
+<% } else { %>
+import { JsonEventSerializer, type EventEnvelope } from '../serializer.js';
+import { withRetry } from '../retry.policy.js';
+import { DeadLetterQueue } from '../dead-letter/dead-letter.queue.js';
+
+/**
+ * EventBridge consumption is typically handled by Lambda/SQS targets.
+ * This local consumer replays Detail payloads for development/testing.
+ */
+export class EventBridgeConsumer {
+  private readonly serializer = new JsonEventSerializer();
+  private readonly handlers = new Map<string, Array<(envelope: EventEnvelope) => Promise<void>>>();
+  readonly deadLetter = new DeadLetterQueue();
+
+  on<T>(type: string, handler: (envelope: EventEnvelope<T>) => Promise<void>): void {
+    const list = this.handlers.get(type) ?? [];
+    list.push(handler as (envelope: EventEnvelope) => Promise<void>);
+    this.handlers.set(type, list);
+  }
+
+  async handleDetail(rawDetail: string, detailType?: string): Promise<void> {
+    try {
+      const envelope = this.serializer.deserialize(rawDetail);
+      const handlers = this.handlers.get(detailType ?? envelope.type) ?? [];
+      for (const handler of handlers) {
+        await withRetry(async () => handler(envelope));
+      }
+    } catch (error) {
+      this.deadLetter.push(this.serializer.deserialize(rawDetail), error);
+    }
+  }
+}
+<% } %>

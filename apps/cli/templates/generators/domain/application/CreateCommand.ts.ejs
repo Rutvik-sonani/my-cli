@@ -1,0 +1,43 @@
+import { Email } from '../../domain/<%= kebab %>/value-objects/Email.js';
+import { <%= pascal %>Aggregate } from '../../domain/<%= kebab %>/aggregates/<%= pascal %>Aggregate.js';
+
+<% if (language === 'javascript') { %>
+export class Create<%= pascal %>Command {
+  constructor(email) {
+    this.email = email;
+  }
+}
+
+export class Create<%= pascal %>Handler {
+  constructor(repository) {
+    this.repository = repository;
+  }
+
+  async execute(command) {
+    const email = new Email(command.email);
+    const id = crypto.randomUUID();
+    const aggregate = <%= pascal %>Aggregate.register(id, email);
+    await this.repository.save(aggregate.entity);
+    return { id, events: aggregate.pullEvents() };
+  }
+}
+<% } else { %>
+import type { I<%= pascal %>Repository } from '../../infrastructure/database/interfaces/I<%= pascal %>Repository.js';
+
+export class Create<%= pascal %>Command {
+  constructor(public readonly email: string) {}
+}
+
+export class Create<%= pascal %>Handler {
+  constructor(private readonly repository: I<%= pascal %>Repository) {}
+
+  async execute(command: Create<%= pascal %>Command): Promise<{ id: string }> {
+    const email = Email.create(command.email);
+    const id = crypto.randomUUID();
+    const aggregate = <%= pascal %>Aggregate.register(id, email);
+    await this.repository.save(aggregate.entity);
+    aggregate.pullEvents();
+    return { id };
+  }
+}
+<% } %>

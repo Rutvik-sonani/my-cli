@@ -1,0 +1,19 @@
+<% if (language === 'javascript') { %>
+import { PrivacyService, InMemoryPrivacyUserStore } from './privacy.service.js';
+import { DataExporter } from './export/data-exporter.js';
+import { DataDeleter } from './deletion/data-deleter.js';
+
+export const privacyUserStore = new InMemoryPrivacyUserStore();
+export const privacyService = new PrivacyService({ userStore: privacyUserStore });
+export const dataExporter = new DataExporter(privacyService);
+export const dataDeleter = new DataDeleter(privacyService);
+<% } else { %>
+import { PrivacyService, InMemoryPrivacyUserStore } from './privacy.service.js';
+import { DataExporter } from './export/data-exporter.js';
+import { DataDeleter } from './deletion/data-deleter.js';
+
+export const privacyUserStore = new InMemoryPrivacyUserStore();
+export const privacyService = new PrivacyService({ userStore: privacyUserStore });
+export const dataExporter = new DataExporter(privacyService);
+export const dataDeleter = new DataDeleter(privacyService);
+<% } %>

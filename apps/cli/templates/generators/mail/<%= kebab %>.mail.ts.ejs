@@ -1,0 +1,49 @@
+export interface <%= pascal %>MailData {
+  to?: string;
+  name?: string;
+  [key: string]: unknown;
+}
+
+export class <%= pascal %>Mail {
+  constructor(private readonly data: <%= pascal %>MailData = {}) {}
+
+  to(): string | undefined {
+    return typeof this.data.to === 'string' ? this.data.to : undefined;
+  }
+
+  subject(): string {
+    return '<%= pascal %> notification';
+  }
+
+  html(): string {
+    const name = typeof this.data.name === 'string' ? this.data.name : 'there';
+    return `<p>Hello ${name},</p><p>This is the <strong><%= pascal %>Mail</strong> template.</p>`;
+  }
+
+  text(): string {
+    const name = typeof this.data.name === 'string' ? this.data.name : 'there';
+    return `Hello ${name},\n\nThis is the <%= pascal %>Mail template.`;
+  }
+
+  getData(): <%= pascal %>MailData {
+    return this.data;
+  }
+
+  /** Build a provider-agnostic send payload. */
+  toMessage(): { to?: string; subject: string; html: string; text: string } {
+    return {
+      to: this.to(),
+      subject: this.subject(),
+      html: this.html(),
+      text: this.text(),
+    };
+  }
+}
+
+export async function send<%= pascal %>Mail(
+  data: <%= pascal %>MailData,
+  send: (message: { to?: string; subject: string; html: string; text: string }) => Promise<void>,
+): Promise<void> {
+  const mail = new <%= pascal %>Mail(data);
+  await send(mail.toMessage());
+}

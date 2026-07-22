@@ -1,0 +1,18 @@
+import { SQSClient, SendMessageCommand, ReceiveMessageCommand, DeleteMessageCommand } from '@aws-sdk/client-sqs';
+
+let client: SQSClient | null = null;
+
+export function getSqsClient(): SQSClient {
+  if (!client) {
+    client = new SQSClient({ region: process.env.AWS_REGION ?? 'us-east-1' });
+  }
+  return client;
+}
+
+export function getQueueUrl(): string {
+  const url = process.env.SQS_QUEUE_URL;
+  if (!url) throw new Error('SQS_QUEUE_URL is required');
+  return url;
+}
+
+export { SendMessageCommand, ReceiveMessageCommand, DeleteMessageCommand };

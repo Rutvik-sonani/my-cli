@@ -1,0 +1,31 @@
+<% if (language === 'javascript') { %>
+import { FeatureFlagService } from './feature-flag.service.js';
+<% if (isLaunchDarkly) { -%>
+import { LaunchDarklyFeatureFlagProvider } from './providers/launchdarkly.provider.js';
+const provider = new LaunchDarklyFeatureFlagProvider();
+<% } else if (isUnleash) { -%>
+import { UnleashFeatureFlagProvider } from './providers/unleash.provider.js';
+const provider = new UnleashFeatureFlagProvider();
+<% } else { -%>
+import { DatabaseFeatureFlagProvider } from './providers/database.provider.js';
+const provider = new DatabaseFeatureFlagProvider();
+<% } -%>
+
+export const featureFlagProvider = provider;
+export const featureFlags = new FeatureFlagService(provider);
+<% } else { %>
+import { FeatureFlagService } from './feature-flag.service.js';
+<% if (isLaunchDarkly) { -%>
+import { LaunchDarklyFeatureFlagProvider } from './providers/launchdarkly.provider.js';
+const provider = new LaunchDarklyFeatureFlagProvider();
+<% } else if (isUnleash) { -%>
+import { UnleashFeatureFlagProvider } from './providers/unleash.provider.js';
+const provider = new UnleashFeatureFlagProvider();
+<% } else { -%>
+import { DatabaseFeatureFlagProvider } from './providers/database.provider.js';
+const provider = new DatabaseFeatureFlagProvider();
+<% } -%>
+
+export const featureFlagProvider = provider;
+export const featureFlags = new FeatureFlagService(provider);
+<% } %>

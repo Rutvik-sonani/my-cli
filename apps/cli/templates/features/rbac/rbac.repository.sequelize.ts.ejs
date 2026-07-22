@@ -1,0 +1,51 @@
+import { Role } from '../../database/sequelize/models/role.model.js';
+import { Permission } from '../../database/sequelize/models/permission.model.js';
+import { RolePermission } from '../../database/sequelize/models/role-permission.model.js';
+import { UserRole } from '../../database/sequelize/models/user-role.model.js';
+import type { Permission as PermissionType, Role as RoleType } from './rbac.types.js';
+
+export class RbacRepository {
+  async findRoleByName(name: string): Promise<RoleType | null> {
+    return Role.findOne({ where: { name } });
+  }
+
+  async findPermissionByName(name: string): Promise<PermissionType | null> {
+    return Permission.findOne({ where: { name } });
+  }
+
+  async createRole(name: string, description?: string): Promise<RoleType> {
+    return Role.create({ name, description: description ?? null });
+  }
+
+  async createPermission(name: string, description?: string): Promise<PermissionType> {
+    return Permission.create({ name, description: description ?? null });
+  }
+
+  async assignPermission(roleId: string, permissionId: string): Promise<void> {
+    await RolePermission.findOrCreate({ where: { roleId, permissionId }, defaults: { roleId, permissionId } });
+  }
+
+  async assignRole(userId: string, roleId: string): Promise<void> {
+    await UserRole.findOrCreate({ where: { userId, roleId }, defaults: { userId, roleId } });
+  }
+
+  async userRoles(userId: string): Promise<RoleType[]> {
+    const links = await UserRole.findAll({ where: { userId } });
+    const result: RoleType[] = [];
+    for (const link of links) {
+      const role = await Role.findByPk(link.roleId);
+      if (role) result.push(role);
+    }
+    return result;
+  }
+
+  async rolePermissions(roleId: string): Promise<PermissionType[]> {
+    const links = await RolePermission.findAll({ where: { roleId } });
+    const result: PermissionType[] = [];
+    for (const link of links) {
+      const permission = await Permission.findByPk(link.permissionId);
+      if (permission) result.push(permission);
+    }
+    return result;
+  }
+}

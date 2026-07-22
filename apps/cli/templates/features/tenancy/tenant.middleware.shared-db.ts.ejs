@@ -1,0 +1,26 @@
+<% if (language === 'javascript') { %>
+import { setTenantContext } from './tenant.context.js';
+import { resolveTenantFromRequest } from './tenant.resolver.js';
+
+const HEADER = process.env.TENANT_HEADER ?? 'x-tenant-id';
+
+/** Shared database: identify tenant and apply row-level filtering via tenant_id. */
+export async function registerTenancyMiddleware(app) {
+  app.addHook('onRequest', async (request) => {
+    const tenant = resolveTenantFromRequest(request);
+    setTenantContext(tenant.tenantId, { slug: tenant.slug });
+  });
+}
+<% } else { %>
+import type { FastifyInstance, FastifyRequest } from 'fastify';
+import { setTenantContext } from './tenant.context.js';
+import { resolveTenantFromRequest } from './tenant.resolver.js';
+
+/** Shared database: identify tenant and apply row-level filtering via tenant_id. */
+export async function registerTenancyMiddleware(app: FastifyInstance): Promise<void> {
+  app.addHook('onRequest', async (request: FastifyRequest) => {
+    const tenant = resolveTenantFromRequest(request);
+    setTenantContext(tenant.tenantId, { slug: tenant.slug });
+  });
+}
+<% } %>

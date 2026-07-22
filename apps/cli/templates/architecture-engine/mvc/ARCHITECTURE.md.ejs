@@ -1,0 +1,31 @@
+# <%= appName %> — MVC Architecture
+
+Model-View-Controller separation for <%= backend %> APIs.
+
+## Layers
+
+| Layer | Path | Responsibility |
+|-------|------|----------------|
+| Controllers | `src/controllers/` | HTTP request/response, status codes, validation entry |
+| Services | `src/services/` | Business logic and orchestration |
+| Models | `src/models/` | Data shapes and domain types |
+| DTOs | `src/dto/` | Request/response transfer objects |
+| Middleware | `src/middleware/` | Cross-cutting HTTP concerns |
+
+## Dependency flow
+
+```
+HTTP Request → Controller → Service → Repository/Model → Response
+```
+
+Controllers **must not** import database drivers or ORM clients directly.
+
+## Commands
+
+```bash
+my make controller <name>
+my make service <name>
+my make model <name> --fields name:string
+```
+
+See `.architecture/MODULE_BOUNDARIES.md` for import rules.

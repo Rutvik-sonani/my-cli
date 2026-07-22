@@ -1,0 +1,36 @@
+# Environment Variables
+
+Project: **<%= projectName %>**
+
+## Required
+
+| Variable | Description |
+|----------|-------------|
+<% if (hasDatabase) { %>| `DATABASE_URL` | Database connection string |<% } %>
+<% if (hasRedis) { %>| `REDIS_URL` | Redis connection string |<% } %>
+| `NODE_ENV` | Runtime environment (`development`, `test`, `production`) |
+
+## Optional
+
+| Variable | Description |
+|----------|-------------|
+| `PORT` | HTTP server port (default: 3000) |
+| `LOG_LEVEL` | Logging verbosity (`debug`, `info`, `warn`, `error`) |
+
+## Files
+
+- `.env.example` — committed template with safe defaults
+- `.env` — local development values (**never commit**)
+- `.env.development` / `.env.production` / `.env.test` — environment-specific overrides
+
+## Production secrets
+
+Store production secrets in your cloud provider:
+
+- **GitHub:** Repository or environment secrets
+- **GitLab:** CI/CD variables (masked)
+- **AWS:** Secrets Manager
+- **Azure:** Key Vault
+- **GCP:** Secret Manager
+
+See `DATABASE.md` and feature-specific docs for additional variables.

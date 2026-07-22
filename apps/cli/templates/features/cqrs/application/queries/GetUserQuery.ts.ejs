@@ -1,0 +1,17 @@
+<% if (language === 'javascript') { %>
+export class GetUserQuery {
+  static type = 'user.get';
+
+  constructor(id) {
+    this.type = GetUserQuery.type;
+    this.id = id;
+  }
+}
+<% } else { %>
+export class GetUserQuery {
+  static readonly type = 'user.get' as const;
+  readonly type = GetUserQuery.type;
+
+  constructor(public readonly id: string) {}
+}
+<% } %>

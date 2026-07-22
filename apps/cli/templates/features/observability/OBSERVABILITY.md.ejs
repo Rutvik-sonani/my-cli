@@ -1,0 +1,54 @@
+# Observability — <%= appName %>
+
+Logger: **<%= logger %>**
+
+## Layout
+
+```
+src/observability/
+  logging/       # <%= logger %> + context logger
+  metrics/       # Prometheus registry + helpers
+  tracing/       # spans + OpenTelemetry bootstrap
+  alerts/        # alert manager
+  errors/        # Sentry monitor
+tests/observability/
+OBSERVABILITY.md
+```
+
+## Capabilities
+
+| Area | Details |
+|------|---------|
+| Logging | Structured JSON, correlation ID, trace ID, context logging |
+| Metrics | Application, business, and custom Prometheus metrics |
+| Tracing | Distributed spans + OpenTelemetry hook |
+| Errors | Sentry-compatible capture buffer |
+| Alerts | Severity-based alert events |
+
+## Usage
+
+```ts
+import {
+  registerObservability,
+  observability,
+  recordHttpRequest,
+  prometheusText,
+} from './src/observability/index.js';
+
+await registerObservability();
+
+observability.withRequestContext(() => {
+  recordHttpRequest('/health', 200);
+  const span = observability.tracer.startSpan('health.check');
+  observability.tracer.endSpan(span);
+});
+
+console.log(prometheusText());
+```
+
+## CLI
+
+```bash
+my add observability --logger pino
+my add observability --logger winston
+```

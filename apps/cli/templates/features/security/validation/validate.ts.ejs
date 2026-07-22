@@ -1,0 +1,52 @@
+<% if (language === 'javascript') { %>
+export function requireString(value, field = 'value') {
+  if (typeof value !== 'string' || value.trim().length === 0) {
+    throw new Error(`Validation failed: ${field} must be a non-empty string`);
+  }
+  return value.trim();
+}
+
+export function requireEmail(value, field = 'email') {
+  const email = requireString(value, field);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    throw new Error(`Validation failed: ${field} must be a valid email`);
+  }
+  return email;
+}
+
+export function validateObject(schema, input) {
+  const result = {};
+  for (const [key, rule] of Object.entries(schema)) {
+    result[key] = rule(input?.[key], key);
+  }
+  return result;
+}
+<% } else { %>
+export type FieldValidator<T> = (value: unknown, field?: string) => T;
+
+export function requireString(value: unknown, field = 'value'): string {
+  if (typeof value !== 'string' || value.trim().length === 0) {
+    throw new Error(`Validation failed: ${field} must be a non-empty string`);
+  }
+  return value.trim();
+}
+
+export function requireEmail(value: unknown, field = 'email'): string {
+  const email = requireString(value, field);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    throw new Error(`Validation failed: ${field} must be a valid email`);
+  }
+  return email;
+}
+
+export function validateObject<T extends Record<string, FieldValidator<unknown>>>(
+  schema: T,
+  input: Record<string, unknown> | undefined,
+): { [K in keyof T]: ReturnType<T[K]> } {
+  const result = {} as { [K in keyof T]: ReturnType<T[K]> };
+  for (const key of Object.keys(schema) as Array<keyof T>) {
+    result[key] = schema[key](input?.[key as string], String(key)) as ReturnType<T[typeof key]>;
+  }
+  return result;
+}
+<% } %>

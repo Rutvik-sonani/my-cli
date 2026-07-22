@@ -1,0 +1,32 @@
+import { getKafkaProducer } from './kafka.client.js';
+
+const prefix = process.env.QUEUE_PREFIX ?? '<%= appName %>';
+
+export type JobHandler<T = unknown> = (job: { name: string; data: T }) => Promise<void>;
+
+export class QueueService {
+  async dispatch<T>(queueName: string, jobName: string, data: T): Promise<void> {
+    const producer = await getKafkaProducer();
+    const topic = `${prefix}.${queueName}`;
+    await producer.send({
+      topic,
+      messages: [{ value: JSON.stringify({ name: jobName, data }) }],
+    });
+  }
+
+  async registerWorker<T>(queueName: string, handler: JobHandler<T>): Promise<void> {
+    const { createKafkaConsumer } = await import('./kafka.client.js');
+    const topic = `${prefix}.${queueName}`;
+    const consumer = await createKafkaConsumer(`${prefix}-${queueName}`);
+    await consumer.subscribe({ topic, fromBeginning: false });
+    await consumer.run({
+      eachMessage: async ({ message }) => {
+        if (!message.value) return;
+        const payload = JSON.parse(message.value.toString()) as { name: string; data: T };
+        await handler(payload);
+      },
+    });
+  }
+}
+
+export const queueService = new QueueService();

@@ -1,0 +1,32 @@
+{
+  "name": "@community/plugin-hello-mycli",
+  "version": "1.0.0",
+  "description": "Example community MyCLI plugin",
+  "type": "module",
+  "license": "MIT",
+  "private": true,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@mycli/plugin-system": "workspace:*",
+    "@mycli/filesystem": "workspace:*"
+  },
+  "devDependencies": {
+    "@mycli/config-manager": "workspace:*",
+    "@mycli/core": "workspace:*",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8",
+    "@types/node": "^22.10.5"
+  }
+}

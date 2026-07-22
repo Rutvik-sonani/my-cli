@@ -1,0 +1,34 @@
+<% if (language === 'javascript') { %>
+import { ComplianceService } from '../compliance.service.js';
+
+export class ComplianceChecker {
+  constructor(service) {
+    this.service = service;
+  }
+
+  run() {
+    return this.service.runChecks();
+  }
+
+  markPass(checkId, evidence) {
+    this.service.setCheckStatus(checkId, 'pass');
+    return this.service.runChecks().find((check) => check.id === checkId);
+  }
+}
+<% } else { %>
+import type { ComplianceCheck, ComplianceCheckStatus } from '../compliance.types.js';
+import { ComplianceService } from '../compliance.service.js';
+
+export class ComplianceChecker {
+  constructor(private readonly service: ComplianceService) {}
+
+  run(): ComplianceCheck[] {
+    return this.service.runChecks();
+  }
+
+  markPass(checkId: string, _evidence?: string): ComplianceCheck | undefined {
+    this.service.setCheckStatus(checkId, 'pass' satisfies ComplianceCheckStatus);
+    return this.service.runChecks().find((check) => check.id === checkId);
+  }
+}
+<% } %>

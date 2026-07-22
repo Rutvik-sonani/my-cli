@@ -1,0 +1,17 @@
+<% if (language === 'javascript') { %>
+import { createMarketplaceService } from './marketplace.service.js';
+
+export const marketplaceService = createMarketplaceService();
+
+export function registerTemplateMarketplace() {
+  return marketplaceService;
+}
+<% } else { %>
+import { createMarketplaceService, type MarketplaceService } from './marketplace.service.js';
+
+export const marketplaceService = createMarketplaceService();
+
+export function registerTemplateMarketplace(): MarketplaceService {
+  return marketplaceService;
+}
+<% } %>

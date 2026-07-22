@@ -1,0 +1,44 @@
+<% if (language === 'javascript') { %>
+export class DocumentIndexer {
+  constructor(service) {
+    this.service = service;
+  }
+
+  indexOne(document) {
+    return this.service.index(document);
+  }
+
+  indexMany(documents) {
+    return this.service.index(documents);
+  }
+
+  async reindex(documents) {
+    for (const doc of documents) {
+      await this.service.delete(doc.id);
+    }
+    await this.service.index(documents);
+  }
+}
+<% } else { %>
+import type { SearchDocument } from '../search.types.js';
+import { SearchService } from '../search.service.js';
+
+export class DocumentIndexer {
+  constructor(private readonly service: SearchService) {}
+
+  indexOne(document: SearchDocument): Promise<void> {
+    return this.service.index(document);
+  }
+
+  indexMany(documents: SearchDocument[]): Promise<void> {
+    return this.service.index(documents);
+  }
+
+  async reindex(documents: SearchDocument[]): Promise<void> {
+    for (const doc of documents) {
+      await this.service.delete(doc.id);
+    }
+    await this.service.index(documents);
+  }
+}
+<% } %>

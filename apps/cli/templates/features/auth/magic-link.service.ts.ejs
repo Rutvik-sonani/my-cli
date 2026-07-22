@@ -1,0 +1,57 @@
+import { MagicLinkRepository } from './magic-link.repository.js';
+
+export class MagicLinkService {
+  private readonly repo = new MagicLinkRepository();
+  private readonly appUrl = process.env.APP_URL ?? 'http://localhost:3000';
+
+  async createLink(email: string): Promise<{ token: string; url: string }> {
+    const token = await this.repo.create(email);
+    const url = `${this.appUrl}/auth/magic-link/verify?token=${encodeURIComponent(token)}`;
+    return { token, url };
+  }
+
+  async sendLink(email: string): Promise<{ url: string; devUrl?: string }> {
+    const link = await this.createLink(email);
+    const delivered = await this.deliverLink(email, link.url);
+    return {
+      url: link.url,
+      devUrl: delivered.logged ? link.url : undefined,
+    };
+  }
+
+  async verify(token: string): Promise<string | null> {
+    return this.repo.verify(token);
+  }
+
+  private async deliverLink(
+    email: string,
+    url: string,
+  ): Promise<{ sent: boolean; logged: boolean }> {
+    const shouldSend =
+      process.env.NODE_ENV === 'production' || Boolean(process.env.MAIL_PROVIDER);
+
+    if (!shouldSend) {
+      console.info(`[magic-link] ${url}`);
+      return { sent: false, logged: true };
+    }
+
+    try {
+      const { mail } = await import('../../services/mail/index.js');
+      await mail.send({
+        to: email,
+        subject: 'Sign in to your account',
+        html: `<p><a href="${url}">Sign in</a></p>`,
+        text: `Sign in: ${url}`,
+      });
+      return { sent: true, logged: false };
+    } catch {
+      if (process.env.NODE_ENV !== 'production') {
+        console.info(`[magic-link] ${url}`);
+        return { sent: false, logged: true };
+      }
+      throw new Error(
+        'Mail service is required for magic links in production. Run `my add mail` and configure MAIL_PROVIDER.',
+      );
+    }
+  }
+}

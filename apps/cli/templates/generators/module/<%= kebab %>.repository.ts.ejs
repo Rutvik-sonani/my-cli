@@ -1,0 +1,42 @@
+import type { <%= pascal %> } from './<%= kebab %>.model.js';
+import type { Create<%= pascal %>Dto, Update<%= pascal %>Dto } from './dto/index.js';
+
+export class <%= pascal %>Repository {
+  private readonly items = new Map<string, <%= pascal %>>();
+
+  async findAll(): Promise<<%= pascal %>[]> {
+    return [...this.items.values()];
+  }
+
+  async findById(id: string): Promise<<%= pascal %> | undefined> {
+    return this.items.get(id);
+  }
+
+  async create(input: Create<%= pascal %>Dto): Promise<<%= pascal %>> {
+    const entity: <%= pascal %> = {
+      id: crypto.randomUUID(),
+      ...input,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    } as <%= pascal %>;
+    this.items.set(entity.id, entity);
+    return entity;
+  }
+
+  async update(id: string, input: Update<%= pascal %>Dto): Promise<<%= pascal %>> {
+    const existing = this.items.get(id);
+    if (!existing) {
+      throw Object.assign(new Error('<%= pascal %> not found'), { status: 404 });
+    }
+    const updated: <%= pascal %> = { ...existing, ...input, updatedAt: new Date() };
+    this.items.set(id, updated);
+    return updated;
+  }
+
+  async delete(id: string): Promise<void> {
+    if (!this.items.has(id)) {
+      throw Object.assign(new Error('<%= pascal %> not found'), { status: 404 });
+    }
+    this.items.delete(id);
+  }
+}

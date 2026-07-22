@@ -1,0 +1,12 @@
+export type { EventPublisher } from './event-publisher.interface.js';
+<% if (provider === 'kafka') { %>
+export { KafkaEventPublisher } from './kafka.publisher.js';
+<% } else if (provider === 'rabbitmq') { %>
+export { RabbitEventPublisher } from './rabbitmq.publisher.js';
+<% } else if (provider === 'nats') { %>
+export { NatsEventPublisher } from './nats.publisher.js';
+<% } else if (provider === 'eventbridge') { %>
+export { EventBridgePublisher } from './eventbridge.publisher.js';
+<% } else { %>
+export { RedisEventPublisher } from './redis.publisher.js';
+<% } %>

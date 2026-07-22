@@ -1,0 +1,21 @@
+import { describe, expect, it } from 'vitest';
+import { <%= pascal %>Service } from '../<%= kebab %>.service.js';
+import { <%= pascal %>Repository } from '../<%= kebab %>.repository.js';
+
+describe('<%= pascal %>Service', () => {
+  it('creates and lists entities', async () => {
+    const service = new <%= pascal %>Service(new <%= pascal %>Repository());
+    await service.create({
+<% fields.forEach(function(field) { %>
+      <%= field.propertyName %>: <%= field.sampleValue %>,
+<% }); %>
+    } as never);
+    const all = await service.findAll();
+    expect(all).toHaveLength(1);
+  });
+
+  it('throws when entity is missing', async () => {
+    const service = new <%= pascal %>Service(new <%= pascal %>Repository());
+    await expect(service.findById('missing')).rejects.toMatchObject({ status: 404 });
+  });
+});

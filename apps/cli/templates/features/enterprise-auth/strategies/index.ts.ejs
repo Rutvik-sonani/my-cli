@@ -1,0 +1,12 @@
+<% if (protocols.includes('oauth2')) { -%>
+export { authenticateOAuth2 } from './oauth2.strategy.js';
+<% } -%>
+<% if (protocols.includes('oidc')) { -%>
+export { authenticateOidc } from './oidc.strategy.js';
+<% } -%>
+<% if (protocols.includes('saml')) { -%>
+export { authenticateSaml } from './saml.strategy.js';
+<% } -%>
+<% if (protocols.includes('ldap')) { -%>
+export { authenticateLdap } from './ldap.strategy.js';
+<% } -%>

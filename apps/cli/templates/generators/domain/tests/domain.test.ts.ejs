@@ -1,0 +1,13 @@
+import { describe, expect, it } from 'vitest';
+import { Email } from '../value-objects/Email.js';
+import { <%= pascal %>Aggregate } from '../aggregates/<%= pascal %>Aggregate.js';
+
+describe('<%= pascal %> domain', () => {
+  it('registers aggregate and emits domain event', () => {
+    const email = Email.create('user@example.com');
+    const aggregate = <%= pascal %>Aggregate.register('id-1', email);
+    const events = aggregate.pullEvents();
+    expect(events).toHaveLength(1);
+    expect(events[0]?.type).toBe('<%= pascal %>Created');
+  });
+});

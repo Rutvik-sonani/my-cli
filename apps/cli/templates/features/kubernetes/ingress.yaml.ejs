@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: <%= appName %>
+  namespace: <%= appName %>
+  annotations:
+    kubernetes.io/ingress.class: nginx
+<% if (tlsEnabled) { %>
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+<% } %>
+spec:
+<% if (tlsEnabled) { %>
+  tls:
+    - hosts:
+        - <%= host %>
+      secretName: <%= appName %>-tls
+<% } %>
+  rules:
+    - host: <%= host %>
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: <%= appName %>
+                port:
+                  number: <%= port %>

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: <%= appName %>-config
+  namespace: <%= appName %>
+data:
+  NODE_ENV: "<%= environment %>"
+  PORT: "<%= port %>"

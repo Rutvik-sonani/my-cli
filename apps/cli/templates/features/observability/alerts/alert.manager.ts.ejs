@@ -1,0 +1,59 @@
+<% if (language === 'javascript') { %>
+import { createCorrelationId } from '../correlation.js';
+
+export class AlertManager {
+  constructor() {
+    this.alerts = [];
+  }
+
+  fire(name, severity, message, labels) {
+    const event = {
+      id: createCorrelationId(),
+      name,
+      severity,
+      message,
+      firedAt: new Date(),
+      labels,
+    };
+    this.alerts.push(event);
+    return event;
+  }
+
+  list() {
+    return [...this.alerts];
+  }
+}
+
+export const alerts = new AlertManager();
+<% } else { %>
+import type { AlertEvent, AlertSeverity, MetricLabels } from '../observability.types.js';
+import { createCorrelationId } from '../correlation.js';
+
+export class AlertManager {
+  private readonly alerts: AlertEvent[] = [];
+
+  fire(
+    name: string,
+    severity: AlertSeverity,
+    message: string,
+    labels?: MetricLabels,
+  ): AlertEvent {
+    const event: AlertEvent = {
+      id: createCorrelationId(),
+      name,
+      severity,
+      message,
+      firedAt: new Date(),
+      labels,
+    };
+    this.alerts.push(event);
+    return event;
+  }
+
+  list(): AlertEvent[] {
+    return [...this.alerts];
+  }
+}
+
+export const alerts = new AlertManager();
+<% } %>

@@ -1,0 +1,47 @@
+# Template Marketplace — <%= appName %>
+
+Search, install, and publish reusable project templates.
+
+## Visibility
+
+| Type | Description |
+|------|-------------|
+| `public` | Shared catalog templates |
+| `private` | Project-local catalog |
+| `organization` | Company-scoped templates |
+
+## Metadata
+
+- `name` · `version` · `author`
+- `compatibility`
+- `requirements` (features, database, architecture styles)
+
+## Layout
+
+```
+src/template-marketplace/
+  catalog/
+  client/
+  providers/
+.mycli/template-catalog/
+templates/installed/
+TEMPLATE_MARKETPLACE.md
+```
+
+## CLI
+
+```bash
+my template setup
+my template search api
+my template install api-crud
+my template publish ./my-template --visibility private
+```
+
+## Usage
+
+```ts
+import { registerTemplateMarketplace } from './src/template-marketplace/index.js';
+
+const marketplace = registerTemplateMarketplace();
+const { templates } = await marketplace.search('auth');
+```

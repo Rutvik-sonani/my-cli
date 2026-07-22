@@ -1,0 +1,12 @@
+/**
+ * Wire ports to adapters for <%= appName %>.
+ */
+<% if (language === 'javascript') { %>
+export function createContainer() {
+  return {};
+}
+<% } else { %>
+export function createContainer(): Record<string, unknown> {
+  return {};
+}
+<% } %>

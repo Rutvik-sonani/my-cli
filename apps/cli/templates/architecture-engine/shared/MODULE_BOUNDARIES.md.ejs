@@ -1,0 +1,16 @@
+# Module Boundaries — <%= appName %>
+
+Architecture style: **<%= label %>** (`<%= style %>`)
+
+This file documents import boundaries enforced by convention. Use `my doctor` or your linter to validate.
+
+<% rules.forEach(function(rule) { %>
+## <%= rule.layer %>
+
+- **Path:** `<%= rule.path %>`
+- **May import:** <%= rule.mayImport.length ? rule.mayImport.map(function(p) { return '`' + p + '`'; }).join(', ') : '_none_' %>
+- **Must not import:** <%= rule.mustNotImport.length ? rule.mustNotImport.map(function(p) { return '`' + p + '`'; }).join(', ') : '_none_' %>
+- <%= rule.description %>
+
+<% }); %>
+Machine-readable rules: `.architecture/dependency-rules.json`

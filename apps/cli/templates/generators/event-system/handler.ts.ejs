@@ -1,0 +1,11 @@
+<% if (language === 'javascript') { %>
+export async function handle<%= pascal %>(envelope) {
+  console.log('[event-system] <%= kebab %>', envelope.payload);
+}
+<% } else { %>
+import type { EventEnvelope } from '../serializer.js';
+
+export async function handle<%= pascal %>(envelope: EventEnvelope<Record<string, unknown>>): Promise<void> {
+  console.log('[event-system] <%= kebab %>', envelope.payload);
+}
+<% } %>

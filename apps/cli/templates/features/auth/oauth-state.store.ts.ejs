@@ -1,0 +1,50 @@
+<% if (orm === 'prisma') { %>
+import { prisma } from '../../database/prisma.client.js';
+<% } %>
+
+export interface OAuthStateRecord {
+  provider: 'google' | 'github' | 'facebook';
+  codeVerifier: string;
+  expiresAt: number;
+}
+
+/**
+ * OAuth PKCE state store. Uses Prisma when available; falls back to in-memory for dev/tests.
+ */
+export class OAuthStateStore {
+<% if (orm === 'prisma') { %>
+  async save(state: string, record: OAuthStateRecord): Promise<void> {
+    await prisma.oAuthState.create({
+      data: {
+        state,
+        provider: record.provider,
+        codeVerifier: record.codeVerifier,
+        expiresAt: new Date(record.expiresAt),
+      },
+    });
+  }
+
+  async consume(state: string): Promise<OAuthStateRecord | null> {
+    const row = await prisma.oAuthState.findUnique({ where: { state } });
+    if (!row) return null;
+    await prisma.oAuthState.delete({ where: { state } });
+    return {
+      provider: row.provider as OAuthStateRecord['provider'],
+      codeVerifier: row.codeVerifier,
+      expiresAt: row.expiresAt.getTime(),
+    };
+  }
+<% } else { %>
+  private readonly memory = new Map<string, OAuthStateRecord>();
+
+  async save(state: string, record: OAuthStateRecord): Promise<void> {
+    this.memory.set(state, record);
+  }
+
+  async consume(state: string): Promise<OAuthStateRecord | null> {
+    const record = this.memory.get(state) ?? null;
+    if (record) this.memory.delete(state);
+    return record;
+  }
+<% } %>
+}

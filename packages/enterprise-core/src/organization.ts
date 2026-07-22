@@ -1,0 +1,53 @@
+/**
+ * Organization management contracts (Phase 14).
+ */
+export type OrganizationRole = 'owner' | 'admin' | 'member' | 'viewer';
+
+export interface Organization {
+  id: string;
+  name: string;
+  slug: string;
+  createdAt: Date;
+  metadata?: Record<string, unknown>;
+}
+
+export interface Team {
+  id: string;
+  organizationId: string;
+  name: string;
+  slug: string;
+  createdAt: Date;
+}
+
+export interface Member {
+  id: string;
+  organizationId: string;
+  userId: string;
+  email: string;
+  role: OrganizationRole;
+  teamIds: string[];
+  joinedAt: Date;
+}
+
+export interface OrgProject {
+  id: string;
+  organizationId: string;
+  name: string;
+  slug: string;
+  teamId?: string;
+  createdAt: Date;
+  metadata?: Record<string, unknown>;
+}
+
+export type OrganizationPermission =
+  | 'org:read'
+  | 'org:write'
+  | 'org:delete'
+  | 'team:read'
+  | 'team:write'
+  | 'member:read'
+  | 'member:write'
+  | 'project:read'
+  | 'project:write'
+  | 'project:delete'
+  | 'role:assign';

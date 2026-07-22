@@ -1,0 +1,37 @@
+<% if (language === 'javascript') { %>
+import { authenticateSaml } from '../strategies/saml.strategy.js';
+
+export class SamlIdentityProvider {
+  constructor() {
+    this.id = 'saml';
+    this.protocol = 'saml';
+  }
+
+  async authenticate(input) {
+    const profile = await authenticateSaml(this, input);
+    return { ...profile, provider: this.id, claims: profile.claims ?? {} };
+  }
+
+  async validateResponse({ samlResponse }) {
+    // Use @node-saml/node-saml to validate assertion
+    return { id: 'saml-user', email: undefined, name: undefined, claims: { samlResponse } };
+  }
+}
+<% } else { %>
+import type { IdentityProvider, IdentityUser } from '../identity-provider.interface.js';
+import { authenticateSaml } from '../strategies/saml.strategy.js';
+
+export class SamlIdentityProvider implements IdentityProvider {
+  readonly id = 'saml' as const;
+  readonly protocol = 'saml' as const;
+
+  async authenticate(input: Record<string, unknown>): Promise<IdentityUser> {
+    const profile = await authenticateSaml(this, { samlResponse: String(input.samlResponse ?? '') });
+    return { id: profile.id, email: profile.email, name: profile.name, provider: this.id, claims: profile.claims };
+  }
+
+  async validateResponse(input: { samlResponse: string }) {
+    return { id: 'saml-user', claims: { entryPoint: process.env.SAML_ENTRY_POINT, ...input } };
+  }
+}
+<% } %>

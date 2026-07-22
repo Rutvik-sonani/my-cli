@@ -1,0 +1,27 @@
+<% if (language === 'javascript') { %>
+import { SessionService } from '../sessions/session.service.js';
+
+export async function identityGuard(request) {
+  const sessionId = request.headers.authorization?.replace(/^Bearer\s+/i, '');
+  if (!sessionId) throw new Error('Unauthorized');
+  const session = await new SessionService().get(sessionId);
+  if (!session || session.expiresAt < new Date()) throw new Error('Unauthorized');
+  request.identity = { sessionId, userId: session.userId, provider: session.provider };
+}
+<% } else { %>
+import type { FastifyRequest } from 'fastify';
+import { SessionService } from '../sessions/session.service.js';
+
+export async function identityGuard(request: FastifyRequest): Promise<void> {
+  const authHeader = request.headers.authorization;
+  const sessionId = typeof authHeader === 'string' ? authHeader.replace(/^Bearer\s+/i, '') : undefined;
+  if (!sessionId) throw new Error('Unauthorized');
+  const session = await new SessionService().get(sessionId);
+  if (!session || session.expiresAt < new Date()) throw new Error('Unauthorized');
+  (request as FastifyRequest & { identity?: { sessionId: string; userId: string; provider: string } }).identity = {
+    sessionId,
+    userId: session.userId,
+    provider: session.provider,
+  };
+}
+<% } %>

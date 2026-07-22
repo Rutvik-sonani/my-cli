@@ -1,0 +1,29 @@
+import { describe, expect, it } from 'vitest';
+import {
+  listDocumentation,
+  registerDocumentation,
+} from '../../src/documentation/index.js';
+
+describe('documentation', () => {
+  it('lists enterprise documentation catalog', () => {
+    const docs = listDocumentation();
+    expect(docs.map((d) => d.filename)).toEqual(
+      expect.arrayContaining([
+        'ARCHITECTURE.md',
+        'SECURITY.md',
+        'COMPLIANCE.md',
+        'OPERATIONS.md',
+        'SCALING.md',
+        'DISASTER_RECOVERY.md',
+        'API_GUIDE.md',
+      ]),
+    );
+  });
+
+  it('plans documentation generation', () => {
+    const service = registerDocumentation();
+    const plan = service.plan();
+    expect(plan.every((p) => p.status === 'planned')).toBe(true);
+    expect(plan).toHaveLength(7);
+  });
+});

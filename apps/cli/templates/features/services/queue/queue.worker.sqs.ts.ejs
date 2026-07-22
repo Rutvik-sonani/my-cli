@@ -1,0 +1,11 @@
+import { queueService } from './queue.service.js';
+
+export function startDefaultWorkers(): void {
+  void queueService.registerWorker('default', async (job) => {
+    console.log(`[queue:sqs] processing ${job.name}`, job.data);
+  });
+}
+
+if (process.env.NODE_ENV !== 'test') {
+  startDefaultWorkers();
+}

@@ -1,0 +1,35 @@
+<% if (language === 'javascript') { %>
+/** Catalog of enterprise docs for <%= appName %>. */
+export const DOCUMENTATION_CATALOG = [
+<% catalog.forEach(function(doc) { -%>
+  {
+    kind: '<%= doc.kind %>',
+    filename: '<%= doc.filename %>',
+    title: '<%= doc.title %>',
+    description: '<%= doc.description %>',
+  },
+<% }) -%>
+];
+
+export function listDocumentation() {
+  return [...DOCUMENTATION_CATALOG];
+}
+<% } else { %>
+import type { DocumentationDocument } from '../documentation.types.js';
+
+/** Catalog of enterprise docs for <%= appName %>. */
+export const DOCUMENTATION_CATALOG: DocumentationDocument[] = [
+<% catalog.forEach(function(doc) { -%>
+  {
+    kind: '<%= doc.kind %>',
+    filename: '<%= doc.filename %>',
+    title: '<%= doc.title %>',
+    description: '<%= doc.description %>',
+  },
+<% }) -%>
+];
+
+export function listDocumentation(): DocumentationDocument[] {
+  return [...DOCUMENTATION_CATALOG];
+}
+<% } %>

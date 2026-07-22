@@ -1,0 +1,59 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "tsconfig.json", "package.json"],
+      "outputs": ["dist/**"]
+    },
+    "@mycli/cli#build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "src/**",
+        "templates/**",
+        "tsconfig.json",
+        "package.json",
+        "../../locales/**",
+        "../../scripts/copy-cli-templates.mjs"
+      ],
+      "outputs": ["dist/**"]
+    },
+    "@mycli/website#build": {
+      "dependsOn": [],
+      "inputs": [
+        "scripts/**",
+        "../../docs/**",
+        "../../*_GUIDE.md",
+        "../../PUBLISHING.md",
+        "../../CONTRIBUTING.md",
+        "../../ARCHITECTURE.md",
+        "package.json"
+      ],
+      "outputs": ["dist/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "tests/**", "vitest.config.ts"]
+    },
+    "test:coverage": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "tests/**", "vitest.config.ts"],
+      "outputs": ["coverage/**"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "tsconfig.json"]
+    },
+    "clean": {
+      "cache": false
+    },
+    "lint": {
+      "inputs": ["src/**"]
+    }
+  }
+}

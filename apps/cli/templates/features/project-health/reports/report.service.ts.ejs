@@ -1,0 +1,50 @@
+<% if (language === 'javascript') { %>
+/**
+ * Renders project health markdown for <%= appName %>.
+ */
+export class ReportService {
+  /** @param {import('../health.types.js').ProjectHealthReport} report */
+  renderMarkdown(report) {
+    return [
+      `# Project Health Report — ${report.projectName}`,
+      '',
+      `- Score: ${report.score}/100`,
+      `- Production ready: ${report.readyForProduction ? 'yes' : 'no'}`,
+      '',
+      '## Findings',
+      '',
+      ...report.findings.map(
+        (f) => `- **${f.title}** (${f.status}): ${f.message}`,
+      ),
+      '',
+    ].join('\n');
+  }
+}
+
+export function createReportService() {
+  return new ReportService();
+}
+<% } else { %>
+import type { ProjectHealthReport } from '../health.types.js';
+
+/** Renders project health markdown for <%= appName %>. */
+export class ReportService {
+  renderMarkdown(report: ProjectHealthReport): string {
+    return [
+      `# Project Health Report — ${report.projectName}`,
+      '',
+      `- Score: ${report.score}/100`,
+      `- Production ready: ${report.readyForProduction ? 'yes' : 'no'}`,
+      '',
+      '## Findings',
+      '',
+      ...report.findings.map((f) => `- **${f.title}** (${f.status}): ${f.message}`),
+      '',
+    ].join('\n');
+  }
+}
+
+export function createReportService(): ReportService {
+  return new ReportService();
+}
+<% } %>

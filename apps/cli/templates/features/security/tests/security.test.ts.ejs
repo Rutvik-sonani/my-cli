@@ -1,0 +1,36 @@
+import { describe, expect, it } from 'vitest';
+import {
+  assertCsrfToken,
+  InMemoryRateLimiter,
+  sanitizeUserInput,
+  requireEmail,
+  getCorsConfig,
+  getSecurityHeadersConfig,
+} from '../../src/security/index.js';
+
+describe('security platform', () => {
+  it('configures headers and cors defaults', () => {
+    const headers = getSecurityHeadersConfig();
+    expect(headers.noSniff).toBe(true);
+    const cors = getCorsConfig();
+    expect(cors.origins.length).toBeGreaterThan(0);
+  });
+
+  it('validates csrf tokens', () => {
+    expect(assertCsrfToken('abc', 'abc')).toBe(true);
+    expect(assertCsrfToken('abc', 'xyz')).toBe(false);
+  });
+
+  it('rate limits requests', () => {
+    const limiter = new InMemoryRateLimiter(2, 60_000);
+    expect(limiter.hit('ip').allowed).toBe(true);
+    expect(limiter.hit('ip').allowed).toBe(true);
+    expect(limiter.hit('ip').allowed).toBe(false);
+  });
+
+  it('sanitizes and validates input', () => {
+    expect(sanitizeUserInput('<script>alert(1)</script>')).toContain('&lt;script&gt;');
+    expect(requireEmail('a@b.com')).toBe('a@b.com');
+    expect(() => requireEmail('nope')).toThrow(/email/);
+  });
+});

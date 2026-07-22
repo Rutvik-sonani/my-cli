@@ -1,0 +1,12 @@
+import type { <%= pascal %>Service } from './<%= kebab %>.service.js';
+
+export class <%= pascal %>Controller {
+  constructor(private readonly service?: <%= pascal %>Service) {}
+
+  async handle(input?: unknown) {
+    if (this.service && 'execute' in this.service) {
+      return this.service.execute(input as never);
+    }
+    return { ok: true, input };
+  }
+}

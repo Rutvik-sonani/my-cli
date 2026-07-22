@@ -1,0 +1,17 @@
+variable "region" {
+  description = "AWS region"
+  type        = string
+  default     = "<%= region %>"
+}
+
+variable "container_image" {
+  description = "Container image URI"
+  type        = string
+  default     = "<%= image %>"
+}
+
+variable "environment" {
+  description = "Environment name"
+  type        = string
+  default     = "<%= environment %>"
+}

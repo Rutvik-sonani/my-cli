@@ -1,0 +1,11 @@
+export type { AuditRecord } from './audit-record.js';
+export { AuditService, computeStateDiff } from './audit.service.js';
+export { AuditRepository } from './audit.repository.js';
+export { registerAuditMiddleware, auditMiddleware } from './audit.middleware.js';
+export { auditService } from './register-audit.js';
+export type { AuditStorage } from './storage/audit-storage.interface.js';
+<% if (storage === 'file') { -%>
+export { FileAuditStorage } from './storage/file-audit.storage.js';
+<% } else { -%>
+export { MemoryAuditStorage } from './storage/memory-audit.storage.js';
+<% } -%>

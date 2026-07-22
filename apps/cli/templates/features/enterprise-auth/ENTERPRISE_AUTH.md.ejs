@@ -1,0 +1,51 @@
+# Enterprise Identity — <%= appName %>
+
+Phase 6 enterprise authentication extending base `my add auth`.
+
+## Enabled providers
+
+<% providers.forEach(function(p) { -%>
+- `<%= p %>`
+<% }); -%>
+
+## Protocols
+
+<% protocols.forEach(function(p) { -%>
+- <%= p %>
+<% }); -%>
+
+## Layout
+
+```
+src/identity/
+  identity-provider.interface.ts
+  identity.service.ts
+  providers/
+  strategies/
+  guards/
+  sessions/
+```
+
+## Usage
+
+```ts
+import { identityService, identityGuard } from './src/identity/index.js';
+
+// OIDC callback example
+const result = await identityService.login('google', {
+  code: 'auth-code',
+  redirectUri: process.env.GOOGLE_REDIRECT_URI,
+});
+
+// Protect routes
+app.addHook('preHandler', identityGuard);
+```
+
+## Environment
+
+Configure provider credentials in `.env.example`.
+
+## Base auth
+
+Use `my add auth` for JWT, refresh tokens, MFA, and local credentials.
+Use `my add enterprise-auth` for SSO and enterprise IdP integration.

@@ -1,0 +1,32 @@
+<% if (language === 'javascript') { %>
+import { <%= pascal %>Command } from '../<%= pascal %>Command.js';
+
+export class <%= pascal %>Handler {
+  async handle(command) {
+    // TODO: implement <%= pascal %> command handler
+    return { ok: true, command: command.type };
+  }
+}
+
+export function register<%= pascal %>Command(commandBus) {
+  const handler = new <%= pascal %>Handler();
+  commandBus.register(<%= pascal %>Command.type, (command) => handler.handle(command));
+}
+<% } else { %>
+import type { CommandBus } from '../../../cqrs/command-bus.js';
+import { <%= pascal %>Command } from '../<%= pascal %>Command.js';
+
+export class <%= pascal %>Handler {
+  async handle(command: <%= pascal %>Command): Promise<{ ok: true; command: string }> {
+    // TODO: implement <%= pascal %> command handler
+    return { ok: true, command: command.type };
+  }
+}
+
+export function register<%= pascal %>Command(commandBus: CommandBus): void {
+  const handler = new <%= pascal %>Handler();
+  commandBus.register(<%= pascal %>Command.type, (command) =>
+    handler.handle(command as <%= pascal %>Command),
+  );
+}
+<% } %>

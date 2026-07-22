@@ -1,0 +1,21 @@
+export type <%= pascal %>Request = {
+  params?: { id?: string };
+  body?: unknown;
+  <%= camel %>Id?: string;
+};
+
+/**
+ * Attach <%= name %> context from route params.
+ */
+export function <%= camel %>Middleware() {
+  return async (req: <%= pascal %>Request, _res: unknown, next: (err?: unknown) => void) => {
+    try {
+      if (req.params?.id) {
+        req.<%= camel %>Id = req.params.id;
+      }
+      next();
+    } catch (error) {
+      next(error);
+    }
+  };
+}

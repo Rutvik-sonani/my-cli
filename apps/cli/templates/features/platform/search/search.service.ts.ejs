@@ -1,0 +1,65 @@
+<% if (provider === 'elasticsearch') { -%>
+import { Client } from '@elastic/elasticsearch';
+
+export interface SearchDocument {
+  id: string;
+  [key: string]: unknown;
+}
+
+export class SearchService {
+  private client: Client | null = null;
+  private readonly index = process.env.SEARCH_INDEX ?? '<%= appName %>';
+
+  private getClient(): Client {
+    if (!this.client) {
+      this.client = new Client({ node: process.env.ELASTICSEARCH_URL ?? 'http://localhost:9200' });
+    }
+    return this.client;
+  }
+
+  async index(doc: SearchDocument): Promise<void> {
+    await this.getClient().index({ index: this.index, id: doc.id, document: doc });
+  }
+
+  async search<T extends Record<string, unknown>>(query: string): Promise<T[]> {
+    const result = await this.getClient().search<{ hits: { hits: Array<{ _source: T }> } }>({
+      index: this.index,
+      q: query,
+    });
+    return result.hits.hits.map((hit) => hit._source);
+  }
+}
+<% } else { -%>
+import { MeiliSearch } from 'meilisearch';
+
+export interface SearchDocument {
+  id: string;
+  [key: string]: unknown;
+}
+
+export class SearchService {
+  private client: MeiliSearch | null = null;
+  private readonly index = process.env.SEARCH_INDEX ?? '<%= appName %>';
+
+  private getClient(): MeiliSearch {
+    if (!this.client) {
+      this.client = new MeiliSearch({
+        host: process.env.MEILISEARCH_HOST ?? 'http://localhost:7700',
+        apiKey: process.env.MEILISEARCH_API_KEY,
+      });
+    }
+    return this.client;
+  }
+
+  async index(doc: SearchDocument): Promise<void> {
+    await this.getClient().index(this.index).addDocuments([doc]);
+  }
+
+  async search<T extends Record<string, unknown>>(query: string): Promise<T[]> {
+    const result = await this.getClient().index(this.index).search(query);
+    return result.hits as T[];
+  }
+}
+<% } -%>
+
+export const search = new SearchService();

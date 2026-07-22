@@ -1,0 +1,23 @@
+# Events — <%= appName %>
+
+Domain event bus with in-process and Redis pub/sub support.
+
+## Environment
+
+```env
+REDIS_URL=redis://localhost:6379
+EVENTS_CHANNEL=<%= appName %>.events
+```
+
+## Usage
+
+```typescript
+import { eventBus } from './src/services/events/index.js';
+
+eventBus.onEvent('user.created', async (event) => {
+  console.log(event.payload);
+});
+
+await eventBus.publish('user.created', { userId: 1 });
+await eventBus.subscribeRemote();
+```

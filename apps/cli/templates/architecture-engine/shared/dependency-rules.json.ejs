@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "style": "<%= style %>",
+  "label": "<%= label %>",
+  "appName": "<%= appName %>",
+  "generatedBy": "MyCLI Architecture Engine",
+  "rules": [
+<% rules.forEach(function(rule, index) { %>
+    {
+      "layer": "<%= rule.layer %>",
+      "path": "<%= rule.path %>",
+      "mayImport": <%- JSON.stringify(rule.mayImport) %>,
+      "mustNotImport": <%- JSON.stringify(rule.mustNotImport) %>,
+      "description": "<%= rule.description.replace(/"/g, '\\"') %>"
+    }<%= index < rules.length - 1 ? ',' : '' %>
+<% }); %>
+  ]
+}

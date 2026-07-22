@@ -1,0 +1,10 @@
+export type {
+  HealthCategory,
+  HealthFinding,
+  HealthStatus,
+  ProjectHealthReport,
+} from './health.types.js';
+export { analyzeArchitecture, analyzeSecurity } from './analyzers/index.js';
+export { ReportService, createReportService } from './reports/report.service.js';
+export { HealthService, createHealthService } from './health.service.js';
+export { healthService, registerProjectHealth } from './register-health.js';

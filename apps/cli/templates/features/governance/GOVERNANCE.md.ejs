@@ -1,0 +1,55 @@
+# Governance — <%= appName %>
+
+Company engineering standards for **<%= company %>**.
+
+## Layout
+
+```
+src/governance/
+  policy/
+  rules/
+  checker/
+tests/governance/
+company-policy.json
+GOVERNANCE.md
+```
+
+## Required standards
+
+Every project must include:
+
+| Requirement | Rule ID |
+|-------------|---------|
+| PostgreSQL | `req-database-postgres` |
+| Docker | `req-docker` |
+| Authentication | `req-auth` |
+| RBAC | `req-rbac` |
+| Security platform | `req-security` |
+| Audit logs | `req-audit` |
+| Automated tests | `req-tests` |
+| CI/CD | `req-cicd` |
+| Documentation | `req-docs` |
+
+## CLI
+
+```bash
+my governance setup
+my governance check
+```
+
+## Usage
+
+```ts
+import { registerGovernance } from './src/governance/index.js';
+
+const governance = registerGovernance();
+const report = governance.check({
+  projectName: '<%= appName %>',
+  database: 'postgresql',
+  features: { docker: true, auth: true, rbac: true, security: true, audit: true, testing: true },
+  scripts: { test: 'vitest run' },
+  existingPaths: ['Dockerfile', 'src/security', 'src/audit', 'tests', '.github/workflows', 'README.md'],
+});
+
+console.log(report.compliant, report.summary);
+```

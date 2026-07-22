@@ -1,0 +1,35 @@
+import type { FastifyReply, FastifyRequest } from 'fastify';
+import { RbacService } from './rbac.service.js';
+
+export function createRbacMiddleware(rbac: RbacService) {
+  return {
+    role(...roles: string[]) {
+      return async (request: FastifyRequest, reply: FastifyReply) => {
+        const userId = (request as FastifyRequest & { user?: { sub: string } }).user?.sub;
+        if (!userId) return reply.status(401).send({ error: 'Unauthorized' });
+        const ok = await Promise.all(roles.map((r) => rbac.hasRole(userId, r)));
+        if (!ok.some(Boolean)) return reply.status(403).send({ error: 'Forbidden' });
+      };
+    },
+    permission(...permissions: string[]) {
+      return async (request: FastifyRequest, reply: FastifyReply) => {
+        const userId = (request as FastifyRequest & { user?: { sub: string } }).user?.sub;
+        if (!userId) return reply.status(401).send({ error: 'Unauthorized' });
+        for (const p of permissions) {
+          if (!(await rbac.hasPermission(userId, p))) {
+            return reply.status(403).send({ error: 'Forbidden' });
+          }
+        }
+      };
+    },
+    can(action: string, resource?: string) {
+      return async (request: FastifyRequest, reply: FastifyReply) => {
+        const userId = (request as FastifyRequest & { user?: { sub: string } }).user?.sub;
+        if (!userId) return reply.status(401).send({ error: 'Unauthorized' });
+        if (!(await rbac.can(userId, action, resource))) {
+          return reply.status(403).send({ error: 'Forbidden' });
+        }
+      };
+    },
+  };
+}

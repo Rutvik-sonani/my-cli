@@ -1,0 +1,31 @@
+import { getRedisClient } from './redis.client.js';
+
+const DEFAULT_TTL = Number(process.env.CACHE_TTL_SECONDS ?? 3600);
+
+export class CacheService {
+  private readonly redis = getRedisClient();
+
+  async get<T>(key: string): Promise<T | null> {
+    const value = await this.redis.get(key);
+    if (!value) return null;
+    return JSON.parse(value) as T;
+  }
+
+  async set(key: string, value: unknown, ttlSeconds = DEFAULT_TTL): Promise<void> {
+    await this.redis.set(key, JSON.stringify(value), 'EX', ttlSeconds);
+  }
+
+  async del(key: string): Promise<void> {
+    await this.redis.del(key);
+  }
+
+  async remember<T>(key: string, factory: () => Promise<T>, ttlSeconds = DEFAULT_TTL): Promise<T> {
+    const cached = await this.get<T>(key);
+    if (cached !== null) return cached;
+    const value = await factory();
+    await this.set(key, value, ttlSeconds);
+    return value;
+  }
+}
+
+export const cache = new CacheService();

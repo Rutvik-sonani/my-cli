@@ -1,0 +1,17 @@
+export interface Subscription {
+  id: string;
+  organizationId: string;
+  plan: string;
+  status: 'active' | 'past_due' | 'canceled';
+}
+
+export class BillingService {
+  async getSubscription(organizationId: string): Promise<Subscription | null> {
+    return {
+      id: crypto.randomUUID(),
+      organizationId,
+      plan: 'free',
+      status: 'active',
+    };
+  }
+}

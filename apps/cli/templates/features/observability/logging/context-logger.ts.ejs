@@ -1,0 +1,46 @@
+<% if (language === 'javascript') { %>
+import { logger } from './logger.js';
+import { getCorrelation } from '../correlation.js';
+
+export function withContext(bindings = {}) {
+  const correlation = getCorrelation();
+  return logger.child
+    ? logger.child({
+        ...bindings,
+        correlationId: bindings.correlationId ?? correlation?.correlationId,
+        traceId: bindings.traceId ?? correlation?.traceId,
+      })
+    : logger;
+}
+
+export function logInfo(message, context = {}) {
+  const child = withContext(context);
+  if (typeof child.info === 'function') child.info(message, context);
+  else child.log('info', message, context);
+}
+<% } else { %>
+import { logger } from './logger.js';
+import type { LogContext } from '../observability.types.js';
+import { getCorrelation } from '../correlation.js';
+
+export function withContext(bindings: LogContext = {}) {
+  const correlation = getCorrelation();
+  const merged = {
+    ...bindings,
+    correlationId: bindings.correlationId ?? correlation?.correlationId,
+    traceId: bindings.traceId ?? correlation?.traceId,
+    spanId: bindings.spanId ?? correlation?.spanId,
+  };
+  if ('child' in logger && typeof logger.child === 'function') {
+    return logger.child(merged);
+  }
+  return logger;
+}
+
+export function logInfo(message: string, context: LogContext = {}): void {
+  const child = withContext(context) as { info: (msg: string, ...args: unknown[]) => void; log?: Function };
+  if (typeof child.info === 'function') {
+    child.info(message, context);
+  }
+}
+<% } %>

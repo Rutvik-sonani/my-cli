@@ -1,0 +1,24 @@
+/** @type {import('semantic-release').Options} */
+export default {
+  branches: ['<%= branch %>'],
+  tagFormat: '${version}',
+  plugins: [
+    '@semantic-release/commit-analyzer',
+    '@semantic-release/release-notes-generator',
+    ['@semantic-release/changelog', { changelogFile: 'CHANGELOG.md' }],
+    [
+      '@semantic-release/npm',
+      {
+        npmPublish: false,
+      },
+    ],
+    [
+      '@semantic-release/exec',
+      {
+        prepareCmd:
+          'node -e "const d=new Date();const v=`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,\'0\')}.${String(d.getDate()).padStart(2,\'0\')}`;const fs=require(\'fs\');const p=JSON.parse(fs.readFileSync(\'package.json\',\'utf8\'));p.version=v;fs.writeFileSync(\'package.json\',JSON.stringify(p,null,2)+\'\\n\');console.log(v)"',
+      },
+    ],
+    '@semantic-release/github',
+  ],
+};

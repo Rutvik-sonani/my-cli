@@ -1,0 +1,86 @@
+<% if (language === 'javascript') { %>
+import { slugify } from '../organization.store.js';
+
+export class ProjectService {
+  constructor(store) {
+    this.store = store;
+  }
+
+  create(organizationId, name, options = {}) {
+    if (!this.store.organizations.has(organizationId)) {
+      throw new Error(`Organization not found: ${organizationId}`);
+    }
+    if (options.teamId) {
+      const team = this.store.teams.get(options.teamId);
+      if (!team || team.organizationId !== organizationId) {
+        throw new Error(`Team not found in organization: ${options.teamId}`);
+      }
+    }
+    const project = {
+      id: crypto.randomUUID(),
+      organizationId,
+      name,
+      slug: slugify(name),
+      teamId: options.teamId,
+      createdAt: new Date(),
+      metadata: options.metadata,
+    };
+    this.store.projects.set(project.id, project);
+    return project;
+  }
+
+  listByOrganization(organizationId) {
+    return [...this.store.projects.values()].filter(
+      (project) => project.organizationId === organizationId,
+    );
+  }
+
+  delete(id) {
+    return this.store.projects.delete(id);
+  }
+}
+<% } else { %>
+import type { OrgProject } from '../organization.types.js';
+import { OrganizationStore, slugify } from '../organization.store.js';
+
+export class ProjectService {
+  constructor(private readonly store: OrganizationStore) {}
+
+  create(
+    organizationId: string,
+    name: string,
+    options: { teamId?: string; metadata?: Record<string, unknown> } = {},
+  ): OrgProject {
+    if (!this.store.organizations.has(organizationId)) {
+      throw new Error(`Organization not found: ${organizationId}`);
+    }
+    if (options.teamId) {
+      const team = this.store.teams.get(options.teamId);
+      if (!team || team.organizationId !== organizationId) {
+        throw new Error(`Team not found in organization: ${options.teamId}`);
+      }
+    }
+    const project: OrgProject = {
+      id: crypto.randomUUID(),
+      organizationId,
+      name,
+      slug: slugify(name),
+      teamId: options.teamId,
+      createdAt: new Date(),
+      metadata: options.metadata,
+    };
+    this.store.projects.set(project.id, project);
+    return project;
+  }
+
+  listByOrganization(organizationId: string): OrgProject[] {
+    return [...this.store.projects.values()].filter(
+      (project) => project.organizationId === organizationId,
+    );
+  }
+
+  delete(id: string): boolean {
+    return this.store.projects.delete(id);
+  }
+}
+<% } %>

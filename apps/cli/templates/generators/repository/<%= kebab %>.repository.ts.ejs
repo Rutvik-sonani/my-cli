@@ -1,0 +1,28 @@
+import type { <%= pascal %> } from './<%= kebab %>.model.js';
+
+export class <%= pascal %>Repository {
+  private readonly items = new Map<string, <%= pascal %>>();
+
+  async findAll(): Promise<<%= pascal %>[]> {
+    return [...this.items.values()];
+  }
+
+  async findById(id: string): Promise<<%= pascal %> | undefined> {
+    return this.items.get(id);
+  }
+
+  async create(input: Omit<<%= pascal %>, 'id' | 'createdAt' | 'updatedAt'>): Promise<<%= pascal %>> {
+    const entity = {
+      id: crypto.randomUUID(),
+      ...input,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    } as <%= pascal %>;
+    this.items.set(entity.id, entity);
+    return entity;
+  }
+
+  async delete(id: string): Promise<void> {
+    this.items.delete(id);
+  }
+}

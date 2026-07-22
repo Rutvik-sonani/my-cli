@@ -1,0 +1,39 @@
+import type { <%= pascal %>Repository } from './<%= kebab %>.repository.js';
+import type { Create<%= pascal %>Dto, Update<%= pascal %>Dto } from './dto/index.js';
+import { <%= pascal %>Events } from './events/<%= kebab %>.events.js';
+
+export class <%= pascal %>Service {
+  constructor(
+    private readonly repository: <%= pascal %>Repository,
+    private readonly events: <%= pascal %>Events = new <%= pascal %>Events(),
+  ) {}
+
+  findAll() {
+    return this.repository.findAll();
+  }
+
+  async findById(id: string) {
+    const entity = await this.repository.findById(id);
+    if (!entity) {
+      throw Object.assign(new Error('<%= pascal %> not found'), { status: 404 });
+    }
+    return entity;
+  }
+
+  async create(input: Create<%= pascal %>Dto) {
+    const entity = await this.repository.create(input);
+    await this.events.emitCreated(entity);
+    return entity;
+  }
+
+  async update(id: string, input: Update<%= pascal %>Dto) {
+    const entity = await this.repository.update(id, input);
+    await this.events.emitUpdated(entity);
+    return entity;
+  }
+
+  async remove(id: string) {
+    await this.repository.delete(id);
+    await this.events.emitDeleted(id);
+  }
+}

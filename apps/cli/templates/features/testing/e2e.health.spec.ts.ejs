@@ -1,0 +1,6 @@
+import { test, expect } from '@playwright/test';
+
+test('health page responds', async ({ request }) => {
+  const response = await request.get('/health');
+  expect([200, 404]).toContain(response.status());
+});

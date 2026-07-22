@@ -1,0 +1,36 @@
+/**
+ * <%= pascal %> domain entity — pure TypeScript, no framework or ORM imports.
+ */
+<% if (language === 'javascript') { %>
+export class <%= pascal %> {
+  constructor(props) {
+    this.id = props.id;
+    this.email = props.email;
+    this.createdAt = props.createdAt ?? new Date();
+    this.updatedAt = props.updatedAt ?? new Date();
+  }
+}
+<% } else { %>
+import type { Email } from '../value-objects/Email.js';
+
+export interface <%= pascal %>Props {
+  id: string;
+  email: Email;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export class <%= pascal %> {
+  readonly id: string;
+  readonly email: Email;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+
+  constructor(props: <%= pascal %>Props) {
+    this.id = props.id;
+    this.email = props.email;
+    this.createdAt = props.createdAt ?? new Date();
+    this.updatedAt = props.updatedAt ?? new Date();
+  }
+}
+<% } %>

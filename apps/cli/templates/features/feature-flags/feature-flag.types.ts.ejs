@@ -1,0 +1,63 @@
+<% if (language === 'javascript') { %>
+/** @typedef {'database'|'launchdarkly'|'unleash'} FeatureFlagProviderId */
+
+/**
+ * @typedef {Object} FeatureFlagContext
+ * @property {string} [userId]
+ * @property {string} [email]
+ * @property {string} [environment]
+ * @property {string} [country]
+ */
+
+/**
+ * @typedef {Object} FeatureFlagDefinition
+ * @property {string} key
+ * @property {boolean} enabled
+ * @property {number} [percentage]
+ * @property {string[]} [userTargets]
+ * @property {string[]} [environments]
+ * @property {string[]} [countries]
+ */
+
+/**
+ * @typedef {Object} FeatureFlagEvaluation
+ * @property {string} key
+ * @property {boolean} enabled
+ * @property {string} reason
+ */
+<% } else { %>
+export type FeatureFlagProviderId = 'database' | 'launchdarkly' | 'unleash';
+
+export interface FeatureFlagContext {
+  userId?: string;
+  email?: string;
+  environment?: string;
+  country?: string;
+  attributes?: Record<string, string | number | boolean>;
+}
+
+export interface FeatureFlagDefinition {
+  key: string;
+  enabled: boolean;
+  percentage?: number;
+  userTargets?: string[];
+  environments?: string[];
+  countries?: string[];
+  description?: string;
+}
+
+export type FeatureFlagReason =
+  | 'disabled'
+  | 'enabled'
+  | 'user-target'
+  | 'percentage'
+  | 'environment'
+  | 'country'
+  | 'default';
+
+export interface FeatureFlagEvaluation {
+  key: string;
+  enabled: boolean;
+  reason: FeatureFlagReason;
+}
+<% } %>

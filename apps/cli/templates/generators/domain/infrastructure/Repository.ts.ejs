@@ -1,0 +1,34 @@
+import type { <%= pascal %> } from '../../../domain/<%= kebab %>/entities/<%= pascal %>.js';
+import type { I<%= pascal %>Repository } from '../interfaces/I<%= pascal %>Repository.js';
+
+/**
+ * In-memory repository stub — replace with Prisma/Drizzle/TypeORM adapter.
+ * Infrastructure may import domain; domain must never import this file.
+ */
+<% if (language === 'javascript') { %>
+export class <%= pascal %>Repository {
+  constructor() {
+    this.store = new Map();
+  }
+
+  async save(entity) {
+    this.store.set(entity.id, entity);
+  }
+
+  async findById(id) {
+    return this.store.get(id) ?? null;
+  }
+}
+<% } else { %>
+export class <%= pascal %>Repository implements I<%= pascal %>Repository {
+  private readonly store = new Map<string, <%= pascal %>>();
+
+  async save(entity: <%= pascal %>): Promise<void> {
+    this.store.set(entity.id, entity);
+  }
+
+  async findById(id: string): Promise<<%= pascal %> | null> {
+    return this.store.get(id) ?? null;
+  }
+}
+<% } %>

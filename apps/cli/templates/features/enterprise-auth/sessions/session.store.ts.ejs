@@ -1,0 +1,48 @@
+<% if (language === 'javascript') { %>
+export class InMemorySessionStore {
+  constructor() {
+    this.sessions = new Map();
+  }
+
+  async create(session) {
+    this.sessions.set(session.id, session);
+  }
+
+  async get(sessionId) {
+    return this.sessions.get(sessionId) ?? null;
+  }
+
+  async delete(sessionId) {
+    this.sessions.delete(sessionId);
+  }
+}
+<% } else { %>
+export interface IdentitySession {
+  id: string;
+  userId: string;
+  provider: string;
+  expiresAt: Date;
+}
+
+export interface SessionStore {
+  create(session: IdentitySession): Promise<void>;
+  get(sessionId: string): Promise<IdentitySession | null>;
+  delete(sessionId: string): Promise<void>;
+}
+
+export class InMemorySessionStore implements SessionStore {
+  private readonly sessions = new Map<string, IdentitySession>();
+
+  async create(session: IdentitySession): Promise<void> {
+    this.sessions.set(session.id, session);
+  }
+
+  async get(sessionId: string): Promise<IdentitySession | null> {
+    return this.sessions.get(sessionId) ?? null;
+  }
+
+  async delete(sessionId: string): Promise<void> {
+    this.sessions.delete(sessionId);
+  }
+}
+<% } %>

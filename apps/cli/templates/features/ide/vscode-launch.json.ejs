@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug <%= appName %>",
+      "runtimeExecutable": "<%= packageManager === 'npm' ? 'npm' : packageManager %>",
+      "runtimeArgs": ["run", "dev"],
+      "skipFiles": ["<node_internals>/**"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug tests",
+      "runtimeExecutable": "<%= packageManager === 'npm' ? 'npm' : packageManager %>",
+      "runtimeArgs": ["test"],
+      "skipFiles": ["<node_internals>/**"],
+      "console": "integratedTerminal"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+---
+description: MyCLI project conventions for <%= appName %>
+globs:
+  - "**/*.{ts,tsx,js,jsx,json,md}"
+alwaysApply: true
+---
+
+# <%= appName %> — MyCLI Project Rules
+
+- Use TypeScript strict mode and match existing module patterns under `src/`.
+- Prefer feature modules (`src/modules/<name>/`) with controller, service, repository, and DTO layers.
+- Run `<%= devCommand %>` for local development, `<%= testCommand %>` for tests, and `<%= lintCommand %>` for linting.
+- Keep environment variables in `.env` (never commit secrets); use `.env.example` for documentation.
+- When adding routes, register them in `src/routes/features.ts` via the generator auto-registration hooks.

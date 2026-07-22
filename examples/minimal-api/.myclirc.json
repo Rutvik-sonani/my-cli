@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0",
+  "projectName": "minimal-api",
+  "applicationType": "api",
+  "architecture": "modular-monolith",
+  "language": "typescript",
+  "backend": "fastify",
+  "frontend": "none",
+  "database": "postgresql",
+  "orm": "prisma",
+  "paths": {
+    "modules": "src/modules",
+    "templates": "templates",
+    "plugins": "plugins"
+  },
+  "features": {
+    "docker": false,
+    "git": true,
+    "testing": true
+  }
+}

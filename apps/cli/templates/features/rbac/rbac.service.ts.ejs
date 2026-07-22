@@ -1,0 +1,67 @@
+import { RbacRepository } from './rbac.repository.js';
+
+export interface ResourceContext {
+  type: string;
+  id?: string;
+  ownerId?: string;
+}
+
+export class RbacService {
+  private readonly repo = new RbacRepository();
+
+  async createRole(name: string, description?: string) {
+    return this.repo.createRole(name, description);
+  }
+
+  async createPermission(name: string, description?: string) {
+    return this.repo.createPermission(name, description);
+  }
+
+  async assignPermission(roleName: string, permissionName: string): Promise<void> {
+    const role = await this.repo.findRoleByName(roleName);
+    const permission = await this.repo.findPermissionByName(permissionName);
+    if (!role) throw Object.assign(new Error(`Role not found: ${roleName}`), { status: 404 });
+    if (!permission) {
+      throw Object.assign(new Error(`Permission not found: ${permissionName}`), { status: 404 });
+    }
+    await this.repo.assignPermission(role.id, permission.id);
+  }
+
+  async assignRole(userId: string, roleName: string): Promise<void> {
+    const role = await this.repo.findRoleByName(roleName);
+    if (!role) throw Object.assign(new Error(`Role not found: ${roleName}`), { status: 404 });
+    await this.repo.assignRole(userId, role.id);
+  }
+
+  async hasRole(userId: string, role: string): Promise<boolean> {
+    const roles = await this.repo.userRoles(userId);
+    return roles.some((r) => r.name === role);
+  }
+
+  async hasPermission(userId: string, permission: string): Promise<boolean> {
+    const roles = await this.repo.userRoles(userId);
+    for (const role of roles) {
+      const perms = await this.repo.rolePermissions(role.id);
+      if (perms.some((p) => p.name === permission)) return true;
+    }
+    return false;
+  }
+
+  async can(userId: string, action: string, resource?: ResourceContext | string): Promise<boolean> {
+    if (await this.hasPermission(userId, action)) {
+      return true;
+    }
+
+    const ctx = typeof resource === 'string' ? { type: resource } : resource;
+    if (!ctx?.ownerId || ctx.ownerId !== userId) {
+      return false;
+    }
+
+    const ownPermission = `${ctx.type}.own`;
+    if (await this.hasPermission(userId, ownPermission)) {
+      return true;
+    }
+
+    return ['read', 'update', 'delete'].includes(action);
+  }
+}

@@ -1,0 +1,61 @@
+import { describe, expect, it } from 'vitest';
+import {
+  Tracer,
+  AlertManager,
+  SentryMonitor,
+  createCorrelationId,
+  runWithCorrelation,
+  getCorrelation,
+  prometheusText,
+  recordHttpRequest,
+  recordBusinessEvent,
+} from '../../src/observability/index.js';
+
+describe('observability platform', () => {
+  it('propagates correlation and trace ids', () => {
+    const correlationId = createCorrelationId();
+    runWithCorrelation({ correlationId, traceId: correlationId }, () => {
+      expect(getCorrelation()?.correlationId).toBe(correlationId);
+      expect(getCorrelation()?.traceId).toBe(correlationId);
+    });
+  });
+
+  it('records prometheus application and business metrics', () => {
+    recordHttpRequest('/orders', 200);
+    recordBusinessEvent('order.placed');
+    const text = prometheusText();
+    expect(text).toContain('http_requests_total');
+    expect(text).toContain('business_events_total');
+    expect(text).toContain('# TYPE');
+  });
+
+  it('creates distributed spans', () => {
+    const tracer = new Tracer();
+    const parent = tracer.startSpan('http.request');
+    const child = tracer.startSpan('db.query', {
+      traceId: parent.traceId,
+      parentSpanId: parent.spanId,
+    });
+    tracer.endSpan(child);
+    tracer.endSpan(parent);
+    expect(child.parentSpanId).toBe(parent.spanId);
+    expect(child.traceId).toBe(parent.traceId);
+    expect(child.endTime).toBeTruthy();
+  });
+
+  it('fires alerts and captures errors', () => {
+    const alerts = new AlertManager();
+    const fired = alerts.fire('high-error-rate', 'critical', 'Error rate > 5%');
+    expect(fired.severity).toBe('critical');
+
+    const monitor = new SentryMonitor();
+    const event = monitor.capture(new Error('boom'), { route: '/checkout' });
+    expect(event.message).toBe('boom');
+    expect(monitor.list()).toHaveLength(1);
+  });
+
+  it('uses <%= logger %> logger module', async () => {
+    const { logger } = await import('../../src/observability/logging/logger.js');
+    expect(logger).toBeTruthy();
+  });
+});

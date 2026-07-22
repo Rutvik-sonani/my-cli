@@ -1,0 +1,98 @@
+<% if (language === 'javascript') { %>
+import { getSecurityHeadersConfig } from './headers/security-headers.js';
+import { getCorsConfig } from './cors/cors.config.js';
+import { getCsrfConfig } from './csrf/csrf.protection.js';
+import { getRateLimitConfig } from './rate-limit/rate-limiter.js';
+
+/**
+ * Registers security middleware for <%= appName %>.
+ * Compatible with Fastify via @fastify/helmet, cors, rate-limit, csrf-protection.
+ */
+export async function registerSecurityPlugins(app) {
+  const headers = getSecurityHeadersConfig();
+  const cors = getCorsConfig();
+  const csrf = getCsrfConfig();
+  const rateLimit = getRateLimitConfig();
+
+  if (app?.register) {
+    const helmet = (await import('@fastify/helmet')).default;
+    const corsPlugin = (await import('@fastify/cors')).default;
+    const rateLimitPlugin = (await import('@fastify/rate-limit')).default;
+
+    if (headers.contentSecurityPolicy !== false) {
+      await app.register(helmet);
+    }
+    await app.register(corsPlugin, {
+      origin: cors.origins,
+      credentials: cors.credentials,
+      methods: cors.methods,
+    });
+    await app.register(rateLimitPlugin, {
+      max: rateLimit.max,
+      timeWindow: rateLimit.windowMs,
+    });
+    if (csrf.enabled) {
+      try {
+        const csrfPlugin = (await import('@fastify/csrf-protection')).default;
+        await app.register(csrfPlugin);
+      } catch {
+        /* optional if package not installed yet */
+      }
+    }
+  }
+
+  return { headers, cors, csrf, rateLimit };
+}
+<% } else { %>
+import { getSecurityHeadersConfig } from './headers/security-headers.js';
+import { getCorsConfig } from './cors/cors.config.js';
+import { getCsrfConfig } from './csrf/csrf.protection.js';
+import { getRateLimitConfig } from './rate-limit/rate-limiter.js';
+
+/**
+ * Registers security middleware for <%= appName %>.
+ * Compatible with Fastify via @fastify/helmet, cors, rate-limit, csrf-protection.
+ */
+export async function registerSecurityPlugins(app?: {
+  register: (plugin: unknown, opts?: Record<string, unknown>) => Promise<void>;
+}): Promise<{
+  headers: ReturnType<typeof getSecurityHeadersConfig>;
+  cors: ReturnType<typeof getCorsConfig>;
+  csrf: ReturnType<typeof getCsrfConfig>;
+  rateLimit: ReturnType<typeof getRateLimitConfig>;
+}> {
+  const headers = getSecurityHeadersConfig();
+  const cors = getCorsConfig();
+  const csrf = getCsrfConfig();
+  const rateLimit = getRateLimitConfig();
+
+  if (app?.register) {
+    const helmet = (await import('@fastify/helmet')).default;
+    const corsPlugin = (await import('@fastify/cors')).default;
+    const rateLimitPlugin = (await import('@fastify/rate-limit')).default;
+
+    if (headers.contentSecurityPolicy !== false) {
+      await app.register(helmet);
+    }
+    await app.register(corsPlugin, {
+      origin: cors.origins,
+      credentials: cors.credentials,
+      methods: cors.methods,
+    });
+    await app.register(rateLimitPlugin, {
+      max: rateLimit.max,
+      timeWindow: rateLimit.windowMs,
+    });
+    if (csrf.enabled) {
+      try {
+        const csrfPlugin = (await import('@fastify/csrf-protection')).default;
+        await app.register(csrfPlugin);
+      } catch {
+        /* optional if package not installed yet */
+      }
+    }
+  }
+
+  return { headers, cors, csrf, rateLimit };
+}
+<% } %>

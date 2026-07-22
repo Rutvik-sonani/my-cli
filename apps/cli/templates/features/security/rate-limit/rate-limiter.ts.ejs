@@ -1,0 +1,59 @@
+<% if (language === 'javascript') { %>
+export class InMemoryRateLimiter {
+  constructor(max = Number(process.env.RATE_LIMIT_MAX ?? 100), windowMs = Number(process.env.RATE_LIMIT_WINDOW_MS ?? 60000)) {
+    this.max = max;
+    this.windowMs = windowMs;
+    this.buckets = new Map();
+  }
+
+  hit(key, now = Date.now()) {
+    const current = this.buckets.get(key);
+    if (!current || current.resetAt <= now) {
+      this.buckets.set(key, { count: 1, resetAt: now + this.windowMs });
+      return { allowed: true, remaining: this.max - 1 };
+    }
+    current.count += 1;
+    return { allowed: current.count <= this.max, remaining: Math.max(0, this.max - current.count) };
+  }
+}
+
+export function getRateLimitConfig() {
+  return {
+    max: Number(process.env.RATE_LIMIT_MAX ?? 100),
+    windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS ?? 60000),
+  };
+}
+<% } else { %>
+import type { RateLimitConfig } from '../security.types.js';
+
+interface RateLimitBucket {
+  count: number;
+  resetAt: number;
+}
+
+export class InMemoryRateLimiter {
+  private readonly buckets = new Map<string, RateLimitBucket>();
+
+  constructor(
+    private readonly max = Number(process.env.RATE_LIMIT_MAX ?? 100),
+    private readonly windowMs = Number(process.env.RATE_LIMIT_WINDOW_MS ?? 60000),
+  ) {}
+
+  hit(key: string, now = Date.now()): { allowed: boolean; remaining: number } {
+    const current = this.buckets.get(key);
+    if (!current || current.resetAt <= now) {
+      this.buckets.set(key, { count: 1, resetAt: now + this.windowMs });
+      return { allowed: true, remaining: this.max - 1 };
+    }
+    current.count += 1;
+    return { allowed: current.count <= this.max, remaining: Math.max(0, this.max - current.count) };
+  }
+}
+
+export function getRateLimitConfig(): RateLimitConfig {
+  return {
+    max: Number(process.env.RATE_LIMIT_MAX ?? 100),
+    windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS ?? 60000),
+  };
+}
+<% } %>

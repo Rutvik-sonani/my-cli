@@ -1,0 +1,68 @@
+import { pgTable, uuid, varchar, boolean, timestamp, text, primaryKey, unique } from 'drizzle-orm/pg-core';
+
+<% if (includeUser) { %>
+export const users = pgTable('users', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  email: varchar('email', { length: 255 }).notNull().unique(),
+  passwordHash: varchar('password_hash', { length: 255 }).notNull(),
+  name: varchar('name', { length: 255 }),
+  emailVerified: boolean('email_verified').notNull().default(false),
+  mfaSecret: varchar('mfa_secret', { length: 255 }),
+  mfaEnabled: boolean('mfa_enabled').notNull().default(false),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
+export const refreshTokens = pgTable('refresh_tokens', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  token: varchar('token', { length: 512 }).notNull().unique(),
+  userId: uuid('user_id').notNull(),
+  expiresAt: timestamp('expires_at').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+export const oAuthAccounts = pgTable(
+  'oauth_accounts',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id').notNull(),
+    provider: varchar('provider', { length: 50 }).notNull(),
+    providerUserId: varchar('provider_user_id', { length: 255 }).notNull(),
+  },
+  (t) => [unique('oauth_provider_user_unique').on(t.provider, t.providerUserId)],
+);
+<% } %>
+
+<% if (includeRbac) { %>
+export const roles = pgTable('roles', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: varchar('name', { length: 100 }).notNull().unique(),
+  description: text('description'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+export const permissions = pgTable('permissions', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: varchar('name', { length: 150 }).notNull().unique(),
+  description: text('description'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+export const rolePermissions = pgTable(
+  'role_permissions',
+  {
+    roleId: uuid('role_id').notNull(),
+    permissionId: uuid('permission_id').notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.roleId, t.permissionId] })],
+);
+
+export const userRoles = pgTable(
+  'user_roles',
+  {
+    userId: uuid('user_id').notNull(),
+    roleId: uuid('role_id').notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.roleId] })],
+);
+<% } %>

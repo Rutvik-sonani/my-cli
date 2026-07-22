@@ -1,0 +1,58 @@
+export const <%= camel %>Swagger = {
+  tags: [{ name: '<%= pascal %>', description: '<%= pascal %> resource' }],
+  paths: {
+    '/<%= kebabPlural %>': {
+      get: {
+        summary: 'List <%= namePlural %>',
+        tags: ['<%= pascal %>'],
+        responses: { '200': { description: 'OK' } },
+      },
+      post: {
+        summary: 'Create <%= name %>',
+        tags: ['<%= pascal %>'],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/<%= pascal %>' },
+            },
+          },
+        },
+        responses: { '201': { description: 'Created' } },
+      },
+    },
+    '/<%= kebabPlural %>/{id}': {
+      get: {
+        summary: 'Get <%= name %>',
+        tags: ['<%= pascal %>'],
+        parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+        responses: { '200': { description: 'OK' } },
+      },
+      patch: {
+        summary: 'Update <%= name %>',
+        tags: ['<%= pascal %>'],
+        responses: { '200': { description: 'OK' } },
+      },
+      delete: {
+        summary: 'Delete <%= name %>',
+        tags: ['<%= pascal %>'],
+        responses: { '204': { description: 'No Content' } },
+      },
+    },
+  },
+  components: {
+    schemas: {
+      <%= pascal %>: {
+        type: 'object',
+        properties: {
+          id: { type: 'string', format: 'uuid' },
+<% fields.forEach(function(field) { %>
+          <%= field.propertyName %>: { type: '<%= field.swaggerType %>'<% if (field.swaggerFormat) { %>, format: '<%= field.swaggerFormat %>'<% } %> },
+<% }); %>
+          createdAt: { type: 'string', format: 'date-time' },
+          updatedAt: { type: 'string', format: 'date-time' },
+        },
+      },
+    },
+  },
+};

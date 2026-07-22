@@ -1,0 +1,48 @@
+import type { FastifyInstance } from 'fastify';
+import { AuthController } from './auth.controller.js';
+import { authMiddleware } from './auth.middleware.js';
+<% if (hasSession) { %>
+import { registerSessionPlugin } from './session.plugin.js';
+<% } %>
+
+export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
+<% if (hasSession) { %>
+  await registerSessionPlugin(app);
+<% } %>
+
+  const controller = new AuthController();
+
+  app.post('/auth/register', controller.register);
+  app.post('/auth/login', controller.login);
+  app.post('/auth/logout', controller.logout);
+<% if (hasRefresh) { %>
+  app.post('/auth/refresh', controller.refresh);
+<% } %>
+  app.get('/auth/me', { preHandler: authMiddleware }, controller.me);
+
+<% if (hasOAuth) { %>
+  app.get('/auth/:provider/start', controller.oauthStart);
+  app.get('/auth/:provider/callback', controller.oauthCallback);
+<% } %>
+
+<% if (hasMagicLink) { %>
+  app.post('/auth/magic-link', controller.magicLinkSend);
+  app.get('/auth/magic-link/verify', controller.magicLinkVerify);
+<% } %>
+
+<% if (hasOtp) { %>
+  app.post('/auth/otp/send', controller.otpSend);
+  app.post('/auth/otp/verify', controller.otpVerify);
+<% } %>
+
+<% if (hasMfa) { %>
+  app.post('/auth/mfa/enroll', { preHandler: authMiddleware }, controller.mfaEnroll);
+<% } %>
+
+<% if (hasPasskeys) { %>
+  app.post('/auth/passkeys/register/options', { preHandler: authMiddleware }, controller.passkeyRegisterOptions);
+  app.post('/auth/passkeys/register/verify', { preHandler: authMiddleware }, controller.passkeyRegisterVerify);
+  app.post('/auth/passkeys/authenticate/options', controller.passkeyAuthOptions);
+  app.post('/auth/passkeys/authenticate/verify', controller.passkeyAuthVerify);
+<% } %>
+}

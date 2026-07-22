@@ -1,0 +1,16 @@
+<% if (language === 'javascript') { %>
+/** @typedef {{ id: string, userId: string, action: string, resource: string, timestamp: Date, ip?: string, device?: string, beforeState?: object|null, afterState?: object|null, metadata?: object }} AuditRecord */
+<% } else { %>
+export interface AuditRecord {
+  id: string;
+  userId: string;
+  action: string;
+  resource: string;
+  timestamp: Date;
+  ip?: string;
+  device?: string;
+  beforeState?: Record<string, unknown> | null;
+  afterState?: Record<string, unknown> | null;
+  metadata?: Record<string, unknown>;
+}
+<% } %>

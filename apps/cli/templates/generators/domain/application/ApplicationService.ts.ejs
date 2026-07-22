@@ -1,0 +1,40 @@
+import { Create<%= pascal %>Command, Create<%= pascal %>Handler } from '../commands/Create<%= pascal %>Command.js';
+import { Get<%= pascal %>Query, Get<%= pascal %>Handler } from '../queries/Get<%= pascal %>Query.js';
+
+<% if (language === 'javascript') { %>
+export class <%= pascal %>ApplicationService {
+  constructor(repository) {
+    this.createHandler = new Create<%= pascal %>Handler(repository);
+    this.getHandler = new Get<%= pascal %>Handler(repository);
+  }
+
+  create(email) {
+    return this.createHandler.execute(new Create<%= pascal %>Command(email));
+  }
+
+  getById(id) {
+    return this.getHandler.execute(new Get<%= pascal %>Query(id));
+  }
+}
+<% } else { %>
+import type { I<%= pascal %>Repository } from '../../infrastructure/database/interfaces/I<%= pascal %>Repository.js';
+import type { <%= pascal %> } from '../../domain/<%= kebab %>/entities/<%= pascal %>.js';
+
+export class <%= pascal %>ApplicationService {
+  private readonly createHandler: Create<%= pascal %>Handler;
+  private readonly getHandler: Get<%= pascal %>Handler;
+
+  constructor(repository: I<%= pascal %>Repository) {
+    this.createHandler = new Create<%= pascal %>Handler(repository);
+    this.getHandler = new Get<%= pascal %>Handler(repository);
+  }
+
+  create(email: string): Promise<{ id: string }> {
+    return this.createHandler.execute(new Create<%= pascal %>Command(email));
+  }
+
+  getById(id: string): Promise<<%= pascal %> | null> {
+    return this.getHandler.execute(new Get<%= pascal %>Query(id));
+  }
+}
+<% } %>

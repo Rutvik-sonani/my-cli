@@ -1,0 +1,39 @@
+# Security — <%= appName %>
+
+Enterprise security platform: headers, CORS, CSRF, rate limiting, sanitization, and validation.
+
+## Layout
+
+```
+src/security/
+  headers/
+  cors/
+  csrf/
+  rate-limit/
+  sanitization/
+  validation/
+tests/security/
+SECURITY.md
+```
+
+## CLI
+
+```bash
+my security setup
+my security scan
+my security audit
+my security scan-secrets
+```
+
+## Usage
+
+```ts
+import { registerSecurity, sanitizeUserInput, assertCsrfToken } from './src/security/index.js';
+
+await registerSecurity(app);
+const clean = sanitizeUserInput(req.body.comment);
+```
+
+## Scanner
+
+`my security scan` writes `security-report.md` covering dependencies, secrets, configuration, OWASP risks, and licenses.

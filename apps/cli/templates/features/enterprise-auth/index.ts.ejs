@@ -1,0 +1,8 @@
+export type { IdentityProvider, IdentityUser } from './identity-provider.interface.js';
+export { IdentityService } from './identity.service.js';
+export * from './providers/index.js';
+export * from './strategies/index.js';
+export { identityGuard } from './guards/identity.guard.js';
+export { sessionGuard } from './guards/session.guard.js';
+export { SessionService } from './sessions/session.service.js';
+export { createIdentityRegistry, identityService } from './register-identity.js';

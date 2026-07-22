@@ -1,0 +1,28 @@
+# <%= appName %> — Microservice Architecture
+
+Independently deployable services with explicit contracts.
+
+## Layout
+
+```
+services/
+  api-gateway/     # edge routing
+  <service-name>/  # one folder per service
+shared/
+  contracts/       # DTOs, event schemas
+  kernel/          # shared types
+  infrastructure/  # service mesh, tracing config
+```
+
+## Communication
+
+- Synchronous: HTTP/gRPC via API gateway
+- Asynchronous: message bus (`my add queue` / Phase 4 event system)
+
+Services **must not** import each other's internal code — only `shared/contracts`.
+
+## Local development
+
+```bash
+docker compose -f docker-compose.services.yml up
+```

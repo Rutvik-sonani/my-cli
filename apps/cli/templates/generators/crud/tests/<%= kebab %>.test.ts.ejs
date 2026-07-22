@@ -1,0 +1,23 @@
+import { describe, expect, it } from 'vitest';
+import { <%= pascal %>Repository } from '../<%= kebab %>.repository.js';
+import { <%= pascal %>Service } from '../<%= kebab %>.service.js';
+import { seed<%= pascal %> } from '../<%= kebab %>.seeder.js';
+
+describe('<%= pascal %> CRUD', () => {
+  it('creates an entity via repository', async () => {
+    const repo = new <%= pascal %>Repository();
+    const created = await repo.create({
+<% fields.forEach(function(field) { %>
+      <%= field.propertyName %>: <%= field.sampleValue %>,
+<% }); %>
+    } as never);
+    expect(created.id).toBeTruthy();
+  });
+
+  it('seeds and lists via service', async () => {
+    const repo = new <%= pascal %>Repository();
+    const service = new <%= pascal %>Service(repo);
+    await seed<%= pascal %>(repo);
+    expect(await service.findAll()).toHaveLength(1);
+  });
+});

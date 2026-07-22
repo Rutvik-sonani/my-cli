@@ -1,0 +1,44 @@
+<% if (language === 'javascript') { %>
+/**
+ * Migration / upgrade types for <%= appName %>
+ * @typedef {'cli'|'plugin'|'template'|'project'} UpgradeScope
+ * @typedef {'applied'|'skipped'|'planned'|'failed'} UpgradeActionStatus
+ */
+
+export {};
+<% } else { %>
+/**
+ * Migration / upgrade types for <%= appName %>
+ */
+export type UpgradeScope = 'cli' | 'plugin' | 'template' | 'project';
+export type UpgradeActionStatus = 'applied' | 'skipped' | 'planned' | 'failed';
+
+export interface UpgradeAction {
+  id: string;
+  scope: UpgradeScope;
+  description: string;
+  status: UpgradeActionStatus;
+  created?: string[];
+  skipped?: string[];
+  reason?: string;
+}
+
+export interface UpgradeReportSummary {
+  applied: number;
+  skipped: number;
+  planned: number;
+  failed: number;
+}
+
+export interface UpgradeReport {
+  id: string;
+  generatedAt: Date;
+  projectName: string;
+  fromVersion: string;
+  toVersion: string;
+  scopes: UpgradeScope[];
+  dryRun: boolean;
+  actions: UpgradeAction[];
+  summary: UpgradeReportSummary;
+}
+<% } %>

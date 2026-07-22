@@ -1,0 +1,42 @@
+<% if (language === 'javascript') { %>
+import { OrganizationStore } from './organization.store.js';
+import { OrganizationService } from './services/organization.service.js';
+import { TeamService } from './services/team.service.js';
+import { MemberService } from './services/member.service.js';
+import { ProjectService } from './services/project.service.js';
+import { PermissionService } from './services/permission.service.js';
+
+export class OrganizationPlatform {
+  constructor(store = new OrganizationStore()) {
+    this.store = store;
+    this.organizations = new OrganizationService(store);
+    this.teams = new TeamService(store);
+    this.members = new MemberService(store);
+    this.projects = new ProjectService(store);
+    this.permissions = new PermissionService(store);
+  }
+}
+<% } else { %>
+import { OrganizationStore } from './organization.store.js';
+import { OrganizationService } from './services/organization.service.js';
+import { TeamService } from './services/team.service.js';
+import { MemberService } from './services/member.service.js';
+import { ProjectService } from './services/project.service.js';
+import { PermissionService } from './services/permission.service.js';
+
+export class OrganizationPlatform {
+  readonly organizations: OrganizationService;
+  readonly teams: TeamService;
+  readonly members: MemberService;
+  readonly projects: ProjectService;
+  readonly permissions: PermissionService;
+
+  constructor(store: OrganizationStore = new OrganizationStore()) {
+    this.organizations = new OrganizationService(store);
+    this.teams = new TeamService(store);
+    this.members = new MemberService(store);
+    this.projects = new ProjectService(store);
+    this.permissions = new PermissionService(store);
+  }
+}
+<% } %>

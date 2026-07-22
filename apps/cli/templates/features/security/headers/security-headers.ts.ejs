@@ -1,0 +1,25 @@
+<% if (language === 'javascript') { %>
+export function getSecurityHeadersConfig() {
+  return {
+    contentSecurityPolicy: process.env.HELMET_ENABLED !== 'false',
+    frameguard: true,
+    hidePoweredBy: true,
+    hsts: process.env.NODE_ENV === 'production',
+    noSniff: true,
+    xssFilter: true,
+  };
+}
+<% } else { %>
+import type { SecurityHeadersConfig } from '../security.types.js';
+
+export function getSecurityHeadersConfig(): SecurityHeadersConfig {
+  return {
+    contentSecurityPolicy: process.env.HELMET_ENABLED !== 'false',
+    frameguard: true,
+    hidePoweredBy: true,
+    hsts: process.env.NODE_ENV === 'production',
+    noSniff: true,
+    xssFilter: true,
+  };
+}
+<% } %>

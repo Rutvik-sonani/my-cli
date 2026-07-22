@@ -1,0 +1,78 @@
+<% if (language === 'javascript') { %>
+export class JsonEventSerializer {
+  serialize(envelope) {
+    return JSON.stringify({
+      id: envelope.id,
+      type: envelope.type,
+      version: envelope.version,
+      payload: envelope.payload,
+      occurredAt: envelope.occurredAt.toISOString(),
+      metadata: envelope.metadata,
+    });
+  }
+
+  deserialize(raw) {
+    const parsed = JSON.parse(raw);
+    return {
+      ...parsed,
+      occurredAt: new Date(parsed.occurredAt),
+    };
+  }
+}
+
+export function createEventEnvelope(type, payload, options = {}) {
+  return {
+    id: crypto.randomUUID(),
+    type,
+    version: options.version ?? Number(process.env.EVENTS_DEFAULT_VERSION ?? 1),
+    payload,
+    occurredAt: new Date(),
+    metadata: options.metadata,
+  };
+}
+<% } else { %>
+export interface EventEnvelope<T = unknown> {
+  readonly id: string;
+  readonly type: string;
+  readonly version: number;
+  readonly payload: T;
+  readonly occurredAt: Date;
+  readonly metadata?: Record<string, string>;
+}
+
+export class JsonEventSerializer {
+  serialize<T>(envelope: EventEnvelope<T>): string {
+    return JSON.stringify({
+      id: envelope.id,
+      type: envelope.type,
+      version: envelope.version,
+      payload: envelope.payload,
+      occurredAt: envelope.occurredAt.toISOString(),
+      metadata: envelope.metadata,
+    });
+  }
+
+  deserialize<T>(raw: string): EventEnvelope<T> {
+    const parsed = JSON.parse(raw) as Omit<EventEnvelope<T>, 'occurredAt'> & { occurredAt: string };
+    return {
+      ...parsed,
+      occurredAt: new Date(parsed.occurredAt),
+    };
+  }
+}
+
+export function createEventEnvelope<T>(
+  type: string,
+  payload: T,
+  options: { version?: number; metadata?: Record<string, string> } = {},
+): EventEnvelope<T> {
+  return {
+    id: crypto.randomUUID(),
+    type,
+    version: options.version ?? Number(process.env.EVENTS_DEFAULT_VERSION ?? 1),
+    payload,
+    occurredAt: new Date(),
+    metadata: options.metadata,
+  };
+}
+<% } %>

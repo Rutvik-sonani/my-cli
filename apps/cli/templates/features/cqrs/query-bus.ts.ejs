@@ -1,0 +1,94 @@
+<% if (language === 'javascript') { %>
+export class QueryBusError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'QueryBusError';
+  }
+}
+
+export class QueryBus {
+  constructor() {
+    this.handlers = new Map();
+    this.middleware = [];
+  }
+
+  use(middleware) {
+    this.middleware.push(middleware);
+    return this;
+  }
+
+  register(type, handler) {
+    this.handlers.set(type, handler);
+    return this;
+  }
+
+  has(type) {
+    return this.handlers.has(type);
+  }
+
+  async execute(query) {
+    const handler = this.handlers.get(query.type);
+    if (!handler) {
+      throw new QueryBusError(`No handler registered for query: ${query.type}`);
+    }
+
+    let index = 0;
+    const dispatch = async () => {
+      if (index < this.middleware.length) {
+        const middleware = this.middleware[index++];
+        return middleware(query, dispatch);
+      }
+      return handler(query);
+    };
+
+    return dispatch();
+  }
+}
+<% } else { %>
+export class QueryBusError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'QueryBusError';
+  }
+}
+
+export type QueryHandler<Q extends { type: string }, R = unknown> = (query: Q) => Promise<R> | R;
+export type BusMiddleware<T> = (message: T, next: () => Promise<unknown>) => Promise<unknown>;
+
+export class QueryBus {
+  private readonly handlers = new Map<string, QueryHandler<{ type: string }, unknown>>();
+  private readonly middleware: BusMiddleware<{ type: string }>[] = [];
+
+  use(middleware: BusMiddleware<{ type: string }>): this {
+    this.middleware.push(middleware);
+    return this;
+  }
+
+  register<Q extends { type: string }, R>(type: string, handler: QueryHandler<Q, R>): this {
+    this.handlers.set(type, handler as QueryHandler<{ type: string }, unknown>);
+    return this;
+  }
+
+  has(type: string): boolean {
+    return this.handlers.has(type);
+  }
+
+  async execute<Q extends { type: string }, R>(query: Q): Promise<R> {
+    const handler = this.handlers.get(query.type);
+    if (!handler) {
+      throw new QueryBusError(`No handler registered for query: ${query.type}`);
+    }
+
+    let index = 0;
+    const dispatch = async (): Promise<R> => {
+      if (index < this.middleware.length) {
+        const middleware = this.middleware[index++]!;
+        return (await middleware(query, dispatch)) as R;
+      }
+      return (await handler(query)) as R;
+    };
+
+    return dispatch();
+  }
+}
+<% } %>

@@ -1,0 +1,45 @@
+<% if (language === 'javascript') { %>
+import { SearchService } from './search.service.js';
+import { DocumentIndexer } from './indexer/document-indexer.js';
+<% if (isElasticsearch) { -%>
+import { ElasticsearchSearchAdapter } from './adapter/elasticsearch.adapter.js';
+const provider = new ElasticsearchSearchAdapter();
+<% } else if (isAlgolia) { -%>
+import { AlgoliaSearchAdapter } from './adapter/algolia.adapter.js';
+const provider = new AlgoliaSearchAdapter();
+<% } else { -%>
+import { MeilisearchSearchAdapter } from './adapter/meilisearch.adapter.js';
+const provider = new MeilisearchSearchAdapter();
+<% } -%>
+
+export const searchProvider = provider;
+export const search = new SearchService(provider);
+export const indexer = new DocumentIndexer(search);
+
+export async function registerSearch() {
+  await searchProvider.connect();
+  return search;
+}
+<% } else { %>
+import { SearchService } from './search.service.js';
+import { DocumentIndexer } from './indexer/document-indexer.js';
+<% if (isElasticsearch) { -%>
+import { ElasticsearchSearchAdapter } from './adapter/elasticsearch.adapter.js';
+const provider = new ElasticsearchSearchAdapter();
+<% } else if (isAlgolia) { -%>
+import { AlgoliaSearchAdapter } from './adapter/algolia.adapter.js';
+const provider = new AlgoliaSearchAdapter();
+<% } else { -%>
+import { MeilisearchSearchAdapter } from './adapter/meilisearch.adapter.js';
+const provider = new MeilisearchSearchAdapter();
+<% } -%>
+
+export const searchProvider = provider;
+export const search = new SearchService(provider);
+export const indexer = new DocumentIndexer(search);
+
+export async function registerSearch(): Promise<SearchService> {
+  await searchProvider.connect();
+  return search;
+}
+<% } %>

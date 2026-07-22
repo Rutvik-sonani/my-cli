@@ -1,0 +1,25 @@
+export { Tenant } from './entities/Tenant.js';
+export { tenantRepository, InMemoryTenantRepository } from './repositories/tenant.repository.js';
+export {
+  getTenantId,
+  getTenantSlug,
+  getTenantSchema,
+  getTenantDatabaseUrl,
+  runWithTenant,
+  setTenantContext,
+} from './tenant.context.js';
+export { registerTenancyMiddleware } from './tenant.middleware.js';
+export * from './tenant.resolver.js';
+export { bootstrapTenancy } from './register-tenancy.js';
+<% if (model === 'multi-tenant-saas' && strategy === 'shared-db') { %>
+export { applyTenantFilter, withTenantId } from './tenant-filter.js';
+<% } %>
+<% if (model === 'multi-tenant-saas' && strategy === 'schema-per-tenant') { %>
+export { SchemaManager } from './schema/schema-manager.js';
+export { TenantSchemaService } from './schema/tenant-schema.service.js';
+<% } %>
+<% if (model === 'multi-tenant-saas' && strategy === 'db-per-tenant') { %>
+export { TenantConnectionManager } from './database/tenant-connection-manager.js';
+export { TenantProvisioningService } from './database/tenant-provisioning.service.js';
+export { TenantMigrationRunner } from './database/tenant-migration-runner.js';
+<% } %>

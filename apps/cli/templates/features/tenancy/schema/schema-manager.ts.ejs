@@ -1,0 +1,61 @@
+<% if (language === 'javascript') { %>
+import { resolveTenantSchema } from '../tenant.resolver.js';
+
+export class SchemaManager {
+  constructor(client) {
+    this.client = client;
+  }
+
+  async createSchema(tenantId) {
+    const schema = resolveTenantSchema(tenantId);
+    await this.client.query(`CREATE SCHEMA IF NOT EXISTS "${schema}"`);
+    return schema;
+  }
+
+  async setSearchPath(tenantId) {
+    const schema = resolveTenantSchema(tenantId);
+    await this.client.query(`SET search_path TO "${schema}", public`);
+    return schema;
+  }
+
+  async runTenantMigrations(tenantId, sqlStatements) {
+    const schema = await this.createSchema(tenantId);
+    await this.setSearchPath(tenantId);
+    for (const sql of sqlStatements) {
+      await this.client.query(sql);
+    }
+    return schema;
+  }
+}
+<% } else { %>
+import { resolveTenantSchema } from '../tenant.resolver.js';
+
+export interface SqlClient {
+  query(sql: string, params?: unknown[]): Promise<unknown>;
+}
+
+export class SchemaManager {
+  constructor(private readonly client: SqlClient) {}
+
+  async createSchema(tenantId: string): Promise<string> {
+    const schema = resolveTenantSchema(tenantId);
+    await this.client.query(`CREATE SCHEMA IF NOT EXISTS "${schema}"`);
+    return schema;
+  }
+
+  async setSearchPath(tenantId: string): Promise<string> {
+    const schema = resolveTenantSchema(tenantId);
+    await this.client.query(`SET search_path TO "${schema}", public`);
+    return schema;
+  }
+
+  async runTenantMigrations(tenantId: string, sqlStatements: string[]): Promise<string> {
+    const schema = await this.createSchema(tenantId);
+    await this.setSearchPath(tenantId);
+    for (const sql of sqlStatements) {
+      await this.client.query(sql);
+    }
+    return schema;
+  }
+}
+<% } %>

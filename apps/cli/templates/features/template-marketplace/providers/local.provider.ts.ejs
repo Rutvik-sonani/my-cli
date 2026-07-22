@@ -1,0 +1,50 @@
+<% if (language === 'javascript') { %>
+import { createBuiltinCatalog } from '../catalog/builtin-catalog.js';
+
+/**
+ * Local in-memory + builtin catalog provider.
+ */
+export class LocalCatalogProvider {
+  constructor(extra = []) {
+    this.id = 'local';
+    this.extra = extra;
+  }
+
+  async list() {
+    return [...createBuiltinCatalog(), ...this.extra];
+  }
+
+  async search(query) {
+    const all = await this.list();
+    if (!query?.trim()) return all;
+    const q = query.toLowerCase();
+    return all.filter((t) =>
+      [t.name, t.description, t.author, ...(t.tags ?? [])].join(' ').toLowerCase().includes(q),
+    );
+  }
+}
+<% } else { %>
+import type { MarketplaceTemplate } from '../marketplace.types.js';
+import type { CatalogProvider } from './catalog-provider.interface.js';
+import { createBuiltinCatalog } from '../catalog/builtin-catalog.js';
+
+/** Local in-memory + builtin catalog provider. */
+export class LocalCatalogProvider implements CatalogProvider {
+  readonly id = 'local';
+
+  constructor(private readonly extra: MarketplaceTemplate[] = []) {}
+
+  async list(): Promise<MarketplaceTemplate[]> {
+    return [...createBuiltinCatalog(), ...this.extra];
+  }
+
+  async search(query?: string): Promise<MarketplaceTemplate[]> {
+    const all = await this.list();
+    if (!query?.trim()) return all;
+    const q = query.toLowerCase();
+    return all.filter((t) =>
+      [t.name, t.description, t.author, ...(t.tags ?? [])].join(' ').toLowerCase().includes(q),
+    );
+  }
+}
+<% } %>

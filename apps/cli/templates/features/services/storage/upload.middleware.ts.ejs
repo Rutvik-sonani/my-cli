@@ -1,0 +1,18 @@
+import type { FastifyInstance, FastifyRequest } from 'fastify';
+import multipart from '@fastify/multipart';
+import { storage } from './storage.service.js';
+
+export async function registerUploadPlugin(app: FastifyInstance): Promise<void> {
+  await app.register(multipart, { limits: { fileSize: 10 * 1024 * 1024 } });
+
+  app.post('/upload', async (request: FastifyRequest) => {
+    const file = await request.file();
+    if (!file) {
+      return { error: 'No file uploaded' };
+    }
+    const buffer = await file.toBuffer();
+    const key = `uploads/${Date.now()}-${file.filename}`;
+    const result = await storage.upload(key, buffer, file.mimetype);
+    return result;
+  });
+}

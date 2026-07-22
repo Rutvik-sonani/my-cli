@@ -1,0 +1,34 @@
+import { randomBytes, scrypt as scryptCb } from 'node:crypto';
+import { promisify } from 'node:util';
+import { sequelize } from './sequelize/config.js';
+import { User } from './sequelize/models/user.model.js';
+
+const scrypt = promisify(scryptCb);
+
+async function hashPassword(password: string): Promise<string> {
+  const salt = randomBytes(16).toString('hex');
+  const derived = (await scrypt(password, salt, 64)) as Buffer;
+  return `${salt}:${derived.toString('hex')}`;
+}
+
+async function main() {
+  await sequelize.authenticate();
+  await sequelize.sync();
+<% if (includeUser) { %>
+  const [admin] = await User.findOrCreate({
+    where: { email: 'admin@example.com' },
+    defaults: {
+      name: 'Admin',
+      passwordHash: await hashPassword('Admin123!'),
+      emailVerified: true,
+    },
+  });
+  console.log('Seeded admin user:', admin.email);
+<% } %>
+  await sequelize.close();
+}
+
+main().catch(async (error) => {
+  console.error(error);
+  process.exit(1);
+});

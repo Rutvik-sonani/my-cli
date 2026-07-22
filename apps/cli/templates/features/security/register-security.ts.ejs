@@ -1,0 +1,15 @@
+<% if (language === 'javascript') { %>
+import { registerSecurityPlugins } from './security.plugin.js';
+
+export async function registerSecurity(app) {
+  return registerSecurityPlugins(app);
+}
+<% } else { %>
+import { registerSecurityPlugins } from './security.plugin.js';
+
+export async function registerSecurity(app?: {
+  register: (plugin: unknown, opts?: Record<string, unknown>) => Promise<void>;
+}) {
+  return registerSecurityPlugins(app);
+}
+<% } %>

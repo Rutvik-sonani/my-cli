@@ -1,0 +1,22 @@
+<% if (language === 'javascript') { %>
+/** @type {import('../compliance.types.js').CompliancePolicy} */
+export const soc2Policy = {
+  id: 'policy-soc2',
+  framework: 'soc2',
+  name: 'SOC 2 Control Policy',
+  version: '1.0.0',
+  summary:
+    '<%= appName %> maintains access control, change management, and monitoring aligned to SOC 2.',
+};
+<% } else { %>
+import type { CompliancePolicy } from '../compliance.types.js';
+
+export const soc2Policy: CompliancePolicy = {
+  id: 'policy-soc2',
+  framework: 'soc2',
+  name: 'SOC 2 Control Policy',
+  version: '1.0.0',
+  summary:
+    '<%= appName %> maintains access control, change management, and monitoring aligned to SOC 2.',
+};
+<% } %>

@@ -1,0 +1,17 @@
+<% if (language === 'javascript') { %>
+export class <%= pascal %>Query {
+  static type = '<%= kebab %>.read';
+
+  constructor(criteria = {}) {
+    this.type = <%= pascal %>Query.type;
+    this.criteria = criteria;
+  }
+}
+<% } else { %>
+export class <%= pascal %>Query {
+  static readonly type = '<%= kebab %>.read' as const;
+  readonly type = <%= pascal %>Query.type;
+
+  constructor(public readonly criteria: Record<string, unknown> = {}) {}
+}
+<% } %>

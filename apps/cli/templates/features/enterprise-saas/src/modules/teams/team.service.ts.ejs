@@ -1,0 +1,21 @@
+export interface Team {
+  id: string;
+  organizationId: string;
+  name: string;
+  createdAt: Date;
+}
+
+export class TeamService {
+  async listByOrganization(organizationId: string): Promise<Team[]> {
+    return [];
+  }
+
+  async create(input: { organizationId: string; name: string }): Promise<Team> {
+    return {
+      id: crypto.randomUUID(),
+      organizationId: input.organizationId,
+      name: input.name,
+      createdAt: new Date(),
+    };
+  }
+}

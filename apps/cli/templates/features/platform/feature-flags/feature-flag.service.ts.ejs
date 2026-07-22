@@ -1,0 +1,31 @@
+import { readFile } from 'node:fs/promises';
+
+type FlagMap = Record<string, boolean>;
+
+export class FeatureFlagService {
+  private flags: FlagMap = {};
+
+  async load(): Promise<void> {
+    const path = process.env.FEATURE_FLAGS_PATH ?? 'config/feature-flags.json';
+    try {
+      const raw = await readFile(path, 'utf8');
+      this.flags = JSON.parse(raw) as FlagMap;
+    } catch {
+      this.flags = {};
+    }
+  }
+
+  isEnabled(flag: string): boolean {
+    return Boolean(this.flags[flag]);
+  }
+
+  set(flag: string, enabled: boolean): void {
+    this.flags[flag] = enabled;
+  }
+
+  all(): FlagMap {
+    return { ...this.flags };
+  }
+}
+
+export const featureFlags = new FeatureFlagService();

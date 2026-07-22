@@ -1,0 +1,19 @@
+# Database Backups — <%= appName %>
+
+MyCLI can create database backups using native tools for your configured engine (`<%= database %>`).
+
+## Commands
+
+```bash
+my backup run              # Create a backup in ./backups
+my backup run --dry-run    # Preview commands without executing
+my backup list             # List existing backups
+```
+
+## Environment
+
+Set `DATABASE_URL` in `.env` before running backups.
+
+## Restore
+
+Restore procedures depend on your database engine — consult your provider documentation and test restores regularly.

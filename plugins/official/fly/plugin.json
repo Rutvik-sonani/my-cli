@@ -1,0 +1,11 @@
+{
+  "name": "@mycli/fly",
+  "version": "1.0.0",
+  "description": "Official MyCLI fly plugin",
+  "main": "dist/index.js",
+  "compatibility": ">=1.0.0",
+  "author": "MyCLI",
+  "slug": "fly",
+  "npmPackage": "@mycli/plugin-fly",
+  "keywords": ["fly", "mycli"]
+}

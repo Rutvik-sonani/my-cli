@@ -1,0 +1,34 @@
+# CQRS — <%= appName %>
+
+Command Query Responsibility Segregation is enabled for this project.
+
+## Layout
+
+- `src/cqrs/` — CommandBus, QueryBus, EventBus, middleware, handler registration
+- `src/application/commands/` — write-side commands + handlers
+- `src/application/queries/` — read-side queries + handlers
+- `src/application/events/` — integration/domain events
+
+## Usage
+
+```ts
+import { commandBus, queryBus, registerCqrsHandlers } from './src/cqrs/index.js';
+import { CreateUserCommand } from './src/application/commands/CreateUserCommand.js';
+import { GetUserQuery } from './src/application/queries/GetUserQuery.js';
+
+registerCqrsHandlers();
+
+const user = await commandBus.execute(new CreateUserCommand('demo@example.com'));
+const found = await queryBus.execute(new GetUserQuery(user.id));
+```
+
+## Generate more
+
+```bash
+my make command create-order
+my make query list-orders
+```
+
+## Middleware
+
+Logging and validation middleware are registered in `register-handlers.ts`. Extend with your own validators or cross-cutting concerns.

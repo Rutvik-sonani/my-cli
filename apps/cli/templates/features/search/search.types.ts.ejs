@@ -1,0 +1,49 @@
+<% if (language === 'javascript') { %>
+/** @typedef {'elasticsearch'|'meilisearch'|'algolia'} SearchProviderId */
+
+/**
+ * @typedef {Object} SearchDocument
+ * @property {string} id
+ */
+
+/**
+ * @typedef {Object} SearchQueryOptions
+ * @property {number} [limit]
+ * @property {number} [offset]
+ * @property {Record<string, string|number|boolean>} [filter]
+ */
+
+/**
+ * @typedef {Object} SearchResult
+ * @property {string} query
+ * @property {Array<{ document: object, score: number }>} hits
+ * @property {number} total
+ * @property {number} tookMs
+ */
+<% } else { %>
+export type SearchProviderId = 'elasticsearch' | 'meilisearch' | 'algolia';
+
+export interface SearchDocument {
+  id: string;
+  [key: string]: unknown;
+}
+
+export interface SearchQueryOptions {
+  limit?: number;
+  offset?: number;
+  filter?: Record<string, string | number | boolean>;
+  attributesToRetrieve?: string[];
+}
+
+export interface SearchHit<T extends SearchDocument = SearchDocument> {
+  document: T;
+  score: number;
+}
+
+export interface SearchResult<T extends SearchDocument = SearchDocument> {
+  query: string;
+  hits: SearchHit<T>[];
+  total: number;
+  tookMs: number;
+}
+<% } %>

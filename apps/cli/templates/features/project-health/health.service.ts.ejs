@@ -1,0 +1,90 @@
+<% if (language === 'javascript') { %>
+import { analyzeArchitecture, analyzeSecurity } from './analyzers/index.js';
+import { createReportService } from './reports/report.service.js';
+
+/**
+ * Project health service for <%= appName %>.
+ */
+export class HealthService {
+  constructor() {
+    this.reports = createReportService();
+  }
+
+  analyze(snapshot) {
+    const findings = [
+      ...analyzeArchitecture(snapshot),
+      ...analyzeSecurity(snapshot),
+    ];
+    const summary = { pass: 0, warn: 0, fail: 0, info: 0 };
+    for (const f of findings) summary[f.status] += 1;
+    const score = Math.round(
+      ((summary.pass * 100 + summary.warn * 55 + summary.fail * 15) /
+        Math.max(1, findings.length)),
+    );
+    return {
+      id: 'local-health',
+      generatedAt: new Date(),
+      projectName: snapshot.projectName ?? '<%= appName %>',
+      findings,
+      summary,
+      score,
+      readyForProduction: summary.fail === 0 && score >= 70,
+    };
+  }
+
+  render(report) {
+    return this.reports.renderMarkdown(report);
+  }
+}
+
+export function createHealthService() {
+  return new HealthService();
+}
+<% } else { %>
+import type { HealthFinding, ProjectHealthReport } from './health.types.js';
+import { analyzeArchitecture, analyzeSecurity } from './analyzers/index.js';
+import { createReportService, ReportService } from './reports/report.service.js';
+
+/** Project health service for <%= appName %>. */
+export class HealthService {
+  private readonly reports: ReportService;
+
+  constructor() {
+    this.reports = createReportService();
+  }
+
+  analyze(snapshot: {
+    projectName?: string;
+    architectureStyle?: string;
+    features?: Record<string, boolean>;
+    existingPaths?: string[];
+  }): ProjectHealthReport {
+    const findings: HealthFinding[] = [
+      ...analyzeArchitecture(snapshot),
+      ...analyzeSecurity(snapshot),
+    ];
+    const summary = { pass: 0, warn: 0, fail: 0, info: 0 };
+    for (const f of findings) summary[f.status] += 1;
+    const score = Math.round(
+      (summary.pass * 100 + summary.warn * 55 + summary.fail * 15) / Math.max(1, findings.length),
+    );
+    return {
+      id: 'local-health',
+      generatedAt: new Date(),
+      projectName: snapshot.projectName ?? '<%= appName %>',
+      findings,
+      summary,
+      score,
+      readyForProduction: summary.fail === 0 && score >= 70,
+    };
+  }
+
+  render(report: ProjectHealthReport): string {
+    return this.reports.renderMarkdown(report);
+  }
+}
+
+export function createHealthService(): HealthService {
+  return new HealthService();
+}
+<% } %>

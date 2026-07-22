@@ -1,0 +1,21 @@
+import { describe, expect, it } from 'vitest';
+import {
+  createBuiltinCatalog,
+  registerTemplateMarketplace,
+} from '../../src/template-marketplace/index.js';
+
+describe('template marketplace', () => {
+  it('lists builtin public templates', () => {
+    const catalog = createBuiltinCatalog();
+    expect(catalog.map((t) => t.name)).toEqual(
+      expect.arrayContaining(['api-crud', 'auth-jwt', 'acme-service']),
+    );
+  });
+
+  it('searches by query', async () => {
+    const service = registerTemplateMarketplace();
+    const result = await service.search('jwt');
+    expect(result.total).toBeGreaterThan(0);
+    expect(result.templates[0]?.name).toBe('auth-jwt');
+  });
+});

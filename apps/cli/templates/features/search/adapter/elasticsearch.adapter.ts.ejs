@@ -1,0 +1,146 @@
+<% if (language === 'javascript') { %>
+import { MemorySearchAdapter } from './memory.adapter.js';
+
+/**
+ * Elasticsearch adapter for <%= appName %>.
+ * Uses @elastic/elasticsearch when available; falls back to memory.
+ */
+export class ElasticsearchSearchAdapter {
+  constructor() {
+    this.id = 'elasticsearch';
+    this.fallback = new MemorySearchAdapter('elasticsearch');
+    this.indexName = process.env.SEARCH_INDEX ?? '<%= appName %>';
+    this.client = null;
+  }
+
+  async connect() {
+    try {
+      const { Client } = await import('@elastic/elasticsearch');
+      this.client = new Client({
+        node: process.env.ELASTICSEARCH_URL ?? 'http://localhost:9200',
+      });
+    } catch {
+      this.client = null;
+    }
+    await this.fallback.connect();
+  }
+
+  async disconnect() {
+    this.client = null;
+    await this.fallback.disconnect();
+  }
+
+  async index(documents) {
+    if (!this.client) return this.fallback.index(documents);
+    const list = Array.isArray(documents) ? documents : [documents];
+    for (const doc of list) {
+      await this.client.index({ index: this.indexName, id: doc.id, document: doc });
+    }
+  }
+
+  async delete(id) {
+    if (!this.client) return this.fallback.delete(id);
+    await this.client.delete({ index: this.indexName, id });
+    return true;
+  }
+
+  async search(query, options = {}) {
+    if (!this.client) return this.fallback.search(query, options);
+    const result = await this.client.search({
+      index: this.indexName,
+      q: query,
+      size: options.limit ?? 20,
+      from: options.offset ?? 0,
+    });
+    return {
+      query,
+      hits: result.hits.hits.map((hit) => ({
+        document: { id: hit._id, ...(hit._source ?? {}) },
+        score: hit._score ?? 0,
+      })),
+      total: typeof result.hits.total === 'number' ? result.hits.total : result.hits.total?.value ?? 0,
+      tookMs: result.took ?? 0,
+    };
+  }
+}
+<% } else { %>
+import type { SearchProvider } from '../search-provider.interface.js';
+import type {
+  SearchDocument,
+  SearchProviderId,
+  SearchQueryOptions,
+  SearchResult,
+} from '../search.types.js';
+import { MemorySearchAdapter } from './memory.adapter.js';
+
+/**
+ * Elasticsearch adapter for <%= appName %>.
+ * Uses @elastic/elasticsearch when available; falls back to memory.
+ */
+export class ElasticsearchSearchAdapter implements SearchProvider {
+  readonly id: SearchProviderId = 'elasticsearch';
+  private readonly fallback = new MemorySearchAdapter('elasticsearch');
+  private readonly indexName = process.env.SEARCH_INDEX ?? '<%= appName %>';
+  private client: {
+    index: (args: Record<string, unknown>) => Promise<unknown>;
+    delete: (args: Record<string, unknown>) => Promise<unknown>;
+    search: (args: Record<string, unknown>) => Promise<any>;
+  } | null = null;
+
+  async connect(): Promise<void> {
+    try {
+      const { Client } = await import('@elastic/elasticsearch');
+      this.client = new Client({
+        node: process.env.ELASTICSEARCH_URL ?? 'http://localhost:9200',
+      });
+    } catch {
+      this.client = null;
+    }
+    await this.fallback.connect();
+  }
+
+  async disconnect(): Promise<void> {
+    this.client = null;
+    await this.fallback.disconnect();
+  }
+
+  async index(documents: SearchDocument | SearchDocument[]): Promise<void> {
+    if (!this.client) return this.fallback.index(documents);
+    const list = Array.isArray(documents) ? documents : [documents];
+    for (const doc of list) {
+      await this.client.index({ index: this.indexName, id: doc.id, document: doc });
+    }
+  }
+
+  async delete(id: string): Promise<boolean> {
+    if (!this.client) return this.fallback.delete(id);
+    await this.client.delete({ index: this.indexName, id });
+    return true;
+  }
+
+  async search<T extends SearchDocument = SearchDocument>(
+    query: string,
+    options: SearchQueryOptions = {},
+  ): Promise<SearchResult<T>> {
+    if (!this.client) return this.fallback.search<T>(query, options);
+    const result = await this.client.search({
+      index: this.indexName,
+      q: query,
+      size: options.limit ?? 20,
+      from: options.offset ?? 0,
+    });
+    return {
+      query,
+      hits: result.hits.hits.map((hit: { _id: string; _source?: T; _score?: number }) => ({
+        document: { id: hit._id, ...(hit._source ?? {}) } as T,
+        score: hit._score ?? 0,
+      })),
+      total:
+        typeof result.hits.total === 'number'
+          ? result.hits.total
+          : (result.hits.total?.value ?? 0),
+      tookMs: result.took ?? 0,
+    };
+  }
+}
+<% } %>

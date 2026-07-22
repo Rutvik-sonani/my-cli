@@ -1,0 +1,11 @@
+{
+  "name": "@community/hello-mycli",
+  "version": "1.0.0",
+  "description": "Example community plugin for MyCLI marketplace",
+  "main": "dist/index.js",
+  "compatibility": ">=1.0.0",
+  "author": "MyCLI Community",
+  "slug": "hello-mycli",
+  "npmPackage": "@community/plugin-hello-mycli",
+  "keywords": ["example", "community", "mycli"]
+}

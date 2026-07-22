@@ -1,0 +1,57 @@
+import { OtpRepository } from './otp.repository.js';
+
+export class OtpService {
+  private readonly repo = new OtpRepository();
+
+  async send(destination: string): Promise<{ sent: boolean; devCode?: string }> {
+    const code = await this.repo.create(destination);
+    const delivered = await this.deliverCode(destination, code);
+    return {
+      sent: delivered.sent,
+      devCode: delivered.logged ? code : undefined,
+    };
+  }
+
+  async verify(destination: string, code: string): Promise<boolean> {
+    return this.repo.verify(destination, code);
+  }
+
+  private async deliverCode(
+    destination: string,
+    code: string,
+  ): Promise<{ sent: boolean; logged: boolean }> {
+    const shouldSend =
+      process.env.NODE_ENV === 'production' || Boolean(process.env.MAIL_PROVIDER);
+
+    if (!shouldSend) {
+      console.info(`[otp] code for ${destination}: ${code}`);
+      return { sent: false, logged: true };
+    }
+
+    const isEmail = destination.includes('@');
+
+    try {
+      const { mail } = await import('../../services/mail/index.js');
+      if (isEmail) {
+        await mail.send({
+          to: destination,
+          subject: 'Your verification code',
+          html: `<p>Your verification code is <strong>${code}</strong></p>`,
+          text: `Your verification code is ${code}`,
+        });
+      } else {
+        console.info(`[otp] SMS delivery not configured — code for ${destination}: ${code}`);
+        return { sent: false, logged: true };
+      }
+      return { sent: true, logged: false };
+    } catch {
+      if (process.env.NODE_ENV !== 'production') {
+        console.info(`[otp] code for ${destination}: ${code}`);
+        return { sent: false, logged: true };
+      }
+      throw new Error(
+        'Mail service is required for OTP delivery in production. Run `my add mail` and configure MAIL_PROVIDER.',
+      );
+    }
+  }
+}

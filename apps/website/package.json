@@ -1,0 +1,19 @@
+{
+  "name": "@mycli/website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MyCLI documentation website",
+  "type": "module",
+  "scripts": {
+    "dev": "node ./scripts/dev.mjs",
+    "build": "node ./scripts/build.mjs",
+    "start": "node ./scripts/start.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}

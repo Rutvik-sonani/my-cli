@@ -1,0 +1,30 @@
+services:
+  app:
+    build:
+      context: .
+      target: runner
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "<%= port %>:<%= port %>"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+<% if (database === 'postgres') { %>
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: <%= appName %>
+      POSTGRES_PASSWORD: <%= appName %>
+      POSTGRES_DB: <%= appName %>
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+<% } %>
+
+volumes:
+<% if (database === 'postgres') { %>  postgres_data:
+<% } %>

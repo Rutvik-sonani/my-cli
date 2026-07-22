@@ -1,0 +1,30 @@
+<% if (language === 'javascript') { %>
+export class GetUserHandler {
+  constructor(store) {
+    this.store = store;
+  }
+
+  async handle(query) {
+    const user = this.store.get(query.id);
+    if (!user) {
+      throw new Error(`User not found: ${query.id}`);
+    }
+    return user;
+  }
+}
+<% } else { %>
+import type { GetUserQuery } from '../GetUserQuery.js';
+import type { UserRecord } from '../../commands/handlers/CreateUserHandler.js';
+
+export class GetUserHandler {
+  constructor(private readonly store: Map<string, UserRecord>) {}
+
+  async handle(query: GetUserQuery): Promise<UserRecord> {
+    const user = this.store.get(query.id);
+    if (!user) {
+      throw new Error(`User not found: ${query.id}`);
+    }
+    return user;
+  }
+}
+<% } %>

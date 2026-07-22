@@ -1,0 +1,45 @@
+{
+  "name": "@mycli/cli-engine",
+  "version": "1.0.0",
+  "description": "MyCLI cli-engine package",
+  "type": "module",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage --passWithNoTests",
+    "clean": "rm -rf dist coverage"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "@mycli/core": "workspace:*",
+    "@mycli/command-engine": "workspace:*",
+    "@mycli/prompt-engine": "workspace:*",
+    "@mycli/config-manager": "workspace:*",
+    "@mycli/plugin-system": "workspace:*",
+    "@mycli/filesystem": "workspace:*",
+    "@mycli/telemetry-manager": "workspace:*",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8",
+    "@types/node": "^22.10.5"
+  }
+}

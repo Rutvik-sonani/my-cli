@@ -1,0 +1,19 @@
+<% if (language === 'javascript') { %>
+export async function authenticateOidc(provider, { code, redirectUri, nonce }) {
+  return provider.verifyCallback({ code, redirectUri, nonce });
+}
+<% } else { %>
+export interface OidcInput {
+  code: string;
+  redirectUri: string;
+  nonce?: string;
+}
+
+export interface OidcVerifier {
+  verifyCallback(input: OidcInput): Promise<{ id: string; email?: string; name?: string; claims: Record<string, unknown> }>;
+}
+
+export async function authenticateOidc(provider: OidcVerifier, input: OidcInput) {
+  return provider.verifyCallback(input);
+}
+<% } %>

@@ -1,0 +1,67 @@
+<% if (language === 'javascript') { %>
+import { createEventEnvelope } from './serializer.js';
+<% if (provider === 'kafka') { %>
+import { KafkaEventPublisher } from './publishers/kafka.publisher.js';
+import { KafkaEventConsumer } from './consumers/kafka.consumer.js';
+<% } else if (provider === 'rabbitmq') { %>
+import { RabbitEventPublisher } from './publishers/rabbitmq.publisher.js';
+import { RabbitEventConsumer } from './consumers/rabbitmq.consumer.js';
+<% } else if (provider === 'nats') { %>
+import { NatsEventPublisher } from './publishers/nats.publisher.js';
+import { NatsEventConsumer } from './consumers/nats.consumer.js';
+<% } else if (provider === 'eventbridge') { %>
+import { EventBridgePublisher } from './publishers/eventbridge.publisher.js';
+import { EventBridgeConsumer } from './consumers/eventbridge.consumer.js';
+<% } else { %>
+import { RedisEventPublisher } from './publishers/redis.publisher.js';
+import { RedisEventConsumer } from './consumers/redis.consumer.js';
+<% } %>
+import { UserCreatedEvent } from './events/UserCreatedEvent.js';
+import { registerUserCreatedConsumer } from './consumers/user-created.consumer.js';
+
+export const eventPublisher = <% if (provider === 'kafka') { %>new KafkaEventPublisher()<% } else if (provider === 'rabbitmq') { %>new RabbitEventPublisher()<% } else if (provider === 'nats') { %>new NatsEventPublisher()<% } else if (provider === 'eventbridge') { %>new EventBridgePublisher()<% } else { %>new RedisEventPublisher()<% } %>;
+export const eventConsumer = <% if (provider === 'kafka') { %>new KafkaEventConsumer()<% } else if (provider === 'rabbitmq') { %>new RabbitEventConsumer()<% } else if (provider === 'nats') { %>new NatsEventConsumer()<% } else if (provider === 'eventbridge') { %>new EventBridgeConsumer()<% } else { %>new RedisEventConsumer()<% } %>;
+
+export async function registerEventHandlers() {
+  registerUserCreatedConsumer(eventConsumer);
+}
+
+export async function publishUserCreated(id, email) {
+  const event = UserCreatedEvent.create(id, email);
+  const envelope = createEventEnvelope(event.type, event.payload, { version: event.version });
+  await eventPublisher.publish(envelope);
+}
+<% } else { %>
+import { createEventEnvelope } from './serializer.js';
+<% if (provider === 'kafka') { %>
+import { KafkaEventPublisher } from './publishers/kafka.publisher.js';
+import { KafkaEventConsumer } from './consumers/kafka.consumer.js';
+<% } else if (provider === 'rabbitmq') { %>
+import { RabbitEventPublisher } from './publishers/rabbitmq.publisher.js';
+import { RabbitEventConsumer } from './consumers/rabbitmq.consumer.js';
+<% } else if (provider === 'nats') { %>
+import { NatsEventPublisher } from './publishers/nats.publisher.js';
+import { NatsEventConsumer } from './consumers/nats.consumer.js';
+<% } else if (provider === 'eventbridge') { %>
+import { EventBridgePublisher } from './publishers/eventbridge.publisher.js';
+import { EventBridgeConsumer } from './consumers/eventbridge.consumer.js';
+<% } else { %>
+import { RedisEventPublisher } from './publishers/redis.publisher.js';
+import { RedisEventConsumer } from './consumers/redis.consumer.js';
+<% } %>
+import { UserCreatedEvent } from './events/UserCreatedEvent.js';
+import { registerUserCreatedConsumer } from './consumers/user-created.consumer.js';
+
+export const eventPublisher = <% if (provider === 'kafka') { %>new KafkaEventPublisher()<% } else if (provider === 'rabbitmq') { %>new RabbitEventPublisher()<% } else if (provider === 'nats') { %>new NatsEventPublisher()<% } else if (provider === 'eventbridge') { %>new EventBridgePublisher()<% } else { %>new RedisEventPublisher()<% } %>;
+export const eventConsumer = <% if (provider === 'kafka') { %>new KafkaEventConsumer()<% } else if (provider === 'rabbitmq') { %>new RabbitEventConsumer()<% } else if (provider === 'nats') { %>new NatsEventConsumer()<% } else if (provider === 'eventbridge') { %>new EventBridgeConsumer()<% } else { %>new RedisEventConsumer()<% } %>;
+
+export async function registerEventHandlers(): Promise<void> {
+  registerUserCreatedConsumer(eventConsumer);
+}
+
+export async function publishUserCreated(id: string, email: string): Promise<void> {
+  const event = UserCreatedEvent.create(id, email);
+  const envelope = createEventEnvelope(event.type, event.payload, { version: event.version });
+  await eventPublisher.publish(envelope);
+}
+<% } %>

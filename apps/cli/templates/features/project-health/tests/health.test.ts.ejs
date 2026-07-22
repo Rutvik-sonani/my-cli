@@ -1,0 +1,17 @@
+import { describe, expect, it } from 'vitest';
+import { registerProjectHealth } from '../../src/project-health/index.js';
+
+describe('project health', () => {
+  it('scores a healthy project snapshot', () => {
+    const service = registerProjectHealth();
+    const report = service.analyze({
+      projectName: '<%= appName %>',
+      architectureStyle: 'modular-monolith',
+      features: { security: true },
+      existingPaths: ['src/security'],
+    });
+    expect(report.score).toBeGreaterThanOrEqual(70);
+    expect(report.findings.length).toBeGreaterThan(0);
+    expect(service.render(report)).toContain('Project Health Report');
+  });
+});

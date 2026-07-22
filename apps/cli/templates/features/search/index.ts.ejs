@@ -1,0 +1,13 @@
+export type {
+  SearchDocument,
+  SearchHit,
+  SearchProviderId,
+  SearchQueryOptions,
+  SearchResult,
+} from './search.types.js';
+export type { SearchProvider } from './search-provider.interface.js';
+export { SearchService } from './search.service.js';
+export { DocumentIndexer } from './indexer/document-indexer.js';
+export { SearchQueryBuilder } from './query/search-query.js';
+export * from './adapter/index.js';
+export { search, searchProvider, indexer, registerSearch } from './register-search.js';

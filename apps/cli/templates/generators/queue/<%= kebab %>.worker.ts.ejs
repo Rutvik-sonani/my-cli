@@ -1,0 +1,44 @@
+import { <%= pascal %>Job, type <%= pascal %>JobPayload } from './<%= kebab %>.job.js';
+
+export interface <%= pascal %>WorkerOptions {
+  /** Max attempts before dead-letter / failure */
+  maxAttempts?: number;
+  /** Optional hook when a job fails permanently */
+  onFailed?: (error: unknown, payload: <%= pascal %>JobPayload) => void | Promise<void>;
+}
+
+/**
+ * Register the <%= kebab %> queue worker with your queue service.
+ * Works with BullMQ-style registerWorker(queue, handler) APIs.
+ */
+export function register<%= pascal %>Worker(
+  registerWorker: (
+    queue: string,
+    handler: (job: { data: <%= pascal %>JobPayload; attemptsMade?: number }) => Promise<void>,
+  ) => void,
+  options: <%= pascal %>WorkerOptions = {},
+): void {
+  const maxAttempts = options.maxAttempts ?? 3;
+
+  registerWorker(<%= pascal %>Job.queue, async (job) => {
+    const attempt = (job.attemptsMade ?? 0) + 1;
+    try {
+      await <%= pascal %>Job.handle({ ...job.data, attempt });
+    } catch (error) {
+      if (attempt >= maxAttempts) {
+        await options.onFailed?.(error, job.data);
+      }
+      throw error;
+    }
+  });
+}
+
+/** Convenience bootstrap when a queueService singleton is available. */
+export function bootstrap<%= pascal %>Worker(queueService: {
+  registerWorker: (
+    queue: string,
+    handler: (job: { data: <%= pascal %>JobPayload; attemptsMade?: number }) => Promise<void>,
+  ) => void;
+}): void {
+  register<%= pascal %>Worker((queue, handler) => queueService.registerWorker(queue, handler));
+}

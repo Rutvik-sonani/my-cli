@@ -1,0 +1,28 @@
+<% if (language === 'javascript') { %>
+export class UserCreatedEvent {
+  static type = 'user.created';
+
+  constructor(id, email) {
+    this.type = UserCreatedEvent.type;
+    this.occurredAt = new Date();
+    this.payload = { id, email };
+  }
+}
+<% } else { %>
+export class UserCreatedEvent {
+  static readonly type = 'user.created' as const;
+  readonly type = UserCreatedEvent.type;
+  readonly occurredAt = new Date();
+
+  constructor(
+    public readonly payload: {
+      id: string;
+      email: string;
+    },
+  ) {}
+
+  static create(id: string, email: string): UserCreatedEvent {
+    return new UserCreatedEvent({ id, email });
+  }
+}
+<% } %>

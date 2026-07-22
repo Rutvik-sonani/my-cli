@@ -1,0 +1,111 @@
+<% if (language === 'javascript') { %>
+/** @typedef {'granted'|'denied'|'withdrawn'|'pending'} ConsentStatus */
+/** @typedef {'necessary'|'analytics'|'marketing'|'preferences'} CookieCategory */
+
+/**
+ * @typedef {Object} ConsentRecord
+ * @property {string} id
+ * @property {string} userId
+ * @property {string} purpose
+ * @property {ConsentStatus} status
+ * @property {Date} recordedAt
+ */
+
+/**
+ * @typedef {Object} CookieEvent
+ * @property {string} id
+ * @property {string} [userId]
+ * @property {CookieCategory} category
+ * @property {string} name
+ * @property {'set'|'read'|'cleared'} action
+ * @property {Date} timestamp
+ */
+
+/**
+ * @typedef {Object} DataProcessingRecord
+ * @property {string} id
+ * @property {string} userId
+ * @property {string} purpose
+ * @property {string} legalBasis
+ * @property {string[]} dataCategories
+ * @property {Date} recordedAt
+ */
+
+/**
+ * @typedef {Object} UserDataExport
+ * @property {string} userId
+ * @property {Date} exportedAt
+ * @property {Record<string, unknown>} profile
+ * @property {ConsentRecord[]} consents
+ * @property {CookieEvent[]} cookies
+ * @property {DataProcessingRecord[]} processingRecords
+ */
+
+/**
+ * @typedef {Object} UserDataDeletionResult
+ * @property {string} userId
+ * @property {Date} deletedAt
+ * @property {number} removedConsents
+ * @property {number} removedCookies
+ * @property {number} removedProcessingRecords
+ * @property {boolean} [tombstone]
+ */
+<% } else { %>
+export type ConsentStatus = 'granted' | 'denied' | 'withdrawn' | 'pending';
+
+export type CookieCategory = 'necessary' | 'analytics' | 'marketing' | 'preferences';
+
+export interface ConsentRecord {
+  id: string;
+  userId: string;
+  purpose: string;
+  status: ConsentStatus;
+  recordedAt: Date;
+  source?: string;
+  metadata?: Record<string, unknown>;
+}
+
+export interface CookieEvent {
+  id: string;
+  userId?: string;
+  category: CookieCategory;
+  name: string;
+  action: 'set' | 'read' | 'cleared';
+  timestamp: Date;
+  metadata?: Record<string, unknown>;
+}
+
+export interface DataProcessingRecord {
+  id: string;
+  userId: string;
+  purpose: string;
+  legalBasis: string;
+  dataCategories: string[];
+  recordedAt: Date;
+  processor?: string;
+  metadata?: Record<string, unknown>;
+}
+
+export interface UserDataExport {
+  userId: string;
+  exportedAt: Date;
+  profile: Record<string, unknown>;
+  consents: ConsentRecord[];
+  cookies: CookieEvent[];
+  processingRecords: DataProcessingRecord[];
+}
+
+export interface UserDataDeletionResult {
+  userId: string;
+  deletedAt: Date;
+  removedConsents: number;
+  removedCookies: number;
+  removedProcessingRecords: number;
+  tombstone?: boolean;
+}
+
+export interface PrivacyUserStore {
+  getProfile(userId: string): Promise<Record<string, unknown> | null>;
+  deleteProfile(userId: string): Promise<boolean>;
+}
+<% } %>

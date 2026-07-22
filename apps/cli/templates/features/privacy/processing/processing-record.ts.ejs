@@ -1,0 +1,37 @@
+<% if (language === 'javascript') { %>
+/** Re-export processing record shape helpers for <%= appName %>. */
+export function createProcessingRecord(input) {
+  return {
+    id: crypto.randomUUID(),
+    userId: input.userId,
+    purpose: input.purpose,
+    legalBasis: input.legalBasis,
+    dataCategories: input.dataCategories,
+    recordedAt: new Date(),
+    processor: input.processor,
+    metadata: input.metadata,
+  };
+}
+<% } else { %>
+import type { DataProcessingRecord } from '../privacy.types.js';
+
+export function createProcessingRecord(input: {
+  userId: string;
+  purpose: string;
+  legalBasis: string;
+  dataCategories: string[];
+  processor?: string;
+  metadata?: Record<string, unknown>;
+}): DataProcessingRecord {
+  return {
+    id: crypto.randomUUID(),
+    userId: input.userId,
+    purpose: input.purpose,
+    legalBasis: input.legalBasis,
+    dataCategories: input.dataCategories,
+    recordedAt: new Date(),
+    processor: input.processor,
+    metadata: input.metadata,
+  };
+}
+<% } %>

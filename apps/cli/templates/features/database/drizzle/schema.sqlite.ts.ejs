@@ -1,0 +1,68 @@
+import { sqliteTable, text, integer, primaryKey, unique } from 'drizzle-orm/sqlite-core';
+
+<% if (includeUser) { %>
+export const users = sqliteTable('users', {
+  id: text('id').primaryKey(),
+  email: text('email').notNull().unique(),
+  passwordHash: text('password_hash').notNull(),
+  name: text('name'),
+  emailVerified: integer('email_verified', { mode: 'boolean' }).notNull().default(false),
+  mfaSecret: text('mfa_secret'),
+  mfaEnabled: integer('mfa_enabled', { mode: 'boolean' }).notNull().default(false),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
+});
+
+export const refreshTokens = sqliteTable('refresh_tokens', {
+  id: text('id').primaryKey(),
+  token: text('token').notNull().unique(),
+  userId: text('user_id').notNull(),
+  expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+});
+
+export const oAuthAccounts = sqliteTable(
+  'oauth_accounts',
+  {
+    id: text('id').primaryKey(),
+    userId: text('user_id').notNull(),
+    provider: text('provider').notNull(),
+    providerUserId: text('provider_user_id').notNull(),
+  },
+  (t) => [unique('oauth_provider_user_unique').on(t.provider, t.providerUserId)],
+);
+<% } %>
+
+<% if (includeRbac) { %>
+export const roles = sqliteTable('roles', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull().unique(),
+  description: text('description'),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+});
+
+export const permissions = sqliteTable('permissions', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull().unique(),
+  description: text('description'),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+});
+
+export const rolePermissions = sqliteTable(
+  'role_permissions',
+  {
+    roleId: text('role_id').notNull(),
+    permissionId: text('permission_id').notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.roleId, t.permissionId] })],
+);
+
+export const userRoles = sqliteTable(
+  'user_roles',
+  {
+    userId: text('user_id').notNull(),
+    roleId: text('role_id').notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.roleId] })],
+);
+<% } %>

@@ -1,0 +1,22 @@
+<% if (language === 'javascript') { %>
+export class <%= pascal %>Created {
+  constructor(aggregateId, email, occurredAt = new Date()) {
+    this.type = '<%= pascal %>Created';
+    this.aggregateId = aggregateId;
+    this.email = email;
+    this.occurredAt = occurredAt;
+  }
+}
+<% } else { %>
+import type { Email } from '../value-objects/Email.js';
+
+export class <%= pascal %>Created {
+  readonly type = '<%= pascal %>Created' as const;
+
+  constructor(
+    public readonly aggregateId: string,
+    public readonly email: Email,
+    public readonly occurredAt: Date = new Date(),
+  ) {}
+}
+<% } %>

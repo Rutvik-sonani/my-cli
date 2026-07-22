@@ -1,0 +1,18 @@
+import type { FastifyInstance, FastifyRequest } from 'fastify';
+import { setTenantContext } from './tenant.context.js';
+import { resolveTenantSchema } from './tenant.resolver.js';
+
+const HEADER = process.env.TENANT_HEADER ?? 'x-tenant-id';
+
+/** Schema-per-tenant: map tenant id to PostgreSQL schema name. */
+export async function registerTenancyMiddleware(app: FastifyInstance): Promise<void> {
+  app.addHook('onRequest', async (request: FastifyRequest) => {
+    const header = request.headers[HEADER.toLowerCase()];
+    const tenantId =
+      (typeof header === 'string' ? header : Array.isArray(header) ? header[0] : undefined) ??
+      process.env.DEFAULT_TENANT ??
+      'default';
+    const schema = resolveTenantSchema(tenantId);
+    setTenantContext(tenantId, { schema });
+  });
+}

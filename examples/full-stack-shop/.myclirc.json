@@ -1,0 +1,26 @@
+{
+  "version": "1.0.0",
+  "projectName": "shop",
+  "applicationType": "full-stack",
+  "architecture": "modular-monolith",
+  "language": "typescript",
+  "backend": "fastify",
+  "frontend": "next",
+  "uiLibrary": "tailwind",
+  "database": "postgresql",
+  "orm": "prisma",
+  "paths": {
+    "modules": "src/modules",
+    "templates": "templates",
+    "plugins": "plugins"
+  },
+  "features": {
+    "docker": true,
+    "git": true,
+    "auth": true,
+    "rbac": false,
+    "testing": true,
+    "database": true,
+    "frontend": true
+  }
+}

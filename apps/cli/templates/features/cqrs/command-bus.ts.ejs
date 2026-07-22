@@ -1,0 +1,94 @@
+<% if (language === 'javascript') { %>
+export class CommandBusError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'CommandBusError';
+  }
+}
+
+export class CommandBus {
+  constructor() {
+    this.handlers = new Map();
+    this.middleware = [];
+  }
+
+  use(middleware) {
+    this.middleware.push(middleware);
+    return this;
+  }
+
+  register(type, handler) {
+    this.handlers.set(type, handler);
+    return this;
+  }
+
+  has(type) {
+    return this.handlers.has(type);
+  }
+
+  async execute(command) {
+    const handler = this.handlers.get(command.type);
+    if (!handler) {
+      throw new CommandBusError(`No handler registered for command: ${command.type}`);
+    }
+
+    let index = 0;
+    const dispatch = async () => {
+      if (index < this.middleware.length) {
+        const middleware = this.middleware[index++];
+        return middleware(command, dispatch);
+      }
+      return handler(command);
+    };
+
+    return dispatch();
+  }
+}
+<% } else { %>
+export class CommandBusError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'CommandBusError';
+  }
+}
+
+export type CommandHandler<C extends { type: string }, R = unknown> = (command: C) => Promise<R> | R;
+export type BusMiddleware<T> = (message: T, next: () => Promise<unknown>) => Promise<unknown>;
+
+export class CommandBus {
+  private readonly handlers = new Map<string, CommandHandler<{ type: string }, unknown>>();
+  private readonly middleware: BusMiddleware<{ type: string }>[] = [];
+
+  use(middleware: BusMiddleware<{ type: string }>): this {
+    this.middleware.push(middleware);
+    return this;
+  }
+
+  register<C extends { type: string }, R>(type: string, handler: CommandHandler<C, R>): this {
+    this.handlers.set(type, handler as CommandHandler<{ type: string }, unknown>);
+    return this;
+  }
+
+  has(type: string): boolean {
+    return this.handlers.has(type);
+  }
+
+  async execute<C extends { type: string }, R>(command: C): Promise<R> {
+    const handler = this.handlers.get(command.type);
+    if (!handler) {
+      throw new CommandBusError(`No handler registered for command: ${command.type}`);
+    }
+
+    let index = 0;
+    const dispatch = async (): Promise<R> => {
+      if (index < this.middleware.length) {
+        const middleware = this.middleware[index++]!;
+        return (await middleware(command, dispatch)) as R;
+      }
+      return (await handler(command)) as R;
+    };
+
+    return dispatch();
+  }
+}
+<% } %>

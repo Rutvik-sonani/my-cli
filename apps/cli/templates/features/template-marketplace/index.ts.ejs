@@ -1,0 +1,12 @@
+export type {
+  MarketplaceTemplate,
+  TemplateRequirements,
+  TemplateSearchResult,
+  TemplateVisibility,
+} from './marketplace.types.js';
+export { createBuiltinCatalog } from './catalog/builtin-catalog.js';
+export type { CatalogProvider } from './providers/catalog-provider.interface.js';
+export { LocalCatalogProvider } from './providers/local.provider.js';
+export { MarketplaceClient, createMarketplaceClient } from './client/marketplace.client.js';
+export { MarketplaceService, createMarketplaceService } from './marketplace.service.js';
+export { marketplaceService, registerTemplateMarketplace } from './register-marketplace.js';

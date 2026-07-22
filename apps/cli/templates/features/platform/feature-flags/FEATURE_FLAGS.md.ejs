@@ -1,0 +1,22 @@
+# Feature Flags — <%= appName %>
+
+JSON-backed feature flags with runtime toggles.
+
+## Environment
+
+```env
+FEATURE_FLAGS_PATH=config/feature-flags.json
+```
+
+## Usage
+
+```typescript
+import { featureFlags } from './src/platform/feature-flags/index.js';
+
+await featureFlags.load();
+if (featureFlags.isEnabled('beta-api')) {
+  // beta path
+}
+```
+
+Default flags are generated in `config/feature-flags.json`.

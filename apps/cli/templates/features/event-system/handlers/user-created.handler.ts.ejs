@@ -1,0 +1,18 @@
+<% if (language === 'javascript') { %>
+export async function handleUserCreated(envelope) {
+  console.log('[event-system] user created', envelope.payload);
+}
+<% } else { %>
+import type { EventEnvelope } from '../serializer.js';
+
+export interface UserCreatedPayload {
+  id: string;
+  email: string;
+}
+
+export async function handleUserCreated(
+  envelope: EventEnvelope<UserCreatedPayload>,
+): Promise<void> {
+  console.log('[event-system] user created', envelope.payload);
+}
+<% } %>

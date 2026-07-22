@@ -1,0 +1,11 @@
+export type { DocumentationDocument, DocumentationKind } from './documentation.types.js';
+export { DOCUMENTATION_CATALOG, listDocumentation } from './generators/catalog.js';
+export {
+  DocumentationGenerator,
+  createDocumentationGenerator,
+} from './generators/documentation.generator.js';
+export {
+  DocumentationService,
+  createDocumentationService,
+} from './documentation.service.js';
+export { documentationService, registerDocumentation } from './register-documentation.js';

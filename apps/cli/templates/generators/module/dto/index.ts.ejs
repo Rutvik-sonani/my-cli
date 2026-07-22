@@ -1,0 +1,11 @@
+export interface Create<%= pascal %>Dto {
+<% fields.forEach(function(field) { %>
+  <%= field.propertyName %><%= field.optional ? '?' : '' %>: <%= field.tsType %>;
+<% }); %>
+}
+
+export interface Update<%= pascal %>Dto {
+<% fields.forEach(function(field) { %>
+  <%= field.propertyName %>?: <%= field.tsType %>;
+<% }); %>
+}

@@ -1,0 +1,13 @@
+import { Schema, model } from 'mongoose';
+
+const rolePermissionSchema = new Schema(
+  {
+    roleId: { type: String, required: true, index: true },
+    permissionId: { type: String, required: true, index: true },
+  },
+  { collection: 'role_permissions' },
+);
+
+rolePermissionSchema.index({ roleId: 1, permissionId: 1 }, { unique: true });
+
+export const RolePermissionModel = model('RolePermission', rolePermissionSchema);

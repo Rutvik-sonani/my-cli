@@ -1,0 +1,18 @@
+import type { FastifyRequest } from 'fastify';
+
+const SESSION_USER_KEY = 'userId';
+
+export class SessionService {
+  setUser(request: FastifyRequest, userId: string): void {
+    request.session.set(SESSION_USER_KEY, userId);
+  }
+
+  getUserId(request: FastifyRequest): string | undefined {
+    const value = request.session.get(SESSION_USER_KEY);
+    return typeof value === 'string' ? value : undefined;
+  }
+
+  destroy(request: FastifyRequest): void {
+    request.session.delete();
+  }
+}

@@ -1,0 +1,33 @@
+# Documentation — <%= appName %>
+
+Enterprise documentation generation for architecture, security, compliance, operations, scaling, disaster recovery, and APIs.
+
+## Generated files
+
+<% catalog.forEach(function(doc) { -%>
+- `<%= doc.filename %>` — <%= doc.description %>
+<% }) -%>
+
+## CLI
+
+```bash
+my docs setup
+my docs list
+my docs generate
+my docs generate --only architecture,security
+my docs generate --force
+```
+
+## Safety
+
+Existing docs are **not** overwritten unless `--force` is provided.
+
+## Usage
+
+```ts
+import { registerDocumentation } from './src/documentation/index.js';
+
+const docs = registerDocumentation();
+console.log(docs.list());
+console.log(docs.plan());
+```

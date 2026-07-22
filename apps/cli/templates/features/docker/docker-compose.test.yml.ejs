@@ -1,0 +1,81 @@
+# Test / CI compose — <%= appName %>
+# Run integration tests against dependency services without starting the dev app.
+
+services:
+  test:
+    image: node:<%= nodeVersion %>-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: sh -c "npm test"
+    environment:
+      NODE_ENV: test
+<% if (database === 'postgres') { %>
+      DATABASE_URL: postgresql://<%= appName %>:<%= appName %>@postgres:5432/<%= appName %>
+<% } %><% if (database === 'mysql') { %>
+      DATABASE_URL: mysql://<%= appName %>:<%= appName %>@mysql:3306/<%= appName %>
+<% } %><% if (database === 'mongodb') { %>
+      DATABASE_URL: mongodb://mongo:27017/<%= appName %>
+<% } %><% if (redis) { %>
+      REDIS_URL: redis://redis:6379
+<% } %>
+    depends_on:
+<% if (database === 'postgres') { %>      - postgres
+<% } %><% if (database === 'mysql') { %>      - mysql
+<% } %><% if (database === 'mongodb') { %>      - mongo
+<% } %><% if (redis) { %>      - redis
+<% } %>
+
+<% if (database === 'postgres') { %>
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: <%= appName %>
+      POSTGRES_PASSWORD: <%= appName %>
+      POSTGRES_DB: <%= appName %>
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U <%= appName %>"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+<% } %>
+<% if (database === 'mysql') { %>
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: <%= appName %>
+      MYSQL_USER: <%= appName %>
+      MYSQL_PASSWORD: <%= appName %>
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+<% } %>
+<% if (database === 'mongodb') { %>
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+<% } %>
+<% if (redis) { %>
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+<% } %>

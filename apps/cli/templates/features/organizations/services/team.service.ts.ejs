@@ -1,0 +1,76 @@
+<% if (language === 'javascript') { %>
+import { slugify } from '../organization.store.js';
+
+export class TeamService {
+  constructor(store) {
+    this.store = store;
+  }
+
+  create(organizationId, name) {
+    if (!this.store.organizations.has(organizationId)) {
+      throw new Error(`Organization not found: ${organizationId}`);
+    }
+    const team = {
+      id: crypto.randomUUID(),
+      organizationId,
+      name,
+      slug: slugify(name),
+      createdAt: new Date(),
+    };
+    this.store.teams.set(team.id, team);
+    return team;
+  }
+
+  listByOrganization(organizationId) {
+    return [...this.store.teams.values()].filter((team) => team.organizationId === organizationId);
+  }
+
+  get(id) {
+    return this.store.teams.get(id);
+  }
+
+  delete(id) {
+    for (const member of this.store.members.values()) {
+      member.teamIds = member.teamIds.filter((teamId) => teamId !== id);
+    }
+    return this.store.teams.delete(id);
+  }
+}
+<% } else { %>
+import type { Team } from '../organization.types.js';
+import { OrganizationStore, slugify } from '../organization.store.js';
+
+export class TeamService {
+  constructor(private readonly store: OrganizationStore) {}
+
+  create(organizationId: string, name: string): Team {
+    if (!this.store.organizations.has(organizationId)) {
+      throw new Error(`Organization not found: ${organizationId}`);
+    }
+    const team: Team = {
+      id: crypto.randomUUID(),
+      organizationId,
+      name,
+      slug: slugify(name),
+      createdAt: new Date(),
+    };
+    this.store.teams.set(team.id, team);
+    return team;
+  }
+
+  listByOrganization(organizationId: string): Team[] {
+    return [...this.store.teams.values()].filter((team) => team.organizationId === organizationId);
+  }
+
+  get(id: string): Team | undefined {
+    return this.store.teams.get(id);
+  }
+
+  delete(id: string): boolean {
+    for (const member of this.store.members.values()) {
+      member.teamIds = member.teamIds.filter((teamId) => teamId !== id);
+    }
+    return this.store.teams.delete(id);
+  }
+}
+<% } %>

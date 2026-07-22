@@ -1,0 +1,12 @@
+<% if (provider === 'kafka') { %>
+export { KafkaEventConsumer } from './kafka.consumer.js';
+<% } else if (provider === 'rabbitmq') { %>
+export { RabbitEventConsumer } from './rabbitmq.consumer.js';
+<% } else if (provider === 'nats') { %>
+export { NatsEventConsumer } from './nats.consumer.js';
+<% } else if (provider === 'eventbridge') { %>
+export { EventBridgeConsumer } from './eventbridge.consumer.js';
+<% } else { %>
+export { RedisEventConsumer } from './redis.consumer.js';
+<% } %>
+export { registerUserCreatedConsumer } from './user-created.consumer.js';

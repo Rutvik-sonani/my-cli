@@ -1,0 +1,31 @@
+# <%= appName %> — Domain Driven Design
+
+Tactical DDD patterns with strict dependency direction: **Domain must not depend on database, framework, or external APIs.**
+
+## Structure
+
+```
+src/
+  domain/
+    entities/         # User, Order
+    value-objects/    # Email, Money
+    aggregates/       # OrderAggregate
+    events/           # UserCreated
+  application/
+    commands/         # CreateUserCommand
+    queries/          # GetUserQuery
+    services/         # application services
+  infrastructure/
+    database/
+      interfaces/     # IUserRepository
+      repositories/   # PrismaUserRepository
+  bounded-contexts/   # optional context map
+```
+
+## Phase 2 preview
+
+```bash
+my make domain user   # coming in Phase 2
+```
+
+For now, scaffold modules with `my make module user` and place files per layer above.

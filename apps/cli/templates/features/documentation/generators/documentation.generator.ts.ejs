@@ -1,0 +1,44 @@
+<% if (language === 'javascript') { %>
+import { listDocumentation } from './catalog.js';
+
+/**
+ * Lightweight local documentation planner for <%= appName %>.
+ */
+export class DocumentationGenerator {
+  list() {
+    return listDocumentation();
+  }
+
+  plan() {
+    return this.list().map((doc) => ({
+      ...doc,
+      status: 'planned',
+    }));
+  }
+}
+
+export function createDocumentationGenerator() {
+  return new DocumentationGenerator();
+}
+<% } else { %>
+import type { DocumentationDocument } from '../documentation.types.js';
+import { listDocumentation } from './catalog.js';
+
+/** Lightweight local documentation planner for <%= appName %>. */
+export class DocumentationGenerator {
+  list(): DocumentationDocument[] {
+    return listDocumentation();
+  }
+
+  plan(): Array<DocumentationDocument & { status: 'planned' }> {
+    return this.list().map((doc) => ({
+      ...doc,
+      status: 'planned' as const,
+    }));
+  }
+}
+
+export function createDocumentationGenerator(): DocumentationGenerator {
+  return new DocumentationGenerator();
+}
+<% } %>

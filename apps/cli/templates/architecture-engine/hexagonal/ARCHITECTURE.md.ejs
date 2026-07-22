@@ -1,0 +1,21 @@
+# <%= appName %> — Hexagonal Architecture (Ports & Adapters)
+
+The **core** is isolated from delivery mechanisms and infrastructure. Adapters plug into ports.
+
+## Structure
+
+```
+src/
+  core/
+    domain/           # entities, value objects
+    application/      # services use cases
+    ports/
+      inbound/        # driven by HTTP, CLI, queues
+      outbound/       # drive DB, APIs, messaging
+  adapters/
+    inbound/http/     # <%= backend %> routes
+    outbound/persistence/
+  wiring/             # DI container
+```
+
+Inbound adapters call inbound ports. Outbound adapters implement outbound ports.

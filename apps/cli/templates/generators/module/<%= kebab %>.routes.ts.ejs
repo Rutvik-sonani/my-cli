@@ -1,0 +1,13 @@
+import type { <%= pascal %>Controller } from './<%= kebab %>.controller.js';
+
+export type RouteHandler = (...args: never[]) => unknown | Promise<unknown>;
+
+export function create<%= pascal %>Routes(controller: <%= pascal %>Controller): Record<string, RouteHandler> {
+  return {
+    'GET /<%= kebabPlural %>': () => controller.list() as never,
+    'GET /<%= kebabPlural %>/:id': ((id: string) => controller.get(id)) as never,
+    'POST /<%= kebabPlural %>': ((body: unknown) => controller.create(body)) as never,
+    'PATCH /<%= kebabPlural %>/:id': ((id: string, body: unknown) => controller.update(id, body)) as never,
+    'DELETE /<%= kebabPlural %>/:id': ((id: string) => controller.remove(id)) as never,
+  };
+}

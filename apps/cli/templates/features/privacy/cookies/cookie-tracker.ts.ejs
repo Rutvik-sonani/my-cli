@@ -1,0 +1,76 @@
+<% if (language === 'javascript') { %>
+export class CookieTracker {
+  constructor() {
+    this.events = [];
+  }
+
+  async track(category, name, action, options = {}) {
+    const event = {
+      id: crypto.randomUUID(),
+      userId: options.userId,
+      category,
+      name,
+      action,
+      timestamp: new Date(),
+      metadata: options.metadata,
+    };
+    this.events.push(event);
+    return event;
+  }
+
+  async listByUser(userId) {
+    return this.events.filter((event) => event.userId === userId);
+  }
+
+  async deleteByUser(userId) {
+    let removed = 0;
+    for (let i = this.events.length - 1; i >= 0; i -= 1) {
+      if (this.events[i]?.userId === userId) {
+        this.events.splice(i, 1);
+        removed += 1;
+      }
+    }
+    return removed;
+  }
+}
+<% } else { %>
+import type { CookieCategory, CookieEvent } from '../privacy.types.js';
+
+export class CookieTracker {
+  private readonly events: CookieEvent[] = [];
+
+  async track(
+    category: CookieCategory,
+    name: string,
+    action: CookieEvent['action'],
+    options: { userId?: string; metadata?: Record<string, unknown> } = {},
+  ): Promise<CookieEvent> {
+    const event: CookieEvent = {
+      id: crypto.randomUUID(),
+      userId: options.userId,
+      category,
+      name,
+      action,
+      timestamp: new Date(),
+      metadata: options.metadata,
+    };
+    this.events.push(event);
+    return event;
+  }
+
+  async listByUser(userId: string): Promise<CookieEvent[]> {
+    return this.events.filter((event) => event.userId === userId);
+  }
+
+  async deleteByUser(userId: string): Promise<number> {
+    let removed = 0;
+    for (let i = this.events.length - 1; i >= 0; i -= 1) {
+      if (this.events[i]?.userId === userId) {
+        this.events.splice(i, 1);
+        removed += 1;
+      }
+    }
+    return removed;
+  }
+}
+<% } %>

@@ -1,0 +1,30 @@
+import { describe, expect, it } from 'vitest';
+import { IdentityService } from '../../src/identity/identity.service.js';
+import { createIdentityRegistry } from '../../src/identity/register-identity.js';
+import { SessionService } from '../../src/identity/sessions/session.service.js';
+
+describe('enterprise identity', () => {
+  it('registers configured providers', () => {
+    const registry = createIdentityRegistry();
+<% if (providers.length > 0) { -%>
+    expect(registry.authenticate).toBeDefined();
+<% } -%>
+  });
+
+<% if (providers.includes('google')) { -%>
+  it('authenticates via google provider stub', async () => {
+    const service = new IdentityService(createIdentityRegistry(), new SessionService());
+    const result = await service.login('google', { code: 'demo-code-123', redirectUri: 'http://localhost/cb' });
+    expect(result.user.provider).toBe('google');
+    expect(result.session.userId).toBe(result.user.id);
+  });
+<% } -%>
+
+<% if (providers.includes('ldap')) { -%>
+  it('authenticates via ldap provider stub', async () => {
+    const service = new IdentityService(createIdentityRegistry(), new SessionService());
+    const result = await service.login('ldap', { username: 'jdoe', password: 'secret' });
+    expect(result.user.provider).toBe('ldap');
+  });
+<% } -%>
+});

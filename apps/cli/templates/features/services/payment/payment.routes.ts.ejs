@@ -1,0 +1,26 @@
+import type { FastifyInstance } from 'fastify';
+import { payment } from './payment.service.js';
+
+export async function registerPaymentRoutes(app: FastifyInstance): Promise<void> {
+  app.post('/webhooks/stripe', { config: { rawBody: true } }, async (request, reply) => {
+    const signature = request.headers['stripe-signature'];
+    if (typeof signature !== 'string') {
+      return reply.status(400).send({ error: 'Missing stripe-signature header' });
+    }
+
+    const raw = (request as { rawBody?: Buffer }).rawBody ?? Buffer.from(JSON.stringify(request.body));
+    try {
+      const event = payment.constructWebhookEvent(raw, signature);
+      switch (event.type) {
+        case 'checkout.session.completed':
+          // handle successful payment
+          break;
+        default:
+          break;
+      }
+      return { received: true };
+    } catch (error) {
+      return reply.status(400).send({ error: (error as Error).message });
+    }
+  });
+}

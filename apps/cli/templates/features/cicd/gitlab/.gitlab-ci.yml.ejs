@@ -1,0 +1,39 @@
+stages:
+  - install
+  - lint
+  - test
+  - build
+
+variables:
+  NODE_VERSION: "<%= nodeVersion %>"
+
+install:
+  stage: install
+  image: node:<%= nodeVersion %>
+  script:
+    - <%= installCommand %>
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+
+lint:
+  stage: lint
+  image: node:<%= nodeVersion %>
+  script:
+    - <%= lintCommand %>
+  needs: [install]
+
+test:
+  stage: test
+  image: node:<%= nodeVersion %>
+  script:
+    - <%= testCommand %>
+  needs: [install]
+
+build:
+  stage: build
+  image: node:<%= nodeVersion %>
+  script:
+    - <%= buildCommand %>
+  needs: [install]

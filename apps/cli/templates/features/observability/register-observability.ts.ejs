@@ -1,0 +1,25 @@
+<% if (language === 'javascript') { %>
+import { ObservabilityService } from './observability.service.js';
+import { errorMonitor } from './errors/sentry.monitor.js';
+import { startOpenTelemetry } from './tracing/otel.js';
+
+export const observability = new ObservabilityService();
+
+export async function registerObservability() {
+  errorMonitor.init();
+  await startOpenTelemetry();
+  return observability;
+}
+<% } else { %>
+import { ObservabilityService } from './observability.service.js';
+import { errorMonitor } from './errors/sentry.monitor.js';
+import { startOpenTelemetry } from './tracing/otel.js';
+
+export const observability = new ObservabilityService();
+
+export async function registerObservability(): Promise<ObservabilityService> {
+  errorMonitor.init();
+  await startOpenTelemetry();
+  return observability;
+}
+<% } %>

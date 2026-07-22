@@ -1,0 +1,93 @@
+<% if (language === 'javascript') { %>
+import { CommandBus } from './command-bus.js';
+import { QueryBus } from './query-bus.js';
+import { EventBus } from './event-bus.js';
+import { createLoggingMiddleware } from './middleware/logging.middleware.js';
+import { createValidationMiddleware } from './middleware/validation.middleware.js';
+import { CreateUserCommand } from '../application/commands/CreateUserCommand.js';
+import { CreateUserHandler } from '../application/commands/handlers/CreateUserHandler.js';
+import { GetUserQuery } from '../application/queries/GetUserQuery.js';
+import { GetUserHandler } from '../application/queries/handlers/GetUserHandler.js';
+import { UserCreatedEvent } from '../application/events/UserCreatedEvent.js';
+
+export const commandBus = new CommandBus();
+export const queryBus = new QueryBus();
+export const eventBus = new EventBus();
+
+const users = new Map();
+
+export function registerCqrsHandlers() {
+  commandBus
+    .use(createLoggingMiddleware('command'))
+    .use(
+      createValidationMiddleware(async (command) => {
+        if (command.type === CreateUserCommand.type && !command.email?.includes('@')) {
+          throw new Error('Invalid email');
+        }
+      }),
+    )
+    .register(CreateUserCommand.type, async (command) => {
+      const handler = new CreateUserHandler(users, eventBus);
+      return handler.handle(command);
+    });
+
+  queryBus
+    .use(createLoggingMiddleware('query'))
+    .register(GetUserQuery.type, async (query) => {
+      const handler = new GetUserHandler(users);
+      return handler.handle(query);
+    });
+
+  eventBus
+    .use(createLoggingMiddleware('event'))
+    .subscribe(UserCreatedEvent.type, async (event) => {
+      console.log('[cqrs] user created', event.payload);
+    });
+}
+<% } else { %>
+import { CommandBus } from './command-bus.js';
+import { QueryBus } from './query-bus.js';
+import { EventBus } from './event-bus.js';
+import { createLoggingMiddleware } from './middleware/logging.middleware.js';
+import { createValidationMiddleware } from './middleware/validation.middleware.js';
+import { CreateUserCommand } from '../application/commands/CreateUserCommand.js';
+import { CreateUserHandler, type UserRecord } from '../application/commands/handlers/CreateUserHandler.js';
+import { GetUserQuery } from '../application/queries/GetUserQuery.js';
+import { GetUserHandler } from '../application/queries/handlers/GetUserHandler.js';
+import { UserCreatedEvent } from '../application/events/UserCreatedEvent.js';
+
+export const commandBus = new CommandBus();
+export const queryBus = new QueryBus();
+export const eventBus = new EventBus();
+
+const users = new Map<string, UserRecord>();
+
+export function registerCqrsHandlers(): void {
+  commandBus
+    .use(createLoggingMiddleware('command'))
+    .use(
+      createValidationMiddleware<CreateUserCommand>(async (command) => {
+        if (command.type === CreateUserCommand.type && !command.email.includes('@')) {
+          throw new Error('Invalid email');
+        }
+      }),
+    )
+    .register(CreateUserCommand.type, async (command) => {
+      const handler = new CreateUserHandler(users, eventBus);
+      return handler.handle(command as CreateUserCommand);
+    });
+
+  queryBus
+    .use(createLoggingMiddleware('query'))
+    .register(GetUserQuery.type, async (query) => {
+      const handler = new GetUserHandler(users);
+      return handler.handle(query as GetUserQuery);
+    });
+
+  eventBus
+    .use(createLoggingMiddleware('event'))
+    .subscribe(UserCreatedEvent.type, async (event) => {
+      console.log('[cqrs] user created', (event as UserCreatedEvent).payload);
+    });
+}
+<% } %>

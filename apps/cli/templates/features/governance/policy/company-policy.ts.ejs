@@ -1,0 +1,29 @@
+<% if (language === 'javascript') { %>
+import { createDefaultCompanyRules } from '../rules/default-rules.js';
+
+/**
+ * @returns {import('../governance.types.js').GovernancePolicy}
+ */
+export function createCompanyPolicy(company = '<%= company %>') {
+  return {
+    id: 'company-default',
+    name: 'Company Engineering Standards',
+    version: '1.0.0',
+    company,
+    rules: createDefaultCompanyRules(),
+  };
+}
+<% } else { %>
+import type { GovernancePolicy } from '../governance.types.js';
+import { createDefaultCompanyRules } from '../rules/default-rules.js';
+
+export function createCompanyPolicy(company = '<%= company %>'): GovernancePolicy {
+  return {
+    id: 'company-default',
+    name: 'Company Engineering Standards',
+    version: '1.0.0',
+    company,
+    rules: createDefaultCompanyRules(),
+  };
+}
+<% } %>

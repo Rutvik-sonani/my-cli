@@ -1,0 +1,42 @@
+import { getMemcachedClient } from './memcached.client.js';
+
+const DEFAULT_TTL = Number(process.env.CACHE_TTL_SECONDS ?? 3600);
+
+function promisify<T>(fn: (cb: (err: Error | null, result?: T) => void) => void): Promise<T> {
+  return new Promise((resolve, reject) => {
+    fn((err, result) => {
+      if (err) reject(err);
+      else resolve(result as T);
+    });
+  });
+}
+
+export class CacheService {
+  private readonly memcached = getMemcachedClient();
+
+  async get<T>(key: string): Promise<T | null> {
+    const value = await promisify<string | undefined>((cb) => this.memcached.get(key, cb));
+    if (!value) return null;
+    return JSON.parse(value) as T;
+  }
+
+  async set(key: string, value: unknown, ttlSeconds = DEFAULT_TTL): Promise<void> {
+    await promisify<void>((cb) =>
+      this.memcached.set(key, JSON.stringify(value), ttlSeconds, cb),
+    );
+  }
+
+  async del(key: string): Promise<void> {
+    await promisify<void>((cb) => this.memcached.del(key, cb));
+  }
+
+  async remember<T>(key: string, factory: () => Promise<T>, ttlSeconds = DEFAULT_TTL): Promise<T> {
+    const cached = await this.get<T>(key);
+    if (cached !== null) return cached;
+    const value = await factory();
+    await this.set(key, value, ttlSeconds);
+    return value;
+  }
+}
+
+export const cache = new CacheService();

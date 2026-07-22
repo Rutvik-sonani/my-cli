@@ -1,0 +1,50 @@
+<% if (language === 'javascript') { %>
+import pino from 'pino';
+import { getCorrelation } from '../correlation.js';
+
+export const baseLogger = pino({
+  level: process.env.LOG_LEVEL ?? 'info',
+  base: { service: '<%= appName %>' },
+  ...(process.env.NODE_ENV === 'development'
+    ? { transport: { target: 'pino-pretty', options: { colorize: true } } }
+    : {}),
+  formatters: {
+    log(object) {
+      const correlation = getCorrelation();
+      return {
+        ...object,
+        correlationId: object.correlationId ?? correlation?.correlationId,
+        traceId: object.traceId ?? correlation?.traceId,
+        spanId: object.spanId ?? correlation?.spanId,
+      };
+    },
+  },
+});
+
+export const logger = baseLogger;
+<% } else { %>
+import pino from 'pino';
+import { getCorrelation } from '../correlation.js';
+
+export const baseLogger = pino({
+  level: process.env.LOG_LEVEL ?? 'info',
+  base: { service: '<%= appName %>' },
+  ...(process.env.NODE_ENV === 'development'
+    ? { transport: { target: 'pino-pretty', options: { colorize: true } } }
+    : {}),
+  formatters: {
+    log(object) {
+      const correlation = getCorrelation();
+      return {
+        ...object,
+        correlationId: (object as { correlationId?: string }).correlationId ?? correlation?.correlationId,
+        traceId: (object as { traceId?: string }).traceId ?? correlation?.traceId,
+        spanId: (object as { spanId?: string }).spanId ?? correlation?.spanId,
+      };
+    },
+  },
+});
+
+export const logger = baseLogger;
+export type Logger = typeof logger;
+<% } %>

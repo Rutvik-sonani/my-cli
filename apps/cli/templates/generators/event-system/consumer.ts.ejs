@@ -1,0 +1,16 @@
+<% if (language === 'javascript') { %>
+import { handle<%= pascal %> } from '../handlers/<%= kebab %>.handler.js';
+
+export function register<%= pascal %>Consumer(consumer) {
+  consumer.on('<%= kebab %>', handle<%= pascal %>);
+}
+<% } else { %>
+import type { EventEnvelope } from '../serializer.js';
+import { handle<%= pascal %> } from '../handlers/<%= kebab %>.handler.js';
+
+export function register<%= pascal %>Consumer(
+  consumer: { on(type: string, handler: (envelope: EventEnvelope) => Promise<void>): void },
+): void {
+  consumer.on('<%= kebab %>', handle<%= pascal %>);
+}
+<% } %>

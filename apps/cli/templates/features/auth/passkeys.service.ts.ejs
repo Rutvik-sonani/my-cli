@@ -1,0 +1,108 @@
+import {
+  generateAuthenticationOptions,
+  generateRegistrationOptions,
+  verifyAuthenticationResponse,
+  verifyRegistrationResponse,
+} from '@simplewebauthn/server';
+import type {
+  AuthenticationResponseJSON,
+  AuthenticatorTransportFuture,
+  RegistrationResponseJSON,
+} from '@simplewebauthn/server';
+import { PasskeyRepository } from './passkey.repository.js';
+
+export interface PasskeyRegistrationOptions {
+  userId: string;
+  userName: string;
+  userDisplayName: string;
+}
+
+export class PasskeysService {
+  private readonly repo = new PasskeyRepository();
+  private readonly rpName = process.env.WEBAUTHN_RP_NAME ?? 'MyCLI App';
+  private readonly rpId = process.env.WEBAUTHN_RP_ID ?? 'localhost';
+  private readonly origin = process.env.WEBAUTHN_ORIGIN ?? 'http://localhost:3000';
+
+  async generateRegistrationOptions(options: PasskeyRegistrationOptions) {
+    const existing = await this.repo.listByUserId(options.userId);
+    return generateRegistrationOptions({
+      rpName: this.rpName,
+      rpID: this.rpId,
+      userName: options.userName,
+      userDisplayName: options.userDisplayName,
+      userID: options.userId,
+      attestationType: 'none',
+      excludeCredentials: existing.map((cred) => ({
+        id: cred.credentialId,
+        transports: cred.transports as AuthenticatorTransportFuture[] | undefined,
+      })),
+    });
+  }
+
+  async verifyRegistration(
+    userId: string,
+    response: RegistrationResponseJSON,
+    expectedChallenge: string,
+  ): Promise<boolean> {
+    const verification = await verifyRegistrationResponse({
+      response,
+      expectedChallenge,
+      expectedOrigin: this.origin,
+      expectedRPID: this.rpId,
+    });
+    if (!verification.verified || !verification.registrationInfo) {
+      return false;
+    }
+    const { credential, credentialDeviceType, credentialBackedUp } = verification.registrationInfo;
+    await this.repo.save({
+      userId,
+      credentialId: credential.id,
+      publicKey: credential.publicKey,
+      counter: credential.counter,
+      transports: credential.transports,
+    });
+    void credentialDeviceType;
+    void credentialBackedUp;
+    return true;
+  }
+
+  async generateAuthenticationOptions(userId?: string) {
+    const allowCredentials = userId
+      ? (await this.repo.listByUserId(userId)).map((cred) => ({
+          id: cred.credentialId,
+          transports: cred.transports as AuthenticatorTransportFuture[] | undefined,
+        }))
+      : undefined;
+
+    return generateAuthenticationOptions({
+      rpID: this.rpId,
+      allowCredentials,
+    });
+  }
+
+  async verifyAuthentication(
+    response: AuthenticationResponseJSON,
+    expectedChallenge: string,
+  ): Promise<string | null> {
+    const credentialId = response.id;
+    const record = await this.repo.findByCredentialId(credentialId);
+    if (!record) return null;
+
+    const verification = await verifyAuthenticationResponse({
+      response,
+      expectedChallenge,
+      expectedOrigin: this.origin,
+      expectedRPID: this.rpId,
+      credential: {
+        id: record.credentialId,
+        publicKey: record.publicKey,
+        counter: record.counter,
+        transports: record.transports as AuthenticatorTransportFuture[] | undefined,
+      },
+    });
+
+    if (!verification.verified) return null;
+    await this.repo.updateCounter(record.credentialId, verification.authenticationInfo.newCounter);
+    return record.userId;
+  }
+}

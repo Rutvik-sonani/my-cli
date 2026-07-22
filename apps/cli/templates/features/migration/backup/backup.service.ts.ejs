@@ -1,0 +1,39 @@
+<% if (language === 'javascript') { %>
+/**
+ * Creates a simple pre-upgrade backup manifest for <%= appName %>.
+ */
+export class BackupService {
+  constructor(targets = ['.myclirc.json', 'package.json']) {
+    this.targets = targets;
+  }
+
+  plan() {
+    return {
+      id: 'local-backup',
+      files: [...this.targets],
+      path: '.mycli/upgrade-backups/latest',
+    };
+  }
+}
+
+export function createBackupService() {
+  return new BackupService();
+}
+<% } else { %>
+/** Creates a simple pre-upgrade backup manifest for <%= appName %>. */
+export class BackupService {
+  constructor(private readonly targets: string[] = ['.myclirc.json', 'package.json']) {}
+
+  plan(): { id: string; files: string[]; path: string } {
+    return {
+      id: 'local-backup',
+      files: [...this.targets],
+      path: '.mycli/upgrade-backups/latest',
+    };
+  }
+}
+
+export function createBackupService(): BackupService {
+  return new BackupService();
+}
+<% } %>

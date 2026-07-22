@@ -1,0 +1,25 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.0.3/schema.json",
+  "changelog": "@changesets/cli/changelog",
+  "commit": false,
+  "fixed": [],
+  "linked": [
+    [
+      "@mycli/cli",
+      "@mycli/core",
+      "@mycli/cli-engine",
+      "@mycli/command-engine",
+      "@mycli/prompt-engine",
+      "@mycli/template-engine",
+      "@mycli/generator-engine",
+      "@mycli/filesystem",
+      "@mycli/dependency-manager",
+      "@mycli/plugin-system",
+      "@mycli/config-manager"
+    ]
+  ],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": ["@mycli/website"]
+}

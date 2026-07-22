@@ -1,0 +1,46 @@
+<% if (language === 'javascript') { %>
+export class MemoryAuditStorage {
+  constructor() {
+    this.records = [];
+  }
+
+  async save(record) {
+    this.records.push(record);
+  }
+
+  async findByResource(resource) {
+    return this.records.filter((record) => record.resource === resource);
+  }
+
+  async findByUser(userId) {
+    return this.records.filter((record) => record.userId === userId);
+  }
+
+  async list(limit = 100) {
+    return this.records.slice(-limit);
+  }
+}
+<% } else { %>
+import type { AuditRecord } from '../audit-record.js';
+import type { AuditStorage } from './audit-storage.interface.js';
+
+export class MemoryAuditStorage implements AuditStorage {
+  private readonly records: AuditRecord[] = [];
+
+  async save(record: AuditRecord): Promise<void> {
+    this.records.push(record);
+  }
+
+  async findByResource(resource: string): Promise<AuditRecord[]> {
+    return this.records.filter((record) => record.resource === resource);
+  }
+
+  async findByUser(userId: string): Promise<AuditRecord[]> {
+    return this.records.filter((record) => record.userId === userId);
+  }
+
+  async list(limit = 100): Promise<AuditRecord[]> {
+    return this.records.slice(-limit);
+  }
+}
+<% } %>

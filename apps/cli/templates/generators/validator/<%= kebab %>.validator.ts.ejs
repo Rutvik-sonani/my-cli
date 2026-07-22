@@ -1,0 +1,11 @@
+export function validate<%= pascal %>(input: unknown): asserts input is Record<string, unknown> {
+  if (!input || typeof input !== 'object') {
+    throw Object.assign(new Error('Validation failed for <%= name %>'), { status: 400 });
+  }
+  const data = input as Record<string, unknown>;
+<% fields.filter(function(f) { return !f.optional; }).forEach(function(field) { %>
+  if (data.<%= field.propertyName %> === undefined || data.<%= field.propertyName %> === null) {
+    throw Object.assign(new Error('<%= field.propertyName %> is required'), { status: 400 });
+  }
+<% }); %>
+}

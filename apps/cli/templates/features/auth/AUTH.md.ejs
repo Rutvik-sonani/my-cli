@@ -1,0 +1,29 @@
+# Authentication
+
+Strategies enabled:
+
+<% strategies.forEach(function(s) { %>- <%= s %>
+<% }); %>
+
+## Endpoints
+
+- `POST /auth/register`
+- `POST /auth/login`
+- `POST /auth/logout`
+<% if (hasRefresh) { %>- `POST /auth/refresh`
+<% } %>
+<% if (hasOAuth) { %>- `GET /auth/:provider` (OAuth redirect)
+<% } %>
+<% if (hasMagicLink) { %>- `POST /auth/magic-link`
+<% } %>
+<% if (hasOtp) { %>- `POST /auth/otp/send`
+<% } %>
+<% if (hasMfa) { %>- `POST /auth/mfa/verify`
+<% } %>
+<% if (hasPasskeys) { %>- `POST /auth/passkeys/register/options`
+- `POST /auth/passkeys/authenticate/options`
+<% } %>
+
+## Environment
+
+See `.env.example` for required variables.

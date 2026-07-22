@@ -1,0 +1,39 @@
+{
+  "name": "@mycli/migration-engine",
+  "version": "1.0.0",
+  "description": "Enterprise migration and upgrade engine — safe backups, reports, and multi-scope upgrades",
+  "type": "module",
+  "license": "MIT",
+  "publishConfig": { "access": "public" },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "clean": "rm -rf dist coverage"
+  },
+  "engines": { "node": ">=22.0.0" },
+  "dependencies": {
+    "@mycli/core": "workspace:*",
+    "@mycli/enterprise-core": "workspace:*",
+    "@mycli/config-manager": "workspace:*",
+    "@mycli/filesystem": "workspace:*",
+    "@mycli/template-engine": "workspace:*",
+    "@mycli/upgrade-manager": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}

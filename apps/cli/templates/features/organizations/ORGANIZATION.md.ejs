@@ -1,0 +1,47 @@
+# Organization — <%= appName %>
+
+Enterprise organization management for companies managing many projects.
+
+## Layout
+
+```
+src/organizations/
+  services/
+    organization.service.ts
+    team.service.ts
+    member.service.ts
+    project.service.ts
+    permission.service.ts
+tests/organizations/
+ORGANIZATION.md
+```
+
+## Support
+
+- Companies (organizations)
+- Teams
+- Members
+- Projects
+- Roles (`owner` | `admin` | `member` | `viewer`)
+
+## CLI
+
+```bash
+my organization setup
+```
+
+## Usage
+
+```ts
+import { registerOrganization } from './src/organizations/index.js';
+
+const orgPlatform = registerOrganization();
+const org = orgPlatform.organizations.create('Acme Corp');
+const team = orgPlatform.teams.create(org.id, 'Platform');
+const member = orgPlatform.members.add(org.id, {
+  userId: 'u1',
+  email: 'owner@acme.com',
+  role: 'owner',
+});
+orgPlatform.projects.create(org.id, 'Checkout API', { teamId: team.id });
+```

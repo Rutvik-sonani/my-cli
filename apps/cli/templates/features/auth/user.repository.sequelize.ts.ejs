@@ -1,0 +1,64 @@
+import { User } from '../../database/models/user.model.js';
+
+export interface AuthUserRecord {
+  id: string;
+  email: string;
+  passwordHash: string;
+  name: string | null;
+  emailVerified: boolean;
+  mfaSecret?: string | null;
+  mfaEnabled?: boolean;
+}
+
+export class UserRepository {
+  async findByEmail(email: string): Promise<AuthUserRecord | null> {
+    const user = await User.findOne({ where: { email: email.toLowerCase() } });
+    return user ? this.toRecord(user) : null;
+  }
+
+  async findById(id: string): Promise<AuthUserRecord | null> {
+    const user = await User.findByPk(id);
+    return user ? this.toRecord(user) : null;
+  }
+
+  async findByOAuth(_provider: string, _providerUserId: string): Promise<AuthUserRecord | null> {
+    return null;
+  }
+
+  async create(input: {
+    email: string;
+    passwordHash?: string;
+    name?: string;
+    emailVerified?: boolean;
+  }): Promise<AuthUserRecord> {
+    const user = await User.create({
+      email: input.email.toLowerCase(),
+      passwordHash: input.passwordHash ?? '',
+      name: input.name ?? null,
+      emailVerified: input.emailVerified ?? false,
+    });
+    return this.toRecord(user);
+  }
+
+  async linkOAuthAccount(_input: {
+    userId: string;
+    provider: string;
+    providerUserId: string;
+  }): Promise<void> {}
+
+  async enableMfa(_userId: string, _secret: string): Promise<void> {}
+
+  async saveRefreshToken(_userId: string, _token: string, _expiresAt: Date): Promise<void> {}
+
+  async deleteRefreshToken(_token: string): Promise<void> {}
+
+  private toRecord(user: User): AuthUserRecord {
+    return {
+      id: user.id,
+      email: user.email,
+      passwordHash: user.passwordHash,
+      name: user.name ?? null,
+      emailVerified: user.emailVerified,
+    };
+  }
+}

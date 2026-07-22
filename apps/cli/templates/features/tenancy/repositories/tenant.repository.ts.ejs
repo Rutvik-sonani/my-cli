@@ -1,0 +1,60 @@
+<% if (language === 'javascript') { %>
+import { Tenant } from '../entities/Tenant.js';
+
+export class InMemoryTenantRepository {
+  constructor() {
+    this.store = new Map();
+  }
+
+  async save(tenant) {
+    this.store.set(tenant.id, tenant);
+    return tenant;
+  }
+
+  async findBySlug(slug) {
+    return [...this.store.values()].find((tenant) => tenant.slug === slug) ?? null;
+  }
+
+  async findById(id) {
+    return this.store.get(id) ?? null;
+  }
+
+  async list() {
+    return [...this.store.values()];
+  }
+}
+
+export const tenantRepository = new InMemoryTenantRepository();
+<% } else { %>
+import { Tenant } from '../entities/Tenant.js';
+
+export interface TenantRepository {
+  save(tenant: Tenant): Promise<Tenant>;
+  findBySlug(slug: string): Promise<Tenant | null>;
+  findById(id: string): Promise<Tenant | null>;
+  list(): Promise<Tenant[]>;
+}
+
+export class InMemoryTenantRepository implements TenantRepository {
+  private readonly store = new Map<string, Tenant>();
+
+  async save(tenant: Tenant): Promise<Tenant> {
+    this.store.set(tenant.id, tenant);
+    return tenant;
+  }
+
+  async findBySlug(slug: string): Promise<Tenant | null> {
+    return [...this.store.values()].find((tenant) => tenant.slug === slug) ?? null;
+  }
+
+  async findById(id: string): Promise<Tenant | null> {
+    return this.store.get(id) ?? null;
+  }
+
+  async list(): Promise<Tenant[]> {
+    return [...this.store.values()];
+  }
+}
+
+export const tenantRepository = new InMemoryTenantRepository();
+<% } %>

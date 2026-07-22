@@ -1,0 +1,41 @@
+# Project Health — <%= appName %>
+
+Enterprise project analysis for architecture, security, dependencies, testing, documentation, deployment readiness, and performance risks.
+
+## CLI
+
+```bash
+my doctor
+my doctor setup
+my doctor --skip-audit
+```
+
+## Output
+
+`project-health-report.md`
+
+## Layout
+
+```
+src/project-health/
+  analyzers/
+  reports/
+tests/project-health/
+PROJECT_HEALTH.md
+project-health-report.md
+```
+
+## Usage
+
+```ts
+import { registerProjectHealth } from './src/project-health/index.js';
+
+const health = registerProjectHealth();
+const report = health.analyze({
+  projectName: '<%= appName %>',
+  architectureStyle: 'modular-monolith',
+  features: { security: true },
+  existingPaths: ['src/security', 'README.md'],
+});
+console.log(health.render(report));
+```

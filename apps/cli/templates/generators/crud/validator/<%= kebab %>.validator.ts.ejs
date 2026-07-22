@@ -1,0 +1,32 @@
+export function validateCreate<%= pascal %>(input: unknown): asserts input is Record<string, unknown> {
+  if (!input || typeof input !== 'object') {
+    throw Object.assign(new Error('Invalid <%= name %> payload'), { status: 400 });
+  }
+  const data = input as Record<string, unknown>;
+<% fields.filter(function(f) { return !f.optional; }).forEach(function(field) { %>
+  if (data.<%= field.propertyName %> === undefined || data.<%= field.propertyName %> === null) {
+    throw Object.assign(new Error('<%= field.propertyName %> is required'), { status: 400 });
+  }
+<% }); %>
+<% fields.forEach(function(field) { %>
+<% if (field.tsType === 'string') { %>
+  if (data.<%= field.propertyName %> !== undefined && typeof data.<%= field.propertyName %> !== 'string') {
+    throw Object.assign(new Error('<%= field.propertyName %> must be a string'), { status: 400 });
+  }
+<% } else if (field.tsType === 'number') { %>
+  if (data.<%= field.propertyName %> !== undefined && typeof data.<%= field.propertyName %> !== 'number') {
+    throw Object.assign(new Error('<%= field.propertyName %> must be a number'), { status: 400 });
+  }
+<% } else if (field.tsType === 'boolean') { %>
+  if (data.<%= field.propertyName %> !== undefined && typeof data.<%= field.propertyName %> !== 'boolean') {
+    throw Object.assign(new Error('<%= field.propertyName %> must be a boolean'), { status: 400 });
+  }
+<% } %>
+<% }); %>
+}
+
+export function validateUpdate<%= pascal %>(input: unknown): asserts input is Record<string, unknown> {
+  if (!input || typeof input !== 'object') {
+    throw Object.assign(new Error('Invalid <%= name %> payload'), { status: 400 });
+  }
+}

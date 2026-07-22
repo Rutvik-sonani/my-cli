@@ -1,0 +1,9 @@
+export interface <%= pascal %>Dto {
+<% fields.forEach(function(field) { %>
+  <%= field.propertyName %><%= field.optional ? '?' : '' %>: <%= field.tsType %>;
+<% }); %>
+}
+
+export interface Create<%= pascal %>Dto extends <%= pascal %>Dto {}
+
+export interface Update<%= pascal %>Dto extends Partial<<%= pascal %>Dto> {}

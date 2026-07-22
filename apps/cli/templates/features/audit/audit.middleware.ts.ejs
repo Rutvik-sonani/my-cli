@@ -1,0 +1,73 @@
+<% if (language === 'javascript') { %>
+import { auditService } from './register-audit.js';
+
+export async function auditMiddleware(request, reply, payload) {
+  if (request.method === 'GET' || request.method === 'HEAD' || request.method === 'OPTIONS') {
+    return payload;
+  }
+
+  const userId = request.identity?.userId ?? request.user?.id ?? 'anonymous';
+  const resource = request.url;
+  const action = `${request.method} ${resource}`;
+
+  await auditService.record(
+    {
+      userId,
+      ip: request.ip,
+      userAgent: request.headers['user-agent'],
+    },
+    {
+      action,
+      resource,
+      metadata: { statusCode: reply.statusCode },
+    },
+  );
+
+  return payload;
+}
+
+export async function registerAuditMiddleware(app) {
+  app.addHook('onSend', auditMiddleware);
+}
+<% } else { %>
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import { auditService } from './register-audit.js';
+
+type RequestWithActor = FastifyRequest & {
+  identity?: { userId: string };
+  user?: { id: string };
+};
+
+export async function auditMiddleware(
+  request: RequestWithActor,
+  reply: FastifyReply,
+  payload: unknown,
+): Promise<unknown> {
+  if (request.method === 'GET' || request.method === 'HEAD' || request.method === 'OPTIONS') {
+    return payload;
+  }
+
+  const userId = request.identity?.userId ?? request.user?.id ?? 'anonymous';
+  const resource = request.url;
+  const action = `${request.method} ${resource}`;
+
+  await auditService.record(
+    {
+      userId,
+      ip: request.ip,
+      userAgent: typeof request.headers['user-agent'] === 'string' ? request.headers['user-agent'] : undefined,
+    },
+    {
+      action,
+      resource,
+      metadata: { statusCode: reply.statusCode },
+    },
+  );
+
+  return payload;
+}
+
+export async function registerAuditMiddleware(app: FastifyInstance): Promise<void> {
+  app.addHook('onSend', auditMiddleware);
+}
+<% } %>

@@ -1,0 +1,12 @@
+<% if (language === 'javascript') { %>
+/** @typedef {{ save(record: AuditRecord): Promise<void>, findByResource(resource: string): Promise<AuditRecord[]>, findByUser(userId: string): Promise<AuditRecord[]>, list(limit?: number): Promise<AuditRecord[]> }} AuditStorage */
+<% } else { %>
+import type { AuditRecord } from '../audit-record.js';
+
+export interface AuditStorage {
+  save(record: AuditRecord): Promise<void>;
+  findByResource(resource: string): Promise<AuditRecord[]>;
+  findByUser(userId: string): Promise<AuditRecord[]>;
+  list(limit?: number): Promise<AuditRecord[]>;
+}
+<% } %>

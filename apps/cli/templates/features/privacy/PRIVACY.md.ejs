@@ -1,0 +1,50 @@
+# Privacy — <%= appName %>
+
+Subject-access export, erasure, consent, cookie tracking, and processing records.
+
+## Layout
+
+```
+src/privacy/
+  consent/
+  cookies/
+  processing/
+  export/
+  deletion/
+tests/privacy/
+PRIVACY.md
+```
+
+## CLI
+
+```bash
+my privacy export --user user-1
+my privacy delete --user user-1
+```
+
+## Usage
+
+```ts
+import {
+  privacyService,
+  privacyUserStore,
+  dataExporter,
+  dataDeleter,
+} from './src/privacy/index.js';
+
+privacyUserStore.setProfile('user-1', { email: 'a@b.com' });
+await privacyService.consentService.grant('user-1', 'marketing');
+await privacyService.cookies.track('analytics', '_ga', 'set', { userId: 'user-1' });
+await privacyService.processing.record('user-1', 'account', 'contract', ['email']);
+
+const dump = await dataExporter.export('user-1');
+const erased = await dataDeleter.delete('user-1');
+```
+
+## Features
+
+- Export user data
+- Delete user data
+- Consent management
+- Cookie tracking
+- Data processing records

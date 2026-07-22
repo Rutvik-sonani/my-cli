@@ -1,0 +1,11 @@
+import { Schema, model } from 'mongoose';
+
+const roleSchema = new Schema(
+  {
+    name: { type: String, required: true, unique: true },
+    description: { type: String },
+  },
+  { timestamps: { createdAt: 'created_at', updatedAt: false }, collection: 'roles' },
+);
+
+export const RoleModel = model('Role', roleSchema);

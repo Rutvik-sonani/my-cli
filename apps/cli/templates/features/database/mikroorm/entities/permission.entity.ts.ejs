@@ -1,0 +1,17 @@
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { randomUUID } from 'node:crypto';
+
+@Entity({ tableName: 'permissions' })
+export class Permission {
+  @PrimaryKey()
+  id: string = randomUUID();
+
+  @Property({ unique: true })
+  name!: string;
+
+  @Property({ nullable: true })
+  description?: string;
+
+  @Property({ fieldName: 'created_at', onCreate: () => new Date() })
+  createdAt = new Date();
+}

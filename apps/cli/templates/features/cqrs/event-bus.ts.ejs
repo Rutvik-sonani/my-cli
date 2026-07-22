@@ -1,0 +1,86 @@
+<% if (language === 'javascript') { %>
+export class EventBusError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'EventBusError';
+  }
+}
+
+export class EventBus {
+  constructor() {
+    this.handlers = new Map();
+    this.middleware = [];
+  }
+
+  use(middleware) {
+    this.middleware.push(middleware);
+    return this;
+  }
+
+  subscribe(type, handler) {
+    const list = this.handlers.get(type) ?? [];
+    list.push(handler);
+    this.handlers.set(type, list);
+    return this;
+  }
+
+  async publish(event) {
+    const handlers = this.handlers.get(event.type) ?? [];
+    for (const handler of handlers) {
+      let index = 0;
+      const runHandler = async () => {
+        if (index < this.middleware.length) {
+          const middleware = this.middleware[index++];
+          await middleware(event, runHandler);
+          return;
+        }
+        await handler(event);
+      };
+      await runHandler();
+    }
+  }
+}
+<% } else { %>
+export class EventBusError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'EventBusError';
+  }
+}
+
+export type EventHandler<E extends { type: string }> = (event: E) => Promise<void> | void;
+export type BusMiddleware<T> = (message: T, next: () => Promise<unknown>) => Promise<unknown>;
+
+export class EventBus {
+  private readonly handlers = new Map<string, EventHandler<{ type: string }>[]>();
+  private readonly middleware: BusMiddleware<{ type: string }>[] = [];
+
+  use(middleware: BusMiddleware<{ type: string }>): this {
+    this.middleware.push(middleware);
+    return this;
+  }
+
+  subscribe<E extends { type: string }>(type: string, handler: EventHandler<E>): this {
+    const list = this.handlers.get(type) ?? [];
+    list.push(handler as EventHandler<{ type: string }>);
+    this.handlers.set(type, list);
+    return this;
+  }
+
+  async publish<E extends { type: string }>(event: E): Promise<void> {
+    const handlers = this.handlers.get(event.type) ?? [];
+    for (const handler of handlers) {
+      let index = 0;
+      const runHandler = async (): Promise<void> => {
+        if (index < this.middleware.length) {
+          const middleware = this.middleware[index++]!;
+          await middleware(event, runHandler);
+          return;
+        }
+        await handler(event);
+      };
+      await runHandler();
+    }
+  }
+}
+<% } %>

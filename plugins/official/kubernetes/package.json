@@ -1,0 +1,32 @@
+{
+  "name": "@mycli/plugin-kubernetes",
+  "version": "1.0.0",
+  "description": "Official MyCLI Kubernetes plugin",
+  "type": "module",
+  "license": "MIT",
+  "private": true,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@mycli/plugin-system": "workspace:*",
+    "@mycli/kubernetes-manager": "workspace:*",
+    "@mycli/filesystem": "workspace:*",
+    "@mycli/template-engine": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8",
+    "@types/node": "^22.10.5"
+  }
+}

@@ -1,0 +1,87 @@
+import {
+  mssqlTable,
+  uniqueIndex,
+  primaryKey,
+  varchar,
+  bit,
+  datetime2,
+  text,
+} from 'drizzle-orm/mssql-core';
+import { sql } from 'drizzle-orm';
+
+<% if (includeUser) { %>
+export const users = mssqlTable('users', {
+  id: varchar('id', { length: 36 })
+    .primaryKey()
+    .default(sql`NEWID()`),
+  email: varchar('email', { length: 255 }).notNull(),
+  passwordHash: varchar('password_hash', { length: 255 }).notNull(),
+  name: varchar('name', { length: 255 }),
+  emailVerified: bit('email_verified').notNull().default(false),
+  mfaSecret: varchar('mfa_secret', { length: 255 }),
+  mfaEnabled: bit('mfa_enabled').notNull().default(false),
+  createdAt: datetime2('created_at').notNull().default(sql`GETDATE()`),
+  updatedAt: datetime2('updated_at').notNull().default(sql`GETDATE()`),
+}, (t) => [uniqueIndex('users_email_unique').on(t.email)]);
+
+export const refreshTokens = mssqlTable('refresh_tokens', {
+  id: varchar('id', { length: 36 })
+    .primaryKey()
+    .default(sql`NEWID()`),
+  token: varchar('token', { length: 512 }).notNull(),
+  userId: varchar('user_id', { length: 36 }).notNull(),
+  expiresAt: datetime2('expires_at').notNull(),
+  createdAt: datetime2('created_at').notNull().default(sql`GETDATE()`),
+}, (t) => [uniqueIndex('refresh_tokens_token_unique').on(t.token)]);
+
+export const oAuthAccounts = mssqlTable(
+  'oauth_accounts',
+  {
+    id: varchar('id', { length: 36 })
+      .primaryKey()
+      .default(sql`NEWID()`),
+    userId: varchar('user_id', { length: 36 }).notNull(),
+    provider: varchar('provider', { length: 50 }).notNull(),
+    providerUserId: varchar('provider_user_id', { length: 255 }).notNull(),
+  },
+  (t) => [uniqueIndex('oauth_provider_user_unique').on(t.provider, t.providerUserId)],
+);
+<% } %>
+
+<% if (includeRbac) { %>
+export const roles = mssqlTable('roles', {
+  id: varchar('id', { length: 36 })
+    .primaryKey()
+    .default(sql`NEWID()`),
+  name: varchar('name', { length: 100 }).notNull(),
+  description: text('description'),
+  createdAt: datetime2('created_at').notNull().default(sql`GETDATE()`),
+}, (t) => [uniqueIndex('roles_name_unique').on(t.name)]);
+
+export const permissions = mssqlTable('permissions', {
+  id: varchar('id', { length: 36 })
+    .primaryKey()
+    .default(sql`NEWID()`),
+  name: varchar('name', { length: 150 }).notNull(),
+  description: text('description'),
+  createdAt: datetime2('created_at').notNull().default(sql`GETDATE()`),
+}, (t) => [uniqueIndex('permissions_name_unique').on(t.name)]);
+
+export const rolePermissions = mssqlTable(
+  'role_permissions',
+  {
+    roleId: varchar('role_id', { length: 36 }).notNull(),
+    permissionId: varchar('permission_id', { length: 36 }).notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.roleId, t.permissionId] })],
+);
+
+export const userRoles = mssqlTable(
+  'user_roles',
+  {
+    userId: varchar('user_id', { length: 36 }).notNull(),
+    roleId: varchar('role_id', { length: 36 }).notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.roleId] })],
+);
+<% } %>

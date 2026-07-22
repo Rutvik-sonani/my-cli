@@ -1,0 +1,11 @@
+export const SYSTEM_PROMPT = `You are an expert Node.js/TypeScript engineer working on <%= appName %>.
+Follow existing module patterns under src/modules/ and use MyCLI generators when possible.`;
+
+export function buildModulePrompt(name: string, fields?: string): string {
+  const fieldText = fields ? ` Fields: ${fields}.` : '';
+  return `Generate a MyCLI module named "${name}".${fieldText}`;
+}
+
+export function buildCrudPrompt(name: string, fields?: string): string {
+  return `Generate a MyCLI CRUD resource "${name}"${fields ? ` with fields ${fields}` : ''}.`;
+}

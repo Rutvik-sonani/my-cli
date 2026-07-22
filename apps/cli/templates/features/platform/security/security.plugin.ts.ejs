@@ -1,0 +1,18 @@
+import type { FastifyInstance } from 'fastify';
+import helmet from '@fastify/helmet';
+import cors from '@fastify/cors';
+import rateLimit from '@fastify/rate-limit';
+
+export async function registerSecurityPlugins(app: FastifyInstance): Promise<void> {
+  await app.register(helmet);
+
+  await app.register(cors, {
+    origin: process.env.CORS_ORIGIN?.split(',') ?? ['http://localhost:3000'],
+    credentials: true,
+  });
+
+  await app.register(rateLimit, {
+    max: Number(process.env.RATE_LIMIT_MAX ?? 100),
+    timeWindow: process.env.RATE_LIMIT_WINDOW ?? '1 minute',
+  });
+}

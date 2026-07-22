@@ -1,0 +1,51 @@
+# Feature Flags — <%= appName %>
+
+Provider: **<%= provider %>** (`<%= providerClass %>`)
+
+## Layout
+
+```
+src/feature-flags/
+  feature-flag-provider.interface.ts
+  feature-flag.service.ts
+  providers/
+  targeting/
+config/feature-flags.json
+tests/feature-flags/
+FEATURE_FLAGS.md
+```
+
+## Capabilities
+
+- Boolean flags
+- Percentage rollout
+- User targeting
+- Environment targeting
+- Country targeting
+
+## Usage
+
+```ts
+import { featureFlags } from './src/feature-flags/index.js';
+
+const enabled = await featureFlags.isEnabled('new-checkout', {
+  userId: 'beta-user',
+  environment: 'staging',
+  country: 'US',
+});
+```
+
+## Providers
+
+| Provider | Class | Notes |
+|----------|-------|-------|
+| database | `DatabaseFeatureFlagProvider` | Local JSON rules (default) |
+| launchdarkly | `LaunchDarklyFeatureFlagProvider` | SDK adapter + local fallback |
+| unleash | `UnleashFeatureFlagProvider` | Client adapter + local fallback |
+
+Re-run with a different provider:
+
+```bash
+my add feature-flags --provider launchdarkly
+my add feature-flags --provider unleash
+```

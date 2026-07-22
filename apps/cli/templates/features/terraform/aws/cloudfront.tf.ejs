@@ -1,0 +1,67 @@
+resource "aws_cloudfront_origin_access_control" "assets" {
+  name                              = "<%= appName %>-assets-oac"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
+}
+
+resource "aws_s3_bucket_policy" "assets_cloudfront" {
+  bucket = aws_s3_bucket.assets.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Sid       = "AllowCloudFrontServicePrincipal"
+      Effect    = "Allow"
+      Principal = { Service = "cloudfront.amazonaws.com" }
+      Action    = "s3:GetObject"
+      Resource  = "${aws_s3_bucket.assets.arn}/*"
+      Condition = {
+        StringEquals = {
+          "AWS:SourceArn" = aws_cloudfront_distribution.assets.arn
+        }
+      }
+    }]
+  })
+}
+
+resource "aws_cloudfront_distribution" "assets" {
+  enabled             = true
+  comment             = "<%= appName %> static assets"
+  default_root_object = "index.html"
+
+  origin {
+    domain_name              = aws_s3_bucket.assets.bucket_regional_domain_name
+    origin_id                = "s3-<%= appName %>-assets"
+    origin_access_control_id = aws_cloudfront_origin_access_control.assets.id
+  }
+
+  default_cache_behavior {
+    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
+    cached_methods         = ["GET", "HEAD"]
+    target_origin_id       = "s3-<%= appName %>-assets"
+    viewer_protocol_policy = "redirect-to-https"
+
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
+    }
+  }
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+
+  tags = {
+    Name        = "<%= appName %>-cdn"
+    Environment = var.environment
+  }
+}

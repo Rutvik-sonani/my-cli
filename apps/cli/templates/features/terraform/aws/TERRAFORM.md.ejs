@@ -1,0 +1,29 @@
+# Terraform AWS — <%= appName %>
+
+Generated modules:
+
+| File | Service |
+|------|---------|
+| `main.tf` | ECS Fargate cluster + task definition |
+| `network.tf` | VPC, subnets, security groups |
+| `database.tf` | RDS PostgreSQL |
+| `storage.tf` | S3 assets bucket |
+| `eks.tf` | Amazon EKS cluster + managed node group |
+| `lambda.tf` | Lambda function + HTTP API Gateway |
+| `cloudfront.tf` | CloudFront CDN for S3 assets |
+
+```bash
+cd deploy/terraform/aws
+terraform init
+terraform plan
+terraform apply
+```
+
+Region: **<%= region %>**
+
+## Post-apply
+
+- **ECS**: deploy container image `<%= image %>` to the ECS cluster.
+- **EKS**: configure `kubectl` with `aws eks update-kubeconfig --name <%= appName %>-eks`.
+- **Lambda**: replace the placeholder zip with your build artifact, then update `aws_lambda_function.api`.
+- **CloudFront**: upload static assets to the S3 bucket; the distribution serves them globally.

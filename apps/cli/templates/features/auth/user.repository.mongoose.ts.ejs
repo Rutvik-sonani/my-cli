@@ -1,0 +1,74 @@
+import { UserModel } from '../../database/models/user.model.js';
+
+export interface AuthUserRecord {
+  id: string;
+  email: string;
+  passwordHash: string;
+  name: string | null;
+  emailVerified: boolean;
+  mfaSecret?: string | null;
+  mfaEnabled?: boolean;
+}
+
+export class UserRepository {
+  async findByEmail(email: string): Promise<AuthUserRecord | null> {
+    const user = await UserModel.findOne({ email: email.toLowerCase() }).lean();
+    if (!user) return null;
+    return {
+      id: String(user._id),
+      email: user.email,
+      passwordHash: user.passwordHash,
+      name: user.name ?? null,
+      emailVerified: user.emailVerified ?? false,
+    };
+  }
+
+  async findById(id: string): Promise<AuthUserRecord | null> {
+    const user = await UserModel.findById(id).lean();
+    if (!user) return null;
+    return {
+      id: String(user._id),
+      email: user.email,
+      passwordHash: user.passwordHash,
+      name: user.name ?? null,
+      emailVerified: user.emailVerified ?? false,
+    };
+  }
+
+  async findByOAuth(_provider: string, _providerUserId: string): Promise<AuthUserRecord | null> {
+    return null;
+  }
+
+  async create(input: {
+    email: string;
+    passwordHash?: string;
+    name?: string;
+    emailVerified?: boolean;
+  }): Promise<AuthUserRecord> {
+    const user = await UserModel.create({
+      email: input.email.toLowerCase(),
+      passwordHash: input.passwordHash ?? '',
+      name: input.name ?? null,
+      emailVerified: input.emailVerified ?? false,
+    });
+    return {
+      id: String(user._id),
+      email: user.email,
+      passwordHash: user.passwordHash,
+      name: user.name ?? null,
+      emailVerified: user.emailVerified ?? false,
+    };
+  }
+
+  async linkOAuthAccount(_input: {
+    userId: string;
+    provider: string;
+    providerUserId: string;
+  }): Promise<void> {}
+
+  async enableMfa(_userId: string, _secret: string): Promise<void> {}
+
+  async saveRefreshToken(_userId: string, _token: string, _expiresAt: Date): Promise<void> {}
+
+  async deleteRefreshToken(_token: string): Promise<void> {}
+}

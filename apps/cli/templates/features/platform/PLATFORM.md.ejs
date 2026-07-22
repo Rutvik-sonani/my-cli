@@ -1,0 +1,17 @@
+# Platform Features — <%= appName %>
+
+MyCLI-generated platform modules for <%= appName %>.
+
+| Feature | Command | Path |
+|---------|---------|------|
+| Observability | `my add observability` | `src/platform/observability/` |
+| Security | `my add security` or `my security setup` | `src/platform/security/` |
+| Tenancy | `my add tenancy` | `src/platform/tenancy/` |
+| Feature flags | `my add feature-flags` | `src/platform/feature-flags/` |
+| Search | `my add search` | `src/platform/search/` |
+
+See `docs/<feature>.md` for configuration and usage.
+
+```bash
+my doctor   # validate enabled platform features
+```

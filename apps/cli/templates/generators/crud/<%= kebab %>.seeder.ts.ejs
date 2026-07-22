@@ -1,0 +1,9 @@
+import type { <%= pascal %>Repository } from './<%= kebab %>.repository.js';
+
+export async function seed<%= pascal %>(repository: <%= pascal %>Repository) {
+  return repository.create({
+<% fields.forEach(function(field) { %>
+    <%= field.propertyName %>: <%= field.sampleValue %>,
+<% }); %>
+  } as never);
+}

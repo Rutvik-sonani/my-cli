@@ -1,0 +1,72 @@
+<% if (language === 'javascript') { %>
+import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge';
+import { JsonEventSerializer } from '../serializer.js';
+import { withRetry } from '../retry.policy.js';
+import { DeadLetterQueue } from '../dead-letter/dead-letter.queue.js';
+
+export class EventBridgePublisher {
+  constructor(options = {}) {
+    this.busName = options.busName ?? process.env.EVENTBRIDGE_BUS ?? '<%= appName %>-events';
+    this.source = options.source ?? '<%= appName %>.app';
+    this.client = options.client ?? new EventBridgeClient({ region: process.env.AWS_REGION ?? 'us-east-1' });
+    this.serializer = new JsonEventSerializer();
+    this.deadLetter = new DeadLetterQueue();
+  }
+
+  async publish(envelope) {
+    await withRetry(async () => {
+      await this.client.send(
+        new PutEventsCommand({
+          Entries: [
+            {
+              EventBusName: this.busName,
+              Source: this.source,
+              DetailType: envelope.type,
+              Detail: this.serializer.serialize(envelope),
+            },
+          ],
+        }),
+      );
+    });
+  }
+}
+<% } else { %>
+import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge';
+import { JsonEventSerializer, type EventEnvelope } from '../serializer.js';
+import { withRetry } from '../retry.policy.js';
+import { DeadLetterQueue } from '../dead-letter/dead-letter.queue.js';
+import type { EventPublisher } from './event-publisher.interface.js';
+
+export class EventBridgePublisher implements EventPublisher {
+  private readonly busName: string;
+  private readonly source: string;
+  private readonly client: EventBridgeClient;
+  private readonly serializer = new JsonEventSerializer();
+  readonly deadLetter = new DeadLetterQueue();
+
+  constructor(options: { client?: EventBridgeClient; busName?: string; source?: string } = {}) {
+    this.busName = options.busName ?? process.env.EVENTBRIDGE_BUS ?? '<%= appName %>-events';
+    this.source = options.source ?? '<%= appName %>.app';
+    this.client =
+      options.client ??
+      new EventBridgeClient({ region: process.env.AWS_REGION ?? 'us-east-1' });
+  }
+
+  async publish<T>(envelope: EventEnvelope<T>): Promise<void> {
+    await withRetry(async () => {
+      await this.client.send(
+        new PutEventsCommand({
+          Entries: [
+            {
+              EventBusName: this.busName,
+              Source: this.source,
+              DetailType: envelope.type,
+              Detail: this.serializer.serialize(envelope),
+            },
+          ],
+        }),
+      );
+    });
+  }
+}
+<% } %>

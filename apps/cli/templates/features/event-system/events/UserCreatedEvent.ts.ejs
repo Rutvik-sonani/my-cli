@@ -1,0 +1,34 @@
+<% if (language === 'javascript') { %>
+export class UserCreatedEvent {
+  static type = 'user.created';
+
+  constructor(payload) {
+    this.type = UserCreatedEvent.type;
+    this.version = 1;
+    this.payload = payload;
+    this.occurredAt = new Date();
+  }
+
+  static create(id, email) {
+    return new UserCreatedEvent({ id, email });
+  }
+}
+<% } else { %>
+export interface UserCreatedPayload {
+  id: string;
+  email: string;
+}
+
+export class UserCreatedEvent {
+  static readonly type = 'user.created' as const;
+  readonly type = UserCreatedEvent.type;
+  readonly version = 1;
+  readonly occurredAt = new Date();
+
+  constructor(public readonly payload: UserCreatedPayload) {}
+
+  static create(id: string, email: string): UserCreatedEvent {
+    return new UserCreatedEvent({ id, email });
+  }
+}
+<% } %>

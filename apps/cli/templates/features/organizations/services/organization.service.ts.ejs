@@ -1,0 +1,108 @@
+<% if (language === 'javascript') { %>
+import { slugify } from '../organization.store.js';
+
+export class OrganizationService {
+  constructor(store) {
+    this.store = store;
+  }
+
+  create(name, metadata) {
+    const org = {
+      id: crypto.randomUUID(),
+      name,
+      slug: slugify(name),
+      createdAt: new Date(),
+      metadata,
+    };
+    this.store.organizations.set(org.id, org);
+    return org;
+  }
+
+  get(id) {
+    return this.store.organizations.get(id);
+  }
+
+  list() {
+    return [...this.store.organizations.values()];
+  }
+
+  rename(id, name) {
+    const org = this.requireOrg(id);
+    org.name = name;
+    org.slug = slugify(name);
+    return org;
+  }
+
+  delete(id) {
+    for (const team of this.store.teams.values()) {
+      if (team.organizationId === id) this.store.teams.delete(team.id);
+    }
+    for (const member of this.store.members.values()) {
+      if (member.organizationId === id) this.store.members.delete(member.id);
+    }
+    for (const project of this.store.projects.values()) {
+      if (project.organizationId === id) this.store.projects.delete(project.id);
+    }
+    return this.store.organizations.delete(id);
+  }
+
+  requireOrg(id) {
+    const org = this.store.organizations.get(id);
+    if (!org) throw new Error(`Organization not found: ${id}`);
+    return org;
+  }
+}
+<% } else { %>
+import type { Organization } from '../organization.types.js';
+import { OrganizationStore, slugify } from '../organization.store.js';
+
+export class OrganizationService {
+  constructor(private readonly store: OrganizationStore) {}
+
+  create(name: string, metadata?: Record<string, unknown>): Organization {
+    const org: Organization = {
+      id: crypto.randomUUID(),
+      name,
+      slug: slugify(name),
+      createdAt: new Date(),
+      metadata,
+    };
+    this.store.organizations.set(org.id, org);
+    return org;
+  }
+
+  get(id: string): Organization | undefined {
+    return this.store.organizations.get(id);
+  }
+
+  list(): Organization[] {
+    return [...this.store.organizations.values()];
+  }
+
+  rename(id: string, name: string): Organization {
+    const org = this.requireOrg(id);
+    org.name = name;
+    org.slug = slugify(name);
+    return org;
+  }
+
+  delete(id: string): boolean {
+    for (const team of this.store.teams.values()) {
+      if (team.organizationId === id) this.store.teams.delete(team.id);
+    }
+    for (const member of this.store.members.values()) {
+      if (member.organizationId === id) this.store.members.delete(member.id);
+    }
+    for (const project of this.store.projects.values()) {
+      if (project.organizationId === id) this.store.projects.delete(project.id);
+    }
+    return this.store.organizations.delete(id);
+  }
+
+  private requireOrg(id: string): Organization {
+    const org = this.store.organizations.get(id);
+    if (!org) throw new Error(`Organization not found: ${id}`);
+    return org;
+  }
+}
+<% } %>

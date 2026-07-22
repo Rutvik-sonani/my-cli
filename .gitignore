@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build
+dist/
+build/
+out/
+*.tsbuildinfo
+.turbo/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Testing
+coverage/
+.vitest/
+
+# IDE
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Changesets
+.changeset/*.md
+!.changeset/README.md
+!.changeset/config.json
+
+# Generated
+*.local
+.cache/
+
+# Website
+apps/website/.next/
+apps/website/out/
+
+# OS
+Thumbs.db

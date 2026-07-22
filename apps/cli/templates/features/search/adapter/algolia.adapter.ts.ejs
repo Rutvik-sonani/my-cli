@@ -1,0 +1,142 @@
+<% if (language === 'javascript') { %>
+import { MemorySearchAdapter } from './memory.adapter.js';
+
+/**
+ * Algolia adapter for <%= appName %>.
+ * Uses algoliasearch when ALGOLIA_APP_ID is set; falls back to memory.
+ */
+export class AlgoliaSearchAdapter {
+  constructor() {
+    this.id = 'algolia';
+    this.fallback = new MemorySearchAdapter('algolia');
+    this.indexName = process.env.ALGOLIA_INDEX ?? process.env.SEARCH_INDEX ?? '<%= appName %>';
+    this.index = null;
+  }
+
+  async connect() {
+    try {
+      const algoliasearch = (await import('algoliasearch')).default;
+      const client = algoliasearch(
+        process.env.ALGOLIA_APP_ID ?? '',
+        process.env.ALGOLIA_API_KEY ?? '',
+      );
+      this.index = client.initIndex(this.indexName);
+    } catch {
+      this.index = null;
+    }
+    await this.fallback.connect();
+  }
+
+  async disconnect() {
+    this.index = null;
+    await this.fallback.disconnect();
+  }
+
+  async index(documents) {
+    if (!this.index) return this.fallback.index(documents);
+    const list = Array.isArray(documents) ? documents : [documents];
+    await this.index.saveObjects(list.map((doc) => ({ objectID: doc.id, ...doc })));
+  }
+
+  async delete(id) {
+    if (!this.index) return this.fallback.delete(id);
+    await this.index.deleteObject(id);
+    return true;
+  }
+
+  async search(query, options = {}) {
+    if (!this.index) return this.fallback.search(query, options);
+    const result = await this.index.search(query, {
+      hitsPerPage: options.limit ?? 20,
+      page: Math.floor((options.offset ?? 0) / (options.limit ?? 20)),
+    });
+    return {
+      query,
+      hits: result.hits.map((hit) => ({
+        document: { id: hit.objectID, ...hit },
+        score: 1,
+      })),
+      total: result.nbHits ?? result.hits.length,
+      tookMs: result.processingTimeMS ?? 0,
+    };
+  }
+}
+<% } else { %>
+import type { SearchProvider } from '../search-provider.interface.js';
+import type {
+  SearchDocument,
+  SearchProviderId,
+  SearchQueryOptions,
+  SearchResult,
+} from '../search.types.js';
+import { MemorySearchAdapter } from './memory.adapter.js';
+
+/**
+ * Algolia adapter for <%= appName %>.
+ * Uses algoliasearch when credentials are configured; falls back to memory.
+ */
+export class AlgoliaSearchAdapter implements SearchProvider {
+  readonly id: SearchProviderId = 'algolia';
+  private readonly fallback = new MemorySearchAdapter('algolia');
+  private readonly indexName =
+    process.env.ALGOLIA_INDEX ?? process.env.SEARCH_INDEX ?? '<%= appName %>';
+  private index: {
+    saveObjects: (objs: Record<string, unknown>[]) => Promise<unknown>;
+    deleteObject: (id: string) => Promise<unknown>;
+    search: (query: string, opts?: Record<string, unknown>) => Promise<any>;
+  } | null = null;
+
+  async connect(): Promise<void> {
+    try {
+      const mod = await import('algoliasearch');
+      const algoliasearch = (mod as { default?: Function }).default ?? (mod as unknown as Function);
+      const client = (algoliasearch as any)(
+        process.env.ALGOLIA_APP_ID ?? '',
+        process.env.ALGOLIA_API_KEY ?? '',
+      );
+      this.index = client.initIndex(this.indexName);
+    } catch {
+      this.index = null;
+    }
+    await this.fallback.connect();
+  }
+
+  async disconnect(): Promise<void> {
+    this.index = null;
+    await this.fallback.disconnect();
+  }
+
+  async index(documents: SearchDocument | SearchDocument[]): Promise<void> {
+    if (!this.index) return this.fallback.index(documents);
+    const list = Array.isArray(documents) ? documents : [documents];
+    await this.index.saveObjects(list.map((doc) => ({ objectID: doc.id, ...doc })));
+  }
+
+  async delete(id: string): Promise<boolean> {
+    if (!this.index) return this.fallback.delete(id);
+    await this.index.deleteObject(id);
+    return true;
+  }
+
+  async search<T extends SearchDocument = SearchDocument>(
+    query: string,
+    options: SearchQueryOptions = {},
+  ): Promise<SearchResult<T>> {
+    if (!this.index) return this.fallback.search<T>(query, options);
+    const limit = options.limit ?? 20;
+    const result = await this.index.search(query, {
+      hitsPerPage: limit,
+      page: Math.floor((options.offset ?? 0) / limit),
+    });
+    return {
+      query,
+      hits: result.hits.map((hit: T & { objectID: string }) => ({
+        document: { id: hit.objectID, ...hit } as T,
+        score: 1,
+      })),
+      total: result.nbHits ?? result.hits.length,
+      tookMs: result.processingTimeMS ?? 0,
+    };
+  }
+}
+<% } %>

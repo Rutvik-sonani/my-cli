@@ -1,0 +1,81 @@
+import { RoleModel } from '../../database/models/role.model.js';
+import { PermissionModel } from '../../database/models/permission.model.js';
+import { RolePermissionModel } from '../../database/models/role-permission.model.js';
+import { UserRoleModel } from '../../database/models/user-role.model.js';
+import type { Permission, Role } from './rbac.types.js';
+
+function toRole(doc: { _id: unknown; name: string; description?: string | null }): Role {
+  return {
+    id: String(doc._id),
+    name: doc.name,
+    description: doc.description ?? null,
+    createdAt: new Date(),
+  };
+}
+
+function toPermission(doc: { _id: unknown; name: string; description?: string | null }): Permission {
+  return {
+    id: String(doc._id),
+    name: doc.name,
+    description: doc.description ?? null,
+    createdAt: new Date(),
+  };
+}
+
+export class RbacRepository {
+  async findRoleByName(name: string): Promise<Role | null> {
+    const doc = await RoleModel.findOne({ name }).lean();
+    return doc ? toRole(doc) : null;
+  }
+
+  async findPermissionByName(name: string): Promise<Permission | null> {
+    const doc = await PermissionModel.findOne({ name }).lean();
+    return doc ? toPermission(doc) : null;
+  }
+
+  async createRole(name: string, description?: string): Promise<Role> {
+    const doc = await RoleModel.create({ name, description: description ?? null });
+    return toRole(doc);
+  }
+
+  async createPermission(name: string, description?: string): Promise<Permission> {
+    const doc = await PermissionModel.create({ name, description: description ?? null });
+    return toPermission(doc);
+  }
+
+  async assignPermission(roleId: string, permissionId: string): Promise<void> {
+    await RolePermissionModel.updateOne(
+      { roleId, permissionId },
+      { $setOnInsert: { roleId, permissionId } },
+      { upsert: true },
+    );
+  }
+
+  async assignRole(userId: string, roleId: string): Promise<void> {
+    await UserRoleModel.updateOne(
+      { userId, roleId },
+      { $setOnInsert: { userId, roleId } },
+      { upsert: true },
+    );
+  }
+
+  async userRoles(userId: string): Promise<Role[]> {
+    const links = await UserRoleModel.find({ userId }).lean();
+    const result: Role[] = [];
+    for (const link of links) {
+      const role = await RoleModel.findById(link.roleId).lean();
+      if (role) result.push(toRole(role));
+    }
+    return result;
+  }
+
+  async rolePermissions(roleId: string): Promise<Permission[]> {
+    const links = await RolePermissionModel.find({ roleId }).lean();
+    const result: Permission[] = [];
+    for (const link of links) {
+      const permission = await PermissionModel.findById(link.permissionId).lean();
+      if (permission) result.push(toPermission(permission));
+    }
+    return result;
+  }
+}

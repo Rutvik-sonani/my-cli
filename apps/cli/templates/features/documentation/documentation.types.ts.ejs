@@ -1,0 +1,27 @@
+<% if (language === 'javascript') { %>
+/**
+ * Documentation types for <%= appName %>
+ * @typedef {'architecture'|'security'|'compliance'|'operations'|'scaling'|'disaster-recovery'|'api-guide'} DocumentationKind
+ */
+
+export {};
+<% } else { %>
+/**
+ * Documentation types for <%= appName %>
+ */
+export type DocumentationKind =
+  | 'architecture'
+  | 'security'
+  | 'compliance'
+  | 'operations'
+  | 'scaling'
+  | 'disaster-recovery'
+  | 'api-guide';
+
+export interface DocumentationDocument {
+  kind: DocumentationKind;
+  filename: string;
+  title: string;
+  description: string;
+}
+<% } %>

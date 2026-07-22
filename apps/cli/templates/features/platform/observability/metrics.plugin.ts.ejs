@@ -1,0 +1,20 @@
+import type { FastifyInstance } from 'fastify';
+
+const metrics = {
+  requests: 0,
+  errors: 0,
+};
+
+export async function registerMetricsPlugin(app: FastifyInstance): Promise<void> {
+  app.addHook('onResponse', async (_request, reply) => {
+    metrics.requests += 1;
+    if (reply.statusCode >= 500) metrics.errors += 1;
+  });
+
+  app.get('/metrics', async () => ({
+    service: '<%= appName %>',
+    requests: metrics.requests,
+    errors: metrics.errors,
+    uptimeSeconds: Math.floor(process.uptime()),
+  }));
+}

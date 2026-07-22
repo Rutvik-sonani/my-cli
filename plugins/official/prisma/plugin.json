@@ -1,0 +1,11 @@
+{
+  "name": "@mycli/prisma",
+  "version": "1.0.0",
+  "description": "Official MyCLI prisma plugin",
+  "main": "dist/index.js",
+  "compatibility": ">=1.0.0",
+  "author": "MyCLI",
+  "slug": "prisma",
+  "npmPackage": "@mycli/plugin-prisma",
+  "keywords": ["prisma", "mycli"]
+}

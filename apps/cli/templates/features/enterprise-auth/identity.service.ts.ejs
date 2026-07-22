@@ -1,0 +1,43 @@
+<% if (language === 'javascript') { %>
+import { IdentityProviderRegistry } from './providers/index.js';
+import { SessionService } from './sessions/session.service.js';
+
+export class IdentityService {
+  constructor(registry = new IdentityProviderRegistry(), sessions = new SessionService()) {
+    this.registry = registry;
+    this.sessions = sessions;
+  }
+
+  async login(providerId, input) {
+    const user = await this.registry.authenticate(providerId, input);
+    const session = await this.sessions.create(user);
+    return { user, session };
+  }
+
+  async logout(sessionId) {
+    await this.sessions.destroy(sessionId);
+  }
+}
+<% } else { %>
+import type { IdentityProviderId } from './providers/index.js';
+import { IdentityProviderRegistry } from './providers/index.js';
+import { SessionService } from './sessions/session.service.js';
+import type { IdentityUser } from './identity-provider.interface.js';
+
+export class IdentityService {
+  constructor(
+    private readonly registry = new IdentityProviderRegistry(),
+    private readonly sessions = new SessionService(),
+  ) {}
+
+  async login(providerId: IdentityProviderId, input: Record<string, unknown>) {
+    const user = await this.registry.authenticate(providerId, input);
+    const session = await this.sessions.create(user);
+    return { user, session };
+  }
+
+  async logout(sessionId: string): Promise<void> {
+    await this.sessions.destroy(sessionId);
+  }
+}
+<% } %>

@@ -1,0 +1,53 @@
+import { SignJWT, jwtVerify, type JWTPayload } from 'jose';
+
+export interface AccessPayload extends JWTPayload {
+  sub: string;
+  email: string;
+}
+
+export class TokenService {
+  private readonly secret: Uint8Array;
+  private readonly accessTtl: string;
+  private readonly refreshTtl: string;
+
+  constructor(
+    secret = process.env.JWT_SECRET ?? 'dev-secret-change-me',
+    accessTtl = process.env.JWT_EXPIRES_IN ?? '15m',
+    refreshTtl = process.env.REFRESH_TOKEN_EXPIRES_IN ?? '7d',
+  ) {
+    this.secret = new TextEncoder().encode(secret);
+    this.accessTtl = accessTtl;
+    this.refreshTtl = refreshTtl;
+  }
+
+  async signAccess(payload: { sub: string; email: string }): Promise<string> {
+    return new SignJWT({ email: payload.email })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setSubject(payload.sub)
+      .setIssuedAt()
+      .setExpirationTime(this.accessTtl)
+      .sign(this.secret);
+  }
+
+  async signRefresh(payload: { sub: string }): Promise<string> {
+    return new SignJWT({ typ: 'refresh' })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setSubject(payload.sub)
+      .setIssuedAt()
+      .setExpirationTime(this.refreshTtl)
+      .sign(this.secret);
+  }
+
+  async verifyAccess(token: string): Promise<AccessPayload> {
+    const { payload } = await jwtVerify(token, this.secret);
+    return payload as AccessPayload;
+  }
+
+  async verifyRefresh(token: string): Promise<JWTPayload> {
+    const { payload } = await jwtVerify(token, this.secret);
+    if (payload.typ !== 'refresh') {
+      throw Object.assign(new Error('Invalid refresh token'), { status: 401 });
+    }
+    return payload;
+  }
+}

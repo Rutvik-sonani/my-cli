@@ -1,0 +1,30 @@
+# Database
+
+- **Engine:** <%= database %>
+- **ORM:** <%= orm %>
+
+## Environment
+
+See `.env.example` for `DATABASE_URL`.
+
+## Migrations
+
+<% if (orm === 'prisma') { %>
+```bash
+npx prisma migrate dev
+npx prisma db seed
+```
+<% } else if (orm === 'drizzle') { %>
+```bash
+npx drizzle-kit generate
+npx drizzle-kit migrate
+```
+<% } else { %>
+Use your ORM CLI to create and apply migrations.
+<% } %>
+
+## Health check
+
+```bash
+my doctor
+```

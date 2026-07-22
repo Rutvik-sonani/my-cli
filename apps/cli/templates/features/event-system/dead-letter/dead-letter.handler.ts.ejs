@@ -1,0 +1,21 @@
+<% if (language === 'javascript') { %>
+export async function handleDeadLetter(record) {
+  console.error('[event-system:dlq]', {
+    type: record.envelope.type,
+    id: record.envelope.id,
+    error: record.error,
+    attempts: record.attempts,
+  });
+}
+<% } else { %>
+import type { DeadLetterRecord } from './dead-letter.queue.js';
+
+export async function handleDeadLetter(record: DeadLetterRecord): Promise<void> {
+  console.error('[event-system:dlq]', {
+    type: record.envelope.type,
+    id: record.envelope.id,
+    error: record.error,
+    attempts: record.attempts,
+  });
+}
+<% } %>

@@ -1,0 +1,29 @@
+# Payment — <%= appName %>
+
+Stripe payment integration with checkout sessions and webhooks.
+
+## Environment
+
+```env
+PAYMENT_PROVIDER=stripe
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+STRIPE_CURRENCY=usd
+```
+
+## Usage
+
+```typescript
+import { payment } from './src/services/payment/index.js';
+
+const url = await payment.createCheckoutSession({
+  priceId: 'price_xxx',
+  customerEmail: 'user@example.com',
+  successUrl: 'https://example.com/success',
+  cancelUrl: 'https://example.com/cancel',
+});
+```
+
+Webhook endpoint: `POST /webhooks/stripe`
+
+Provider: **<%= provider %>**

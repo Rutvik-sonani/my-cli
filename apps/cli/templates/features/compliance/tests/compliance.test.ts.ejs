@@ -1,0 +1,39 @@
+import { describe, expect, it } from 'vitest';
+import {
+  complianceService,
+  ComplianceChecker,
+  ReportGenerator,
+  DEFAULT_RETENTION_RULES,
+} from '../../src/compliance/index.js';
+
+describe('compliance platform', () => {
+  it('runs framework checks and generates a report', () => {
+    const checks = complianceService.runChecks();
+    expect(checks.length).toBeGreaterThan(0);
+
+    const report = complianceService.generateReport();
+    expect(report.frameworks).toEqual(expect.arrayContaining([<%- frameworks.map(f => `'${f}'`).join(', ') %>]));
+    expect(report.summary.warning + report.summary.pass).toBeGreaterThan(0);
+  });
+
+  it('marks checks as passing via ComplianceChecker', () => {
+    const checker = new ComplianceChecker(complianceService);
+    const first = checker.run()[0];
+    expect(first).toBeTruthy();
+    const updated = checker.markPass(first.id, 'documented');
+    expect(updated?.status).toBe('pass');
+  });
+
+  it('exposes data retention rules', () => {
+    const rules = complianceService.listRetentionRules();
+    expect(rules.length).toBeGreaterThan(0);
+    expect(DEFAULT_RETENTION_RULES.length).toBeGreaterThan(0);
+  });
+
+  it('renders markdown compliance report', () => {
+    const generator = new ReportGenerator(complianceService);
+    const markdown = generator.toMarkdown();
+    expect(markdown).toContain('# Compliance Report');
+    expect(markdown).toContain('## Checks');
+  });
+});

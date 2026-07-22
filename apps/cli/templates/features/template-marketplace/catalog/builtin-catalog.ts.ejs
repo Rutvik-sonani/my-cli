@@ -1,0 +1,88 @@
+<% if (language === 'javascript') { %>
+/**
+ * Built-in public / organization sample templates.
+ * @returns {import('../marketplace.types.js').MarketplaceTemplate[]}
+ */
+export function createBuiltinCatalog() {
+  return [
+    {
+      id: 'public/api-crud',
+      name: 'api-crud',
+      version: '1.0.0',
+      author: 'MyCLI',
+      description: 'REST CRUD module starter.',
+      visibility: 'public',
+      compatibility: '>=1.0.0',
+      tags: ['api', 'crud'],
+      downloads: 1200,
+    },
+    {
+      id: 'public/auth-jwt',
+      name: 'auth-jwt',
+      version: '1.1.0',
+      author: 'MyCLI',
+      description: 'JWT authentication helpers.',
+      visibility: 'public',
+      compatibility: '>=1.0.0',
+      requirements: { features: ['auth'] },
+      tags: ['auth', 'jwt'],
+      downloads: 890,
+    },
+    {
+      id: 'org/acme-service',
+      name: 'acme-service',
+      version: '2.0.0',
+      author: 'Acme Platform',
+      description: 'Organization-standard service skeleton.',
+      visibility: 'organization',
+      organization: 'acme',
+      compatibility: '>=1.0.0',
+      tags: ['organization', 'acme'],
+      downloads: 42,
+    },
+  ];
+}
+<% } else { %>
+import type { MarketplaceTemplate } from '../marketplace.types.js';
+
+/** Built-in public / organization sample templates. */
+export function createBuiltinCatalog(): MarketplaceTemplate[] {
+  return [
+    {
+      id: 'public/api-crud',
+      name: 'api-crud',
+      version: '1.0.0',
+      author: 'MyCLI',
+      description: 'REST CRUD module starter.',
+      visibility: 'public',
+      compatibility: '>=1.0.0',
+      tags: ['api', 'crud'],
+      downloads: 1200,
+    },
+    {
+      id: 'public/auth-jwt',
+      name: 'auth-jwt',
+      version: '1.1.0',
+      author: 'MyCLI',
+      description: 'JWT authentication helpers.',
+      visibility: 'public',
+      compatibility: '>=1.0.0',
+      requirements: { features: ['auth'] },
+      tags: ['auth', 'jwt'],
+      downloads: 890,
+    },
+    {
+      id: 'org/acme-service',
+      name: 'acme-service',
+      version: '2.0.0',
+      author: 'Acme Platform',
+      description: 'Organization-standard service skeleton.',
+      visibility: 'organization',
+      organization: 'acme',
+      compatibility: '>=1.0.0',
+      tags: ['organization', 'acme'],
+      downloads: 42,
+    },
+  ];
+}
+<% } %>

@@ -1,0 +1,74 @@
+<% if (language === 'javascript') { %>
+import { IdentityProviderRegistry<% providers.forEach(function(p) { -%><% if (p === 'google') { %>, GoogleIdentityProvider<% } else if (p === 'azure-ad') { %>, AzureAdIdentityProvider<% } else if (p === 'okta') { %>, OktaIdentityProvider<% } else if (p === 'keycloak') { %>, KeycloakIdentityProvider<% } else if (p === 'saml') { %>, SamlIdentityProvider<% } else if (p === 'ldap') { %>, LdapIdentityProvider<% } else if (p === 'active-directory') { %>, ActiveDirectoryIdentityProvider<% } %><% }); %> } from './providers/index.js';
+import { IdentityService } from './identity.service.js';
+
+export function createIdentityRegistry() {
+  const registry = new IdentityProviderRegistry();
+<% providers.forEach(function(p) { -%>
+<% if (p === 'google') { -%>
+  registry.register(new GoogleIdentityProvider());
+<% } else if (p === 'azure-ad') { -%>
+  registry.register(new AzureAdIdentityProvider());
+<% } else if (p === 'okta') { -%>
+  registry.register(new OktaIdentityProvider());
+<% } else if (p === 'keycloak') { -%>
+  registry.register(new KeycloakIdentityProvider());
+<% } else if (p === 'saml') { -%>
+  registry.register(new SamlIdentityProvider());
+<% } else if (p === 'ldap') { -%>
+  registry.register(new LdapIdentityProvider());
+<% } else if (p === 'active-directory') { -%>
+  registry.register(new ActiveDirectoryIdentityProvider());
+<% } -%>
+<% }); -%>
+  return registry;
+}
+
+export const identityService = new IdentityService(createIdentityRegistry());
+<% } else { %>
+import {
+  IdentityProviderRegistry,
+<% providers.forEach(function(p) { -%>
+<% if (p === 'google') { -%>
+  GoogleIdentityProvider,
+<% } else if (p === 'azure-ad') { -%>
+  AzureAdIdentityProvider,
+<% } else if (p === 'okta') { -%>
+  OktaIdentityProvider,
+<% } else if (p === 'keycloak') { -%>
+  KeycloakIdentityProvider,
+<% } else if (p === 'saml') { -%>
+  SamlIdentityProvider,
+<% } else if (p === 'ldap') { -%>
+  LdapIdentityProvider,
+<% } else if (p === 'active-directory') { -%>
+  ActiveDirectoryIdentityProvider,
+<% } -%>
+<% }); -%>
+} from './providers/index.js';
+import { IdentityService } from './identity.service.js';
+
+export function createIdentityRegistry(): IdentityProviderRegistry {
+  const registry = new IdentityProviderRegistry();
+<% providers.forEach(function(p) { -%>
+<% if (p === 'google') { -%>
+  registry.register(new GoogleIdentityProvider());
+<% } else if (p === 'azure-ad') { -%>
+  registry.register(new AzureAdIdentityProvider());
+<% } else if (p === 'okta') { -%>
+  registry.register(new OktaIdentityProvider());
+<% } else if (p === 'keycloak') { -%>
+  registry.register(new KeycloakIdentityProvider());
+<% } else if (p === 'saml') { -%>
+  registry.register(new SamlIdentityProvider());
+<% } else if (p === 'ldap') { -%>
+  registry.register(new LdapIdentityProvider());
+<% } else if (p === 'active-directory') { -%>
+  registry.register(new ActiveDirectoryIdentityProvider());
+<% } -%>
+<% }); -%>
+  return registry;
+}
+
+export const identityService = new IdentityService(createIdentityRegistry());
+<% } %>

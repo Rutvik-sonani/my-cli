@@ -1,0 +1,54 @@
+<% if (language === 'javascript') { %>
+/**
+ * @param {{ architectureStyle?: string, existingPaths?: string[] }} snapshot
+ * @returns {import('../health.types.js').HealthFinding[]}
+ */
+export function analyzeArchitecture(snapshot) {
+  const findings = [];
+  if (snapshot.architectureStyle) {
+    findings.push({
+      id: 'arch-style',
+      category: 'architecture',
+      status: 'pass',
+      title: 'Architecture style configured',
+      message: `Using \`${snapshot.architectureStyle}\`.`,
+    });
+  } else {
+    findings.push({
+      id: 'arch-style',
+      category: 'architecture',
+      status: 'warn',
+      title: 'Architecture style missing',
+      message: 'No architectureStyle configured.',
+    });
+  }
+  return findings;
+}
+<% } else { %>
+import type { HealthFinding } from '../health.types.js';
+
+export function analyzeArchitecture(snapshot: {
+  architectureStyle?: string;
+  existingPaths?: string[];
+}): HealthFinding[] {
+  const findings: HealthFinding[] = [];
+  if (snapshot.architectureStyle) {
+    findings.push({
+      id: 'arch-style',
+      category: 'architecture',
+      status: 'pass',
+      title: 'Architecture style configured',
+      message: `Using \`${snapshot.architectureStyle}\`.`,
+    });
+  } else {
+    findings.push({
+      id: 'arch-style',
+      category: 'architecture',
+      status: 'warn',
+      title: 'Architecture style missing',
+      message: 'No architectureStyle configured.',
+    });
+  }
+  return findings;
+}
+<% } %>

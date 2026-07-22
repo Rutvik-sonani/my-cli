@@ -1,0 +1,23 @@
+<% if (language === 'javascript') { %>
+import { tenantRepository } from './repositories/tenant.repository.js';
+import { Tenant } from './entities/Tenant.js';
+
+export async function bootstrapTenancy() {
+  const defaultSlug = process.env.DEFAULT_TENANT ?? '<%= appName %>';
+  const existing = await tenantRepository.findBySlug(defaultSlug);
+  if (!existing) {
+    await tenantRepository.save(Tenant.create(defaultSlug, '<%= appName %>'));
+  }
+}
+<% } else { %>
+import { tenantRepository } from './repositories/tenant.repository.js';
+import { Tenant } from './entities/Tenant.js';
+
+export async function bootstrapTenancy(): Promise<void> {
+  const defaultSlug = process.env.DEFAULT_TENANT ?? '<%= appName %>';
+  const existing = await tenantRepository.findBySlug(defaultSlug);
+  if (!existing) {
+    await tenantRepository.save(Tenant.create(defaultSlug, '<%= appName %>'));
+  }
+}
+<% } %>

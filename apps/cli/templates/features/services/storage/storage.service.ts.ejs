@@ -1,0 +1,47 @@
+import { createWriteStream } from 'node:fs';
+import { mkdir } from 'node:fs/promises';
+import { join } from 'node:path';
+import { pipeline } from 'node:stream/promises';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+
+export interface UploadResult {
+  key: string;
+  url: string;
+}
+
+export class StorageService {
+  private readonly provider = process.env.STORAGE_PROVIDER ?? '<%= provider %>';
+  private s3: S3Client | null = null;
+
+  private getS3(): S3Client {
+    if (!this.s3) {
+      this.s3 = new S3Client({
+        region: process.env.AWS_REGION ?? 'us-east-1',
+        credentials: {
+          accessKeyId: process.env.AWS_ACCESS_KEY_ID ?? '',
+          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ?? '',
+        },
+        ...(process.env.S3_ENDPOINT ? { endpoint: process.env.S3_ENDPOINT, forcePathStyle: true } : {}),
+      });
+    }
+    return this.s3;
+  }
+
+  async upload(key: string, body: Buffer | Uint8Array, contentType?: string): Promise<UploadResult> {
+    if (this.provider === 'local') {
+      const base = process.env.STORAGE_LOCAL_PATH ?? './uploads';
+      const filePath = join(base, key);
+      await mkdir(join(base, key.split('/').slice(0, -1).join('/')), { recursive: true });
+      await pipeline(body as Buffer, createWriteStream(filePath));
+      return { key, url: `/uploads/${key}` };
+    }
+
+    const bucket = process.env.S3_BUCKET ?? '';
+    await this.getS3().send(
+      new PutObjectCommand({ Bucket: bucket, Key: key, Body: body, ContentType: contentType }),
+    );
+    return { key, url: `s3://${bucket}/${key}` };
+  }
+}
+
+export const storage = new StorageService();

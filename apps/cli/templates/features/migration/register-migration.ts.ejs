@@ -1,0 +1,17 @@
+<% if (language === 'javascript') { %>
+import { createUpgradeService } from './upgrade.service.js';
+
+export const upgradeService = createUpgradeService();
+
+export function registerMigration() {
+  return upgradeService;
+}
+<% } else { %>
+import { createUpgradeService, type UpgradeService } from './upgrade.service.js';
+
+export const upgradeService = createUpgradeService();
+
+export function registerMigration(): UpgradeService {
+  return upgradeService;
+}
+<% } %>

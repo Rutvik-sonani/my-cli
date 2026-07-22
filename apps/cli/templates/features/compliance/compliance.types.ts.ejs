@@ -1,0 +1,87 @@
+<% if (language === 'javascript') { %>
+/** @typedef {'gdpr'|'hipaa'|'soc2'|'iso27001'} ComplianceFramework */
+/** @typedef {'pass'|'fail'|'warning'|'not-applicable'} ComplianceCheckStatus */
+
+/**
+ * @typedef {Object} ComplianceCheck
+ * @property {string} id
+ * @property {ComplianceFramework} framework
+ * @property {string} category
+ * @property {string} title
+ * @property {string} description
+ * @property {ComplianceCheckStatus} status
+ * @property {string} [evidence]
+ */
+
+/**
+ * @typedef {Object} DataRetentionRule
+ * @property {string} id
+ * @property {string} dataCategory
+ * @property {number} retentionDays
+ * @property {string} [legalBasis]
+ * @property {ComplianceFramework} framework
+ */
+
+/**
+ * @typedef {Object} CompliancePolicy
+ * @property {string} id
+ * @property {ComplianceFramework} framework
+ * @property {string} name
+ * @property {string} version
+ * @property {string} summary
+ */
+
+/**
+ * @typedef {Object} ComplianceReport
+ * @property {string} id
+ * @property {ComplianceFramework[]} frameworks
+ * @property {Date} generatedAt
+ * @property {ComplianceCheck[]} checks
+ * @property {{ pass: number, fail: number, warning: number, notApplicable: number }} summary
+ */
+<% } else { %>
+export type ComplianceFramework = 'gdpr' | 'hipaa' | 'soc2' | 'iso27001';
+
+export type ComplianceCheckStatus = 'pass' | 'fail' | 'warning' | 'not-applicable';
+
+export interface ComplianceCheck {
+  id: string;
+  framework: ComplianceFramework;
+  category: string;
+  title: string;
+  description: string;
+  status: ComplianceCheckStatus;
+  evidence?: string;
+}
+
+export interface DataRetentionRule {
+  id: string;
+  dataCategory: string;
+  retentionDays: number;
+  legalBasis?: string;
+  framework: ComplianceFramework;
+}
+
+export interface CompliancePolicy {
+  id: string;
+  framework: ComplianceFramework;
+  name: string;
+  version: string;
+  summary: string;
+}
+
+export interface ComplianceReportSummary {
+  pass: number;
+  fail: number;
+  warning: number;
+  notApplicable: number;
+}
+
+export interface ComplianceReport {
+  id: string;
+  frameworks: ComplianceFramework[];
+  generatedAt: Date;
+  checks: ComplianceCheck[];
+  summary: ComplianceReportSummary;
+}
+<% } %>

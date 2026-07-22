@@ -1,0 +1,30 @@
+import type { FastifyInstance } from 'fastify';
+import { RbacService } from './rbac.service.js';
+
+export async function registerRbacRoutes(app: FastifyInstance): Promise<void> {
+  const rbac = new RbacService();
+
+  app.post('/rbac/roles', async (request, reply) => {
+    const { name, description } = request.body as { name: string; description?: string };
+    const role = await rbac.createRole(name, description);
+    return reply.status(201).send(role);
+  });
+
+  app.post('/rbac/permissions', async (request, reply) => {
+    const { name, description } = request.body as { name: string; description?: string };
+    const permission = await rbac.createPermission(name, description);
+    return reply.status(201).send(permission);
+  });
+
+  app.post('/rbac/assign-permission', async (request, reply) => {
+    const { role, permission } = request.body as { role: string; permission: string };
+    await rbac.assignPermission(role, permission);
+    return reply.status(204).send();
+  });
+
+  app.post('/rbac/assign-role', async (request, reply) => {
+    const { userId, role } = request.body as { userId: string; role: string };
+    await rbac.assignRole(userId, role);
+    return reply.status(204).send();
+  });
+}

@@ -1,0 +1,24 @@
+export type {
+  ConsentRecord,
+  ConsentStatus,
+  CookieCategory,
+  CookieEvent,
+  DataProcessingRecord,
+  PrivacyUserStore,
+  UserDataDeletionResult,
+  UserDataExport,
+} from './privacy.types.js';
+export { PrivacyService, InMemoryPrivacyUserStore } from './privacy.service.js';
+export { ConsentStore } from './consent/consent.store.js';
+export { ConsentService } from './consent/consent.service.js';
+export { CookieTracker } from './cookies/cookie-tracker.js';
+export { createProcessingRecord } from './processing/processing-record.js';
+export { ProcessingRegistry } from './processing/processing-registry.js';
+export { DataExporter } from './export/data-exporter.js';
+export { DataDeleter } from './deletion/data-deleter.js';
+export {
+  privacyService,
+  privacyUserStore,
+  dataExporter,
+  dataDeleter,
+} from './register-privacy.js';

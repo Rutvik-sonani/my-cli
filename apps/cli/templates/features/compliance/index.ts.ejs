@@ -1,0 +1,14 @@
+export type {
+  ComplianceCheck,
+  ComplianceCheckStatus,
+  ComplianceFramework,
+  CompliancePolicy,
+  ComplianceReport,
+  DataRetentionRule,
+} from './compliance.types.js';
+export { ComplianceService } from './compliance.service.js';
+export { ComplianceChecker } from './checks/compliance-checker.js';
+export { CHECK_CATALOG, DEFAULT_RETENTION_RULES } from './checks/check-catalog.js';
+export { ReportGenerator } from './reports/report-generator.js';
+export { listPolicies } from './policies/index.js';
+export { COMPLIANCE_FRAMEWORKS, complianceService } from './register-compliance.js';

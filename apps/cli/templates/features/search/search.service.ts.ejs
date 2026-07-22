@@ -1,0 +1,49 @@
+<% if (language === 'javascript') { %>
+export class SearchService {
+  constructor(provider) {
+    this.provider = provider;
+  }
+
+  getProvider() {
+    return this.provider;
+  }
+
+  index(documents) {
+    return this.provider.index(documents);
+  }
+
+  delete(id) {
+    return this.provider.delete(id);
+  }
+
+  search(query, options) {
+    return this.provider.search(query, options);
+  }
+}
+<% } else { %>
+import type { SearchProvider } from './search-provider.interface.js';
+import type { SearchDocument, SearchQueryOptions, SearchResult } from './search.types.js';
+
+export class SearchService {
+  constructor(private readonly provider: SearchProvider) {}
+
+  getProvider(): SearchProvider {
+    return this.provider;
+  }
+
+  index(documents: SearchDocument | SearchDocument[]): Promise<void> {
+    return this.provider.index(documents);
+  }
+
+  delete(id: string): Promise<boolean> {
+    return this.provider.delete(id);
+  }
+
+  search<T extends SearchDocument = SearchDocument>(
+    query: string,
+    options?: SearchQueryOptions,
+  ): Promise<SearchResult<T>> {
+    return this.provider.search<T>(query, options);
+  }
+}
+<% } %>

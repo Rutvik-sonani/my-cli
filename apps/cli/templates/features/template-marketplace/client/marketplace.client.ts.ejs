@@ -1,0 +1,51 @@
+<% if (language === 'javascript') { %>
+import { LocalCatalogProvider } from '../providers/local.provider.js';
+
+/**
+ * Marketplace client for <%= appName %>.
+ */
+export class MarketplaceClient {
+  constructor(provider = new LocalCatalogProvider()) {
+    this.provider = provider;
+  }
+
+  async search(query) {
+    const templates = await this.provider.search(query);
+    return { templates, total: templates.length };
+  }
+
+  async get(name) {
+    const all = await this.provider.list();
+    const key = name.toLowerCase();
+    return all.find((t) => t.name.toLowerCase() === key || t.id.toLowerCase().endsWith(`/${key}`));
+  }
+}
+
+export function createMarketplaceClient() {
+  return new MarketplaceClient();
+}
+<% } else { %>
+import type { MarketplaceTemplate, TemplateSearchResult } from '../marketplace.types.js';
+import type { CatalogProvider } from '../providers/catalog-provider.interface.js';
+import { LocalCatalogProvider } from '../providers/local.provider.js';
+
+/** Marketplace client for <%= appName %>. */
+export class MarketplaceClient {
+  constructor(private readonly provider: CatalogProvider = new LocalCatalogProvider()) {}
+
+  async search(query?: string): Promise<TemplateSearchResult> {
+    const templates = await this.provider.search(query);
+    return { templates, total: templates.length };
+  }
+
+  async get(name: string): Promise<MarketplaceTemplate | undefined> {
+    const all = await this.provider.list();
+    const key = name.toLowerCase();
+    return all.find((t) => t.name.toLowerCase() === key || t.id.toLowerCase().endsWith(`/${key}`));
+  }
+}
+
+export function createMarketplaceClient(): MarketplaceClient {
+  return new MarketplaceClient();
+}
+<% } %>

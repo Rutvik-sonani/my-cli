@@ -1,0 +1,50 @@
+# Security — <%= appName %>
+
+Fastify security plugins: Helmet headers, CORS, and rate limiting.
+
+## Environment
+
+```env
+CORS_ORIGIN=http://localhost:3000
+RATE_LIMIT_MAX=100
+RATE_LIMIT_WINDOW=1 minute
+```
+
+## Usage
+
+```typescript
+import { registerSecurityPlugins } from './src/platform/security/index.js';
+
+await registerSecurityPlugins(app);
+```
+
+Run `my security setup` to regenerate this module.
+
+## Dependency audit
+
+```bash
+my security audit
+my doctor                 # includes npm/pnpm audit unless --skip-audit
+```
+
+## Secret scanning
+
+```bash
+my security scan-secrets
+```
+
+Uses lightweight regex heuristics (AWS keys, private keys, JWT-like strings). For CI, consider [TruffleHog](https://github.com/trufflesecurity/trufflehog) or [Gitleaks](https://github.com/gitleaks/gitleaks).
+
+## CI scanning (Snyk / Trivy)
+
+Add to your pipeline after build:
+
+```yaml
+# Snyk (example)
+- run: npx snyk test --severity-threshold=high
+
+# Trivy filesystem scan (example)
+- run: trivy fs --scanners vuln,secret .
+```
+
+See generated GitHub/GitLab CI workflows under `.github/workflows/` or `.gitlab-ci.yml` for lint/test stages you can extend.

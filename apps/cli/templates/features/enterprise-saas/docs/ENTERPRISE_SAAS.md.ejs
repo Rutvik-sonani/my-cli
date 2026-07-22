@@ -1,0 +1,26 @@
+# Enterprise SaaS Architecture
+
+## Tenancy
+
+Use `my add tenancy --mode <strategy>`:
+
+| Mode | Description |
+|------|-------------|
+| `single-db` | Shared database with `tenant_id` column |
+| `schema-per-tenant` | PostgreSQL schema per tenant |
+| `db-per-tenant` | Isolated database per tenant |
+
+## Modules
+
+| Module | Path | Purpose |
+|--------|------|---------|
+| Organizations | `src/modules/organizations` | Tenant root entity |
+| Teams | `src/modules/teams` | Team membership within orgs |
+| Billing | `src/modules/billing` | Subscription & invoice scaffold |
+
+## Compliance checklist
+
+- [ ] Enable MFA for admin users (`my add auth` with MFA)
+- [ ] Configure audit logging (`my add observability`)
+- [ ] Set up secret management (see `ENVIRONMENT.md`)
+- [ ] Enable dependency scanning (`.github/workflows/codeql.yml`)

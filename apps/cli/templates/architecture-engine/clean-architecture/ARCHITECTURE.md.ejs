@@ -1,0 +1,27 @@
+# <%= appName %> — Clean Architecture
+
+Dependencies point **inward**. The domain knows nothing about frameworks, databases, or HTTP.
+
+## Layers
+
+| Layer | Path | Depends on |
+|-------|------|------------|
+| Domain | `src/domain/` | Nothing |
+| Application | `src/application/` | Domain |
+| Infrastructure | `src/infrastructure/` | Domain, Application (ports) |
+| Presentation | `src/presentation/` | Application |
+
+## Dependency rule
+
+```
+Presentation → Application → Domain
+Infrastructure → Domain (implements ports)
+```
+
+## Commands
+
+```bash
+my make module <name>   # prefer placing use cases in src/application/use-cases/
+```
+
+Use `src/composition-root.ts` to wire concrete adapters to interfaces.

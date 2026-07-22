@@ -1,0 +1,29 @@
+<% if (language === 'javascript') { %>
+/** @typedef {'info'|'low'|'medium'|'high'|'critical'} SecurityFindingSeverity */
+<% } else { %>
+export interface SecurityHeadersConfig {
+  contentSecurityPolicy?: boolean;
+  frameguard?: boolean;
+  hidePoweredBy?: boolean;
+  hsts?: boolean;
+  noSniff?: boolean;
+  xssFilter?: boolean;
+}
+
+export interface CorsConfig {
+  origins: string[];
+  credentials: boolean;
+  methods?: string[];
+}
+
+export interface CsrfConfig {
+  cookieName: string;
+  headerName: string;
+  enabled: boolean;
+}
+
+export interface RateLimitConfig {
+  max: number;
+  windowMs: number;
+}
+<% } %>

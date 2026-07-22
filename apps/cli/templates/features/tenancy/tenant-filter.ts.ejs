@@ -1,0 +1,23 @@
+<% if (language === 'javascript') { %>
+import { getTenantId } from './tenant.context.js';
+
+export function applyTenantFilter(records) {
+  const tenantId = getTenantId();
+  return records.filter((record) => record.tenantId === tenantId);
+}
+
+export function withTenantId(payload) {
+  return { ...payload, tenantId: getTenantId() };
+}
+<% } else { %>
+import { getTenantId } from './tenant.context.js';
+
+export function applyTenantFilter<T extends { tenantId?: string }>(records: T[]): T[] {
+  const tenantId = getTenantId();
+  return records.filter((record) => record.tenantId === tenantId);
+}
+
+export function withTenantId<T extends Record<string, unknown>>(payload: T): T & { tenantId: string } {
+  return { ...payload, tenantId: getTenantId() };
+}
+<% } %>

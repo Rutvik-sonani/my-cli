@@ -1,0 +1,14 @@
+<% if (language === 'javascript') { %>
+import { ComplianceService } from './compliance.service.js';
+
+export const COMPLIANCE_FRAMEWORKS = /** @type {const} */ ([<%- frameworks.map(f => `'${f}'`).join(', ') %>]);
+
+export const complianceService = new ComplianceService([...COMPLIANCE_FRAMEWORKS]);
+<% } else { %>
+import type { ComplianceFramework } from './compliance.types.js';
+import { ComplianceService } from './compliance.service.js';
+
+export const COMPLIANCE_FRAMEWORKS: ComplianceFramework[] = [<%- frameworks.map(f => `'${f}'`).join(', ') %>];
+
+export const complianceService = new ComplianceService([...COMPLIANCE_FRAMEWORKS]);
+<% } %>

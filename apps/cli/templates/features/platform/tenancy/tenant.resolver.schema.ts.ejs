@@ -1,0 +1,5 @@
+/** Schema-per-tenant resolver — customize mapping for your org. */
+export function resolveTenantSchema(tenantId: string): string {
+  const prefix = process.env.TENANT_SCHEMA_PREFIX ?? 'tenant_';
+  return `${prefix}${tenantId.replace(/[^a-zA-Z0-9_]/g, '_')}`;
+}

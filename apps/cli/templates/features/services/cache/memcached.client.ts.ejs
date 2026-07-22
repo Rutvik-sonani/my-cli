@@ -1,0 +1,15 @@
+import Memcached from 'memcached';
+
+let client: Memcached | null = null;
+
+export function getMemcachedClient(): Memcached {
+  if (!client) {
+    const servers = (process.env.MEMCACHED_SERVERS ?? 'localhost:11211').split(',');
+    client = new Memcached(servers);
+  }
+  return client;
+}
+
+export function closeMemcachedClient(): void {
+  client = null;
+}

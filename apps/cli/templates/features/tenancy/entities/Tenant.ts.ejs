@@ -1,0 +1,37 @@
+<% if (language === 'javascript') { %>
+export class Tenant {
+  constructor({ id, slug, name, status = 'active', createdAt = new Date() }) {
+    this.id = id;
+    this.slug = slug;
+    this.name = name;
+    this.status = status;
+    this.createdAt = createdAt;
+  }
+
+  static create(slug, name) {
+    return new Tenant({
+      id: crypto.randomUUID(),
+      slug,
+      name,
+      status: 'active',
+      createdAt: new Date(),
+    });
+  }
+}
+<% } else { %>
+export type TenantStatus = 'active' | 'suspended' | 'provisioning';
+
+export class Tenant {
+  constructor(
+    public readonly id: string,
+    public readonly slug: string,
+    public readonly name: string,
+    public readonly status: TenantStatus = 'active',
+    public readonly createdAt: Date = new Date(),
+  ) {}
+
+  static create(slug: string, name: string): Tenant {
+    return new Tenant(crypto.randomUUID(), slug, name, 'active', new Date());
+  }
+}
+<% } %>

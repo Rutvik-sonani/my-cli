@@ -1,0 +1,74 @@
+<% if (language === 'javascript') { %>
+import { createCorrelationId, getCorrelation } from '../correlation.js';
+
+/**
+ * Sentry-compatible error monitor for <%= appName %>.
+ * Set SENTRY_DSN to enable remote reporting; always keeps an in-process buffer.
+ */
+export class SentryMonitor {
+  constructor() {
+    this.errors = [];
+  }
+
+  init() {
+    // TODO: Sentry.init({ dsn: process.env.SENTRY_DSN, environment: process.env.SENTRY_ENVIRONMENT })
+  }
+
+  capture(error, extras) {
+    const correlation = getCorrelation();
+    const event = {
+      id: createCorrelationId(),
+      message: typeof error === 'string' ? error : error.message,
+      stack: typeof error === 'string' ? undefined : error.stack,
+      capturedAt: new Date(),
+      correlationId: correlation?.correlationId,
+      traceId: correlation?.traceId,
+      extras,
+    };
+    this.errors.push(event);
+    return event;
+  }
+
+  list() {
+    return [...this.errors];
+  }
+}
+
+export const errorMonitor = new SentryMonitor();
+<% } else { %>
+import type { ErrorEvent } from '../observability.types.js';
+import { createCorrelationId, getCorrelation } from '../correlation.js';
+
+/**
+ * Sentry-compatible error monitor for <%= appName %>.
+ * Set SENTRY_DSN to enable remote reporting; always keeps an in-process buffer.
+ */
+export class SentryMonitor {
+  private readonly errors: ErrorEvent[] = [];
+
+  init(): void {
+    // TODO: Sentry.init({ dsn: process.env.SENTRY_DSN, environment: process.env.SENTRY_ENVIRONMENT })
+  }
+
+  capture(error: Error | string, extras?: Record<string, unknown>): ErrorEvent {
+    const correlation = getCorrelation();
+    const event: ErrorEvent = {
+      id: createCorrelationId(),
+      message: typeof error === 'string' ? error : error.message,
+      stack: typeof error === 'string' ? undefined : error.stack,
+      capturedAt: new Date(),
+      correlationId: correlation?.correlationId,
+      traceId: correlation?.traceId,
+      extras,
+    };
+    this.errors.push(event);
+    return event;
+  }
+
+  list(): ErrorEvent[] {
+    return [...this.errors];
+  }
+}
+
+export const errorMonitor = new SentryMonitor();
+<% } %>

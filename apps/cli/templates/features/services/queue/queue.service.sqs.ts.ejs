@@ -1,0 +1,61 @@
+import {
+  getSqsClient,
+  getQueueUrl,
+  SendMessageCommand,
+  ReceiveMessageCommand,
+  DeleteMessageCommand,
+} from './sqs.client.js';
+
+const prefix = process.env.QUEUE_PREFIX ?? '<%= appName %>';
+
+export type JobHandler<T = unknown> = (job: { name: string; data: T }) => Promise<void>;
+
+export class QueueService {
+  async dispatch<T>(queueName: string, jobName: string, data: T): Promise<void> {
+    const sqs = getSqsClient();
+    await sqs.send(
+      new SendMessageCommand({
+        QueueUrl: getQueueUrl(),
+        MessageBody: JSON.stringify({ queueName, name: jobName, data, prefix }),
+      }),
+    );
+  }
+
+  async registerWorker<T>(queueName: string, handler: JobHandler<T>): Promise<void> {
+    const sqs = getSqsClient();
+    const poll = async () => {
+      const response = await sqs.send(
+        new ReceiveMessageCommand({
+          QueueUrl: getQueueUrl(),
+          MaxNumberOfMessages: 10,
+          WaitTimeSeconds: 20,
+        }),
+      );
+      for (const message of response.Messages ?? []) {
+        if (!message.Body || !message.ReceiptHandle) continue;
+        try {
+          const payload = JSON.parse(message.Body) as {
+            queueName: string;
+            name: string;
+            data: T;
+            prefix: string;
+          };
+          if (payload.queueName !== queueName || payload.prefix !== prefix) continue;
+          await handler({ name: payload.name, data: payload.data });
+          await sqs.send(
+            new DeleteMessageCommand({
+              QueueUrl: getQueueUrl(),
+              ReceiptHandle: message.ReceiptHandle,
+            }),
+          );
+        } catch (error) {
+          console.error('[queue:sqs] job failed', error);
+        }
+      }
+      setImmediate(poll);
+    };
+    void poll();
+  }
+}
+
+export const queueService = new QueueService();

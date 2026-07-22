@@ -1,0 +1,62 @@
+<% if (language === 'javascript') { %>
+import { authenticateOidc } from '../strategies/oidc.strategy.js';
+
+export class GoogleIdentityProvider {
+  constructor() {
+    this.id = 'google';
+    this.protocol = 'oidc';
+  }
+
+  async authenticate(input) {
+    const profile = await authenticateOidc(this, input);
+    return { ...profile, provider: this.id, claims: profile.claims ?? {} };
+  }
+
+  async verifyCallback({ code, redirectUri, nonce }) {
+    // Configure openid-client with https://accounts.google.com
+    return {
+      id: String(inputSubject(code)),
+      email: undefined,
+      name: undefined,
+      claims: { code, redirectUri, nonce },
+    };
+  }
+}
+
+function inputSubject(code) {
+  return code.slice(0, 8);
+}
+<% } else { %>
+import type { IdentityProvider, IdentityUser } from '../identity-provider.interface.js';
+import { authenticateOidc } from '../strategies/oidc.strategy.js';
+
+export class GoogleIdentityProvider implements IdentityProvider {
+  readonly id = 'google' as const;
+  readonly protocol = 'oidc' as const;
+
+  async authenticate(input: Record<string, unknown>): Promise<IdentityUser> {
+    const profile = await authenticateOidc(this, {
+      code: String(input.code ?? ''),
+      redirectUri: String(input.redirectUri ?? process.env.GOOGLE_REDIRECT_URI ?? ''),
+      nonce: input.nonce ? String(input.nonce) : undefined,
+    });
+    return {
+      id: profile.id,
+      email: profile.email,
+      name: profile.name,
+      provider: this.id,
+      claims: profile.claims,
+    };
+  }
+
+  async verifyCallback(input: { code: string; redirectUri: string; nonce?: string }) {
+    // Configure openid-client Issuer.discover('https://accounts.google.com')
+    return {
+      id: input.code.slice(0, 8),
+      email: undefined,
+      name: undefined,
+      claims: { issuer: 'https://accounts.google.com', ...input },
+    };
+  }
+}
+<% } %>

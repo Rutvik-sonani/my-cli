@@ -1,0 +1,40 @@
+<% if (language === 'javascript') { %>
+/**
+ * Local migration registry for <%= appName %>.
+ */
+export const MIGRATIONS = [
+  {
+    id: 'ensure-paths',
+    description: 'Ensure standard project paths',
+  },
+  {
+    id: 'ensure-docs',
+    description: 'Ensure core documentation files',
+  },
+];
+
+export function listMigrations() {
+  return [...MIGRATIONS];
+}
+<% } else { %>
+/** Local migration registry for <%= appName %>. */
+export interface LocalMigration {
+  id: string;
+  description: string;
+}
+
+export const MIGRATIONS: LocalMigration[] = [
+  {
+    id: 'ensure-paths',
+    description: 'Ensure standard project paths',
+  },
+  {
+    id: 'ensure-docs',
+    description: 'Ensure core documentation files',
+  },
+];
+
+export function listMigrations(): LocalMigration[] {
+  return [...MIGRATIONS];
+}
+<% } %>

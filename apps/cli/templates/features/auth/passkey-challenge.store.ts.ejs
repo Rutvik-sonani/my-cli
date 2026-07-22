@@ -1,0 +1,47 @@
+<% if (orm === 'prisma') { %>
+import { prisma } from '../../database/prisma.client.js';
+<% } %>
+
+export class PasskeyChallengeStore {
+<% if (orm === 'prisma') { %>
+  async save(userId: string | null, challenge: string, type: 'registration' | 'authentication'): Promise<void> {
+    await prisma.passkeyChallenge.create({
+      data: {
+        userId,
+        challenge,
+        type,
+        expiresAt: new Date(Date.now() + 300_000),
+      },
+    });
+  }
+
+  async consume(userId: string | null, type: 'registration' | 'authentication'): Promise<string | null> {
+    const row = await prisma.passkeyChallenge.findFirst({
+      where: {
+        userId: userId ?? undefined,
+        type,
+        expiresAt: { gt: new Date() },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+    if (!row) return null;
+    await prisma.passkeyChallenge.delete({ where: { id: row.id } });
+    return row.challenge;
+  }
+<% } else { %>
+  private readonly memory = new Map<string, { challenge: string; expiresAt: number }>();
+
+  async save(userId: string | null, challenge: string, type: 'registration' | 'authentication'): Promise<void> {
+    const key = `${type}:${userId ?? 'anonymous'}`;
+    this.memory.set(key, { challenge, expiresAt: Date.now() + 300_000 });
+  }
+
+  async consume(userId: string | null, type: 'registration' | 'authentication'): Promise<string | null> {
+    const key = `${type}:${userId ?? 'anonymous'}`;
+    const row = this.memory.get(key);
+    if (!row || row.expiresAt < Date.now()) return null;
+    this.memory.delete(key);
+    return row.challenge;
+  }
+<% } %>
+}

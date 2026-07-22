@@ -1,0 +1,33 @@
+<% if (language === 'javascript') { %>
+export function getCsrfConfig() {
+  return {
+    cookieName: process.env.CSRF_COOKIE_NAME ?? 'csrf_token',
+    headerName: process.env.CSRF_HEADER_NAME ?? 'x-csrf-token',
+    enabled: process.env.CSRF_ENABLED !== 'false',
+  };
+}
+
+export function assertCsrfToken(cookieToken, headerToken, config = getCsrfConfig()) {
+  if (!config.enabled) return true;
+  return Boolean(cookieToken) && cookieToken === headerToken;
+}
+<% } else { %>
+import type { CsrfConfig } from '../security.types.js';
+
+export function getCsrfConfig(): CsrfConfig {
+  return {
+    cookieName: process.env.CSRF_COOKIE_NAME ?? 'csrf_token',
+    headerName: process.env.CSRF_HEADER_NAME ?? 'x-csrf-token',
+    enabled: process.env.CSRF_ENABLED !== 'false',
+  };
+}
+
+export function assertCsrfToken(
+  cookieToken: string | undefined,
+  headerToken: string | undefined,
+  config: CsrfConfig = getCsrfConfig(),
+): boolean {
+  if (!config.enabled) return true;
+  return Boolean(cookieToken) && cookieToken === headerToken;
+}
+<% } %>

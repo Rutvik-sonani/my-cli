@@ -1,0 +1,38 @@
+<% if (language === 'javascript') { %>
+import { SchemaManager } from './schema-manager.js';
+import { Tenant } from '../entities/Tenant.js';
+import { tenantRepository } from '../repositories/tenant.repository.js';
+
+export class TenantSchemaService {
+  constructor(client) {
+    this.manager = new SchemaManager(client);
+  }
+
+  async provisionTenant(slug, name, migrationSql = []) {
+    const tenant = Tenant.create(slug, name);
+    await tenantRepository.save(tenant);
+    const schema = await this.manager.runTenantMigrations(slug, migrationSql);
+    return { tenant, schema };
+  }
+}
+<% } else { %>
+import { SchemaManager } from './schema-manager.js';
+import { Tenant } from '../entities/Tenant.js';
+import { tenantRepository } from '../repositories/tenant.repository.js';
+import type { SqlClient } from './schema-manager.js';
+
+export class TenantSchemaService {
+  private readonly manager: SchemaManager;
+
+  constructor(client: SqlClient) {
+    this.manager = new SchemaManager(client);
+  }
+
+  async provisionTenant(slug: string, name: string, migrationSql: string[] = []) {
+    const tenant = Tenant.create(slug, name);
+    await tenantRepository.save(tenant);
+    const schema = await this.manager.runTenantMigrations(slug, migrationSql);
+    return { tenant, schema };
+  }
+}
+<% } %>

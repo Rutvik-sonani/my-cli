@@ -1,0 +1,35 @@
+<% if (language === 'javascript') { %>
+export function sanitizePlainText(input) {
+  return input
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+export function stripNullBytes(input) {
+  return input.replace(/\0/g, '');
+}
+
+export function sanitizeUserInput(input) {
+  return sanitizePlainText(stripNullBytes(String(input ?? '')));
+}
+<% } else { %>
+export function sanitizePlainText(input: string): string {
+  return input
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+export function stripNullBytes(input: string): string {
+  return input.replace(/\0/g, '');
+}
+
+export function sanitizeUserInput(input: unknown): string {
+  return sanitizePlainText(stripNullBytes(String(input ?? '')));
+}
+<% } %>

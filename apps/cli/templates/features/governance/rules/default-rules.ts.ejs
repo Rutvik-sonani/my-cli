@@ -1,0 +1,170 @@
+<% if (language === 'javascript') { %>
+/**
+ * Default company governance rules for <%= company %>.
+ * @returns {import('../governance.types.js').GovernanceRule[]}
+ */
+export function createDefaultCompanyRules() {
+  return [
+    {
+      id: 'req-database-postgres',
+      category: 'database',
+      title: 'PostgreSQL required',
+      description: 'Every project must use PostgreSQL as the primary database.',
+      required: true,
+      expect: { database: 'postgresql' },
+    },
+    {
+      id: 'req-docker',
+      category: 'infrastructure',
+      title: 'Docker required',
+      description: 'Projects must include Docker packaging.',
+      required: true,
+      featureKey: 'docker',
+      expect: { pathExists: ['Dockerfile', 'docker-compose.yml'] },
+    },
+    {
+      id: 'req-auth',
+      category: 'authentication',
+      title: 'Authentication required',
+      description: 'Projects must enable authentication.',
+      required: true,
+      featureKey: 'auth',
+    },
+    {
+      id: 'req-rbac',
+      category: 'authentication',
+      title: 'RBAC required',
+      description: 'Projects must enable role-based access control.',
+      required: true,
+      featureKey: 'rbac',
+    },
+    {
+      id: 'req-security',
+      category: 'security',
+      title: 'Security platform required',
+      description: 'Projects must enable the security platform.',
+      required: true,
+      featureKey: 'security',
+      expect: { pathExists: ['src/security'] },
+    },
+    {
+      id: 'req-audit',
+      category: 'audit',
+      title: 'Audit logs required',
+      description: 'Projects must enable audit logging.',
+      required: true,
+      featureKey: 'audit',
+      expect: { pathExists: ['src/audit'] },
+    },
+    {
+      id: 'req-tests',
+      category: 'testing',
+      title: 'Tests required',
+      description: 'Projects must include automated tests.',
+      required: true,
+      featureKey: 'testing',
+      expect: { packageScripts: ['test'], pathExists: ['tests'] },
+    },
+    {
+      id: 'req-cicd',
+      category: 'cicd',
+      title: 'CI/CD required',
+      description: 'Projects must include continuous integration workflows.',
+      required: true,
+      expect: { pathExists: ['.github/workflows', '.gitlab-ci.yml'] },
+    },
+    {
+      id: 'req-docs',
+      category: 'documentation',
+      title: 'Documentation required',
+      description: 'Projects must include core documentation files.',
+      required: true,
+      expect: { pathExists: ['README.md', 'SECURITY.md'] },
+    },
+  ];
+}
+<% } else { %>
+import type { GovernanceRule } from '../governance.types.js';
+
+/** Default company governance rules for <%= company %>. */
+export function createDefaultCompanyRules(): GovernanceRule[] {
+  return [
+    {
+      id: 'req-database-postgres',
+      category: 'database',
+      title: 'PostgreSQL required',
+      description: 'Every project must use PostgreSQL as the primary database.',
+      required: true,
+      expect: { database: 'postgresql' },
+    },
+    {
+      id: 'req-docker',
+      category: 'infrastructure',
+      title: 'Docker required',
+      description: 'Projects must include Docker packaging.',
+      required: true,
+      featureKey: 'docker',
+      expect: { pathExists: ['Dockerfile', 'docker-compose.yml'] },
+    },
+    {
+      id: 'req-auth',
+      category: 'authentication',
+      title: 'Authentication required',
+      description: 'Projects must enable authentication.',
+      required: true,
+      featureKey: 'auth',
+    },
+    {
+      id: 'req-rbac',
+      category: 'authentication',
+      title: 'RBAC required',
+      description: 'Projects must enable role-based access control.',
+      required: true,
+      featureKey: 'rbac',
+    },
+    {
+      id: 'req-security',
+      category: 'security',
+      title: 'Security platform required',
+      description: 'Projects must enable the security platform.',
+      required: true,
+      featureKey: 'security',
+      expect: { pathExists: ['src/security'] },
+    },
+    {
+      id: 'req-audit',
+      category: 'audit',
+      title: 'Audit logs required',
+      description: 'Projects must enable audit logging.',
+      required: true,
+      featureKey: 'audit',
+      expect: { pathExists: ['src/audit'] },
+    },
+    {
+      id: 'req-tests',
+      category: 'testing',
+      title: 'Tests required',
+      description: 'Projects must include automated tests.',
+      required: true,
+      featureKey: 'testing',
+      expect: { packageScripts: ['test'], pathExists: ['tests'] },
+    },
+    {
+      id: 'req-cicd',
+      category: 'cicd',
+      title: 'CI/CD required',
+      description: 'Projects must include continuous integration workflows.',
+      required: true,
+      expect: { pathExists: ['.github/workflows', '.gitlab-ci.yml'] },
+    },
+    {
+      id: 'req-docs',
+      category: 'documentation',
+      title: 'Documentation required',
+      description: 'Projects must include core documentation files.',
+      required: true,
+      expect: { pathExists: ['README.md', 'SECURITY.md'] },
+    },
+  ];
+}
+<% } %>

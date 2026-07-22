@@ -1,0 +1,19 @@
+<% if (language === 'javascript') { %>
+export async function authenticateOAuth2(provider, { code, redirectUri }) {
+  // Uses openid-client Issuer + Client configured per provider
+  return provider.exchangeCode({ code, redirectUri });
+}
+<% } else { %>
+export interface OAuth2Input {
+  code: string;
+  redirectUri: string;
+}
+
+export interface OAuth2ExchangeProvider {
+  exchangeCode(input: OAuth2Input): Promise<{ id: string; email?: string; name?: string; claims: Record<string, unknown> }>;
+}
+
+export async function authenticateOAuth2(provider: OAuth2ExchangeProvider, input: OAuth2Input) {
+  return provider.exchangeCode(input);
+}
+<% } %>

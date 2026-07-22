@@ -1,0 +1,9 @@
+import { defineConfig } from 'cypress';
+
+export default defineConfig({
+  e2e: {
+    supportFile: false,
+    specPattern: 'tests/e2e/**/*.cy.ts',
+    baseUrl: process.env.E2E_BASE_URL ?? 'http://localhost:3000',
+  },
+});

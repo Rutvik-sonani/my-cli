@@ -1,0 +1,32 @@
+<% if (language === 'javascript') { %>
+export class Get<%= pascal %>Query {
+  constructor(id) {
+    this.id = id;
+  }
+}
+
+export class Get<%= pascal %>Handler {
+  constructor(repository) {
+    this.repository = repository;
+  }
+
+  async execute(query) {
+    return this.repository.findById(query.id);
+  }
+}
+<% } else { %>
+import type { <%= pascal %> } from '../../domain/<%= kebab %>/entities/<%= pascal %>.js';
+import type { I<%= pascal %>Repository } from '../../infrastructure/database/interfaces/I<%= pascal %>Repository.js';
+
+export class Get<%= pascal %>Query {
+  constructor(public readonly id: string) {}
+}
+
+export class Get<%= pascal %>Handler {
+  constructor(private readonly repository: I<%= pascal %>Repository) {}
+
+  async execute(query: Get<%= pascal %>Query): Promise<<%= pascal %> | null> {
+    return this.repository.findById(query.id);
+  }
+}
+<% } %>

@@ -1,0 +1,26 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [<%= branch %>]
+    tags: ['v*']
+
+concurrency:
+  group: deploy-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: <%= nodeVersion %>
+          cache: '<%= packageManager %>'
+      - run: <%= installCommand %>
+      - run: <%= buildCommand %>
+      - name: Deploy
+        run: echo "Add your deployment command here (e.g. my deploy push --provider railway)"

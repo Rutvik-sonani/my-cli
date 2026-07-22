@@ -1,0 +1,42 @@
+<% if (language === 'javascript') { %>
+/**
+ * Project health types for <%= appName %>
+ * @typedef {'architecture'|'security'|'dependencies'|'testing'|'documentation'|'deployment'|'performance'} HealthCategory
+ * @typedef {'pass'|'warn'|'fail'|'info'} HealthStatus
+ */
+
+export {};
+<% } else { %>
+/**
+ * Project health types for <%= appName %>
+ */
+export type HealthCategory =
+  | 'architecture'
+  | 'security'
+  | 'dependencies'
+  | 'testing'
+  | 'documentation'
+  | 'deployment'
+  | 'performance';
+
+export type HealthStatus = 'pass' | 'warn' | 'fail' | 'info';
+
+export interface HealthFinding {
+  id: string;
+  category: HealthCategory;
+  status: HealthStatus;
+  title: string;
+  message: string;
+  recommendation?: string;
+}
+
+export interface ProjectHealthReport {
+  id: string;
+  generatedAt: Date;
+  projectName: string;
+  findings: HealthFinding[];
+  summary: { pass: number; warn: number; fail: number; info: number };
+  score: number;
+  readyForProduction: boolean;
+}
+<% } %>

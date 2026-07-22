@@ -1,0 +1,52 @@
+import { prisma } from '../../database/prisma.client.js';
+import type { Permission, Role } from './rbac.types.js';
+
+export class RbacRepository {
+  async findRoleByName(name: string): Promise<Role | null> {
+    return prisma.role.findUnique({ where: { name } });
+  }
+
+  async findPermissionByName(name: string): Promise<Permission | null> {
+    return prisma.permission.findUnique({ where: { name } });
+  }
+
+  async createRole(name: string, description?: string): Promise<Role> {
+    return prisma.role.create({ data: { name, description: description ?? null } });
+  }
+
+  async createPermission(name: string, description?: string): Promise<Permission> {
+    return prisma.permission.create({ data: { name, description: description ?? null } });
+  }
+
+  async assignPermission(roleId: string, permissionId: string): Promise<void> {
+    await prisma.rolePermission.upsert({
+      where: { roleId_permissionId: { roleId, permissionId } },
+      create: { roleId, permissionId },
+      update: {},
+    });
+  }
+
+  async assignRole(userId: string, roleId: string): Promise<void> {
+    await prisma.userRole.upsert({
+      where: { userId_roleId: { userId, roleId } },
+      create: { userId, roleId },
+      update: {},
+    });
+  }
+
+  async userRoles(userId: string): Promise<Role[]> {
+    const rows = await prisma.userRole.findMany({
+      where: { userId },
+      include: { role: true },
+    });
+    return rows.map((r) => r.role);
+  }
+
+  async rolePermissions(roleId: string): Promise<Permission[]> {
+    const rows = await prisma.rolePermission.findMany({
+      where: { roleId },
+      include: { permission: true },
+    });
+    return rows.map((r) => r.permission);
+  }
+}

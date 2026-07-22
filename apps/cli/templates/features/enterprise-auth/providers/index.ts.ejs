@@ -1,0 +1,56 @@
+<% providers.forEach(function(provider) { -%>
+<% if (provider === 'google') { -%>
+export { GoogleIdentityProvider } from './google.provider.js';
+<% } else if (provider === 'azure-ad') { -%>
+export { AzureAdIdentityProvider } from './azure-ad.provider.js';
+<% } else if (provider === 'okta') { -%>
+export { OktaIdentityProvider } from './okta.provider.js';
+<% } else if (provider === 'keycloak') { -%>
+export { KeycloakIdentityProvider } from './keycloak.provider.js';
+<% } else if (provider === 'saml') { -%>
+export { SamlIdentityProvider } from './saml.provider.js';
+<% } else if (provider === 'ldap') { -%>
+export { LdapIdentityProvider } from './ldap.provider.js';
+<% } else if (provider === 'active-directory') { -%>
+export { ActiveDirectoryIdentityProvider } from './active-directory.provider.js';
+<% } -%>
+<% }); -%>
+
+<% if (language === 'javascript') { -%>
+export class IdentityProviderRegistry {
+  constructor() {
+    this.providers = new Map();
+  }
+
+  register(provider) {
+    this.providers.set(provider.id, provider);
+    return this;
+  }
+
+  async authenticate(id, input) {
+    const provider = this.providers.get(id);
+    if (!provider) throw new Error(`Identity provider not registered: ${id}`);
+    return provider.authenticate(input);
+  }
+}
+<% } else { -%>
+export type IdentityProviderId =
+<% providers.forEach(function(p, i) { -%>
+  | '<%= p %>'<% if (i < providers.length - 1) { %><% } %>
+<% }); -%>;
+
+export class IdentityProviderRegistry {
+  private readonly providers = new Map<string, { authenticate(input: Record<string, unknown>): Promise<unknown> }>();
+
+  register(provider: { id: string; authenticate(input: Record<string, unknown>): Promise<unknown> }): this {
+    this.providers.set(provider.id, provider);
+    return this;
+  }
+
+  async authenticate(id: IdentityProviderId, input: Record<string, unknown>) {
+    const provider = this.providers.get(id);
+    if (!provider) throw new Error(`Identity provider not registered: ${id}`);
+    return provider.authenticate(input);
+  }
+}
+<% } -%>

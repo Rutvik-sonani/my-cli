@@ -1,0 +1,106 @@
+<% if (language === 'javascript') { %>
+/**
+ * Governance types for <%= appName %>
+ */
+
+/**
+ * @typedef {'database'|'authentication'|'security'|'documentation'|'cicd'|'testing'|'infrastructure'|'audit'} GovernanceRuleCategory
+ * @typedef {'pass'|'fail'|'warning'|'skipped'} GovernanceCheckStatus
+ *
+ * @typedef {Object} GovernanceRule
+ * @property {string} id
+ * @property {GovernanceRuleCategory} category
+ * @property {string} title
+ * @property {string} description
+ * @property {boolean} required
+ * @property {string} [featureKey]
+ * @property {{ database?: string, pathExists?: string[], packageScripts?: string[] }} [expect]
+ *
+ * @typedef {Object} GovernancePolicy
+ * @property {string} id
+ * @property {string} name
+ * @property {string} version
+ * @property {string} company
+ * @property {GovernanceRule[]} rules
+ *
+ * @typedef {Object} GovernanceCheckResult
+ * @property {string} ruleId
+ * @property {GovernanceCheckStatus} status
+ * @property {string} title
+ * @property {string} message
+ * @property {string} [evidence]
+ *
+ * @typedef {Object} GovernanceReport
+ * @property {string} id
+ * @property {string} policyId
+ * @property {Date} generatedAt
+ * @property {string} projectName
+ * @property {GovernanceCheckResult[]} results
+ * @property {{ pass: number, fail: number, warning: number, skipped: number }} summary
+ * @property {boolean} compliant
+ */
+
+export {};
+<% } else { %>
+/**
+ * Governance types for <%= appName %>
+ */
+export type GovernanceRuleCategory =
+  | 'database'
+  | 'authentication'
+  | 'security'
+  | 'documentation'
+  | 'cicd'
+  | 'testing'
+  | 'infrastructure'
+  | 'audit';
+
+export type GovernanceCheckStatus = 'pass' | 'fail' | 'warning' | 'skipped';
+
+export interface GovernanceRule {
+  id: string;
+  category: GovernanceRuleCategory;
+  title: string;
+  description: string;
+  required: boolean;
+  featureKey?: string;
+  expect?: {
+    database?: string;
+    pathExists?: string[];
+    packageScripts?: string[];
+  };
+}
+
+export interface GovernancePolicy {
+  id: string;
+  name: string;
+  version: string;
+  company: string;
+  rules: GovernanceRule[];
+}
+
+export interface GovernanceCheckResult {
+  ruleId: string;
+  status: GovernanceCheckStatus;
+  title: string;
+  message: string;
+  evidence?: string;
+}
+
+export interface GovernanceReportSummary {
+  pass: number;
+  fail: number;
+  warning: number;
+  skipped: number;
+}
+
+export interface GovernanceReport {
+  id: string;
+  policyId: string;
+  generatedAt: Date;
+  projectName: string;
+  results: GovernanceCheckResult[];
+  summary: GovernanceReportSummary;
+  compliant: boolean;
+}
+<% } %>
