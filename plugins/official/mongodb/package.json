@@ -1,11 +1,16 @@
 {
   "name": "@mycli-cli/plugin-mongodb",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Official MyCLI MongoDB database plugin",
   "type": "module",
   "license": "MIT",
   "private": true,
-  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "main": "./dist/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",

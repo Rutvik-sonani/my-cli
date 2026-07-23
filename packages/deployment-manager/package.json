@@ -1,6 +1,6 @@
 {
   "name": "@mycli-cli/deployment-manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MyCLI deployment-manager package",
   "type": "module",
   "license": "MIT",

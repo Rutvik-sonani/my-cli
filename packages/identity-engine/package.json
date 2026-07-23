@@ -1,10 +1,12 @@
 {
   "name": "@mycli-cli/identity-engine",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Enterprise identity and SSO scaffolding for MyCLI",
   "type": "module",
   "license": "MIT",
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -22,7 +24,9 @@
     "test:coverage": "vitest run --coverage",
     "clean": "rm -rf dist coverage"
   },
-  "engines": { "node": ">=22.0.0" },
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "dependencies": {
     "@mycli-cli/core": "workspace:*",
     "@mycli-cli/enterprise-core": "workspace:*",

@@ -1,6 +1,6 @@
 {
   "name": "@mycli-cli/plugin-kubernetes",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Official MyCLI Kubernetes plugin",
   "type": "module",
   "license": "MIT",

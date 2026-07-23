@@ -1,6 +1,6 @@
 {
   "name": "@mycli-cli/cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MyCLI — Laravel Artisan-style development platform for Node.js",
   "type": "module",
   "license": "MIT",

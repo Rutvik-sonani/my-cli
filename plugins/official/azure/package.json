@@ -1,6 +1,6 @@
 {
   "name": "@mycli-cli/plugin-azure",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Official MyCLI Azure deployment plugin",
   "type": "module",
   "license": "MIT",
