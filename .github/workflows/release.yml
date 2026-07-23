@@ -3,6 +3,7 @@ name: Release
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 concurrency:
   group: release
@@ -32,12 +33,30 @@ jobs:
           node-version: 22
           cache: pnpm
           registry-url: https://registry.npmjs.org
+          always-auth: true
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build
         run: pnpm build
+
+      - name: Configure npm auth for publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "${NODE_AUTH_TOKEN}" ]; then
+            echo "NPM_TOKEN is empty — set the NPM_TOKEN repository secret from an Automation token"
+            exit 1
+          fi
+          # Project .npmrc can shadow setup-node; ensure registry auth for changeset publish (uses npm).
+          {
+            echo '//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}'
+            echo 'registry=https://registry.npmjs.org/'
+            echo 'always-auth=true'
+            echo 'access=public'
+          } >> .npmrc
+          npm whoami
 
       - name: Create Release Pull Request or Publish
         uses: changesets/action@v1
@@ -48,6 +67,5 @@ jobs:
           commit: 'chore: version packages'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # setup-node registry auth reads NODE_AUTH_TOKEN; changesets also accepts NPM_TOKEN
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
