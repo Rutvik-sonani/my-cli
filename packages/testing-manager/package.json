@@ -1,6 +1,6 @@
 {
   "name": "@mycli-cli/testing-manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MyCLI testing-manager package",
   "type": "module",
   "license": "MIT",

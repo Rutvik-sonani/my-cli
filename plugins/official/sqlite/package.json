@@ -1,6 +1,6 @@
 {
   "name": "@mycli-cli/plugin-sqlite",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Official MyCLI sqlite plugin",
   "type": "module",
   "license": "MIT",

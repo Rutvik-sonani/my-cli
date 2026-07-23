@@ -1,0 +1,64 @@
+# @mycli-cli/cli
+
+## 1.0.1
+
+### Patch Changes
+
+- d2c77e2: Initial public release of MyCLI — Fastify-first Node.js application scaffolding CLI.
+- Updated dependencies [d2c77e2]
+  - @mycli-cli/ai-manager@1.0.1
+  - @mycli-cli/api-manager@1.0.1
+  - @mycli-cli/architecture-engine@1.0.1
+  - @mycli-cli/architecture-manager@1.0.1
+  - @mycli-cli/audit-engine@1.0.1
+  - @mycli-cli/auth-manager@1.0.1
+  - @mycli-cli/backup-manager@1.0.1
+  - @mycli-cli/cicd-manager@1.0.1
+  - @mycli-cli/cli-engine@1.0.1
+  - @mycli-cli/cloud-manager@1.0.1
+  - @mycli-cli/command-engine@1.0.1
+  - @mycli-cli/compliance-engine@1.0.1
+  - @mycli-cli/config-manager@1.0.1
+  - @mycli-cli/core@1.0.1
+  - @mycli-cli/cqrs-engine@1.0.1
+  - @mycli-cli/database-manager@1.0.1
+  - @mycli-cli/dependency-manager@1.0.1
+  - @mycli-cli/deployment-manager@1.0.1
+  - @mycli-cli/docker-manager@1.0.1
+  - @mycli-cli/documentation-engine@1.0.1
+  - @mycli-cli/domain-engine@1.0.1
+  - @mycli-cli/event-engine@1.0.1
+  - @mycli-cli/feature-flag-engine@1.0.1
+  - @mycli-cli/filesystem@1.0.1
+  - @mycli-cli/frontend-manager@1.0.1
+  - @mycli-cli/generator-engine@1.0.1
+  - @mycli-cli/git-manager@1.0.1
+  - @mycli-cli/github-manager@1.0.1
+  - @mycli-cli/governance-engine@1.0.1
+  - @mycli-cli/ide-manager@1.0.1
+  - @mycli-cli/identity-engine@1.0.1
+  - @mycli-cli/kubernetes-manager@1.0.1
+  - @mycli-cli/marketplace-manager@1.0.1
+  - @mycli-cli/migration-engine@1.0.1
+  - @mycli-cli/observability-engine@1.0.1
+  - @mycli-cli/organization-engine@1.0.1
+  - @mycli-cli/platform-manager@1.0.1
+  - @mycli-cli/plugin-sdk@1.0.1
+  - @mycli-cli/plugin-system@1.0.1
+  - @mycli-cli/privacy-engine@1.0.1
+  - @mycli-cli/project-health-engine@1.0.1
+  - @mycli-cli/prompt-engine@1.0.1
+  - @mycli-cli/rbac-manager@1.0.1
+  - @mycli-cli/registry-manager@1.0.1
+  - @mycli-cli/release-manager@1.0.1
+  - @mycli-cli/search-engine@1.0.1
+  - @mycli-cli/secrets-manager@1.0.1
+  - @mycli-cli/security-engine@1.0.1
+  - @mycli-cli/services-manager@1.0.1
+  - @mycli-cli/telemetry-manager@1.0.1
+  - @mycli-cli/template-engine@1.0.1
+  - @mycli-cli/template-marketplace-engine@1.0.1
+  - @mycli-cli/tenancy-engine@1.0.1
+  - @mycli-cli/testing-manager@1.0.1
+  - @mycli-cli/ui-manager@1.0.1
+  - @mycli-cli/upgrade-manager@1.0.1

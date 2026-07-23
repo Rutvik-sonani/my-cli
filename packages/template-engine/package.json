@@ -1,6 +1,6 @@
 {
   "name": "@mycli-cli/template-engine",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MyCLI template-engine package",
   "type": "module",
   "license": "MIT",

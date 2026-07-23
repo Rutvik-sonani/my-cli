@@ -1,6 +1,6 @@
 {
   "name": "@mycli-cli/command-engine",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MyCLI command-engine package",
   "type": "module",
   "license": "MIT",

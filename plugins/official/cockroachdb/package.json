@@ -1,6 +1,6 @@
 {
   "name": "@mycli-cli/plugin-cockroachdb",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Official MyCLI cockroachdb plugin",
   "type": "module",
   "license": "MIT",

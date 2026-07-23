@@ -1,6 +1,6 @@
 {
   "name": "@community/plugin-hello-mycli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Example community MyCLI plugin",
   "type": "module",
   "license": "MIT",

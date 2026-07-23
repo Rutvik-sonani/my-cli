@@ -1,6 +1,6 @@
 {
   "name": "@mycli-cli/generator-engine",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MyCLI generator-engine package",
   "type": "module",
   "license": "MIT",

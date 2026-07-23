@@ -1,6 +1,6 @@
 {
   "name": "@mycli-cli/telemetry-manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MyCLI telemetry-manager package",
   "type": "module",
   "license": "MIT",
