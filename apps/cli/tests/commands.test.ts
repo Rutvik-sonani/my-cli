@@ -305,7 +305,7 @@ describe('my commands (integration)', () => {
     const result = await cli.run(['git', 'providers']);
     expect(result.exitCode).toBe(0);
     await cli.shutdown();
-  });
+  }, 20_000);
 
   it('my backup run --dry-run plans backup commands', async () => {
     await scaffoldProject({ database: 'postgresql' });

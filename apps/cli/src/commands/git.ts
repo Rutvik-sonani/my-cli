@@ -69,7 +69,13 @@ export function gitCommand(engine: CliEngine) {
       if (action === 'providers') {
         engine.prompts.intro(t('git_providers_intro'));
         for (const adapter of listGitProviderAdapters()) {
-          const available = await adapter.isAvailable();
+          // Bound each probe so CI never hangs on slow/unresponsive CLIs (gh/az/glab).
+          const available = await Promise.race([
+            adapter.isAvailable(),
+            new Promise<boolean>((resolve) => {
+              setTimeout(() => resolve(false), 3_000);
+            }),
+          ]);
           const icon = available ? pc.green('✔') : pc.yellow('○');
           const tools = adapter.cliTools.length > 0 ? adapter.cliTools.join(', ') : 'manual';
           console.log(`${icon} ${adapter.provider} (${tools})`);

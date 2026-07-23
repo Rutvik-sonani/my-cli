@@ -11,7 +11,24 @@ import { BitbucketGitAdapter } from './bitbucket.js';
 
 async function cliAvailable(binary: string): Promise<boolean> {
   try {
-    const result = await execa(binary, ['--version'], { reject: false });
+    const result = await execa(binary, ['--version'], {
+      reject: false,
+      timeout: 2_500,
+      killSignal: 'SIGKILL',
+    });
+    return result.exitCode === 0;
+  } catch {
+    return false;
+  }
+}
+
+async function cliAuthOk(binary: string, args: string[]): Promise<boolean> {
+  try {
+    const result = await execa(binary, args, {
+      reject: false,
+      timeout: 2_500,
+      killSignal: 'SIGKILL',
+    });
     return result.exitCode === 0;
   } catch {
     return false;
@@ -29,8 +46,7 @@ export class GithubGitAdapter implements GitProviderAdapter {
 
   async isAvailable(): Promise<boolean> {
     if (!(await cliAvailable('gh'))) return false;
-    const auth = await execa('gh', ['auth', 'status'], { reject: false });
-    return auth.exitCode === 0;
+    return cliAuthOk('gh', ['auth', 'status']);
   }
 
   planCreate(options: CreateRemoteRepoOptions): CreateRemoteRepoResult {
@@ -103,8 +119,7 @@ export class GitlabGitAdapter implements GitProviderAdapter {
 
   async isAvailable(): Promise<boolean> {
     if (!(await cliAvailable('glab'))) return false;
-    const auth = await execa('glab', ['auth', 'status'], { reject: false });
-    return auth.exitCode === 0;
+    return cliAuthOk('glab', ['auth', 'status']);
   }
 
   planCreate(options: CreateRemoteRepoOptions): CreateRemoteRepoResult {

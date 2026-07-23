@@ -8,7 +8,11 @@ import type {
 
 async function cliAvailable(binary: string): Promise<boolean> {
   try {
-    const result = await execa(binary, ['--version'], { reject: false });
+    const result = await execa(binary, ['--version'], {
+      reject: false,
+      timeout: 2_500,
+      killSignal: 'SIGKILL',
+    });
     return result.exitCode === 0;
   } catch {
     return false;

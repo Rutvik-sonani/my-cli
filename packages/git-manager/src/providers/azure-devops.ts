@@ -8,7 +8,11 @@ import type {
 
 async function cliAvailable(binary: string): Promise<boolean> {
   try {
-    const result = await execa(binary, ['--version'], { reject: false });
+    const result = await execa(binary, ['--version'], {
+      reject: false,
+      timeout: 2_500,
+      killSignal: 'SIGKILL',
+    });
     return result.exitCode === 0;
   } catch {
     return false;
@@ -27,8 +31,16 @@ export class AzureDevOpsGitAdapter implements GitProviderAdapter {
 
   async isAvailable(): Promise<boolean> {
     if (!(await cliAvailable('az'))) return false;
-    const auth = await execa('az', ['account', 'show'], { reject: false });
-    return auth.exitCode === 0;
+    try {
+      const auth = await execa('az', ['account', 'show'], {
+        reject: false,
+        timeout: 2_500,
+        killSignal: 'SIGKILL',
+      });
+      return auth.exitCode === 0;
+    } catch {
+      return false;
+    }
   }
 
   planCreate(options: CreateRemoteRepoOptions): CreateRemoteRepoResult {
