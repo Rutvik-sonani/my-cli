@@ -4,7 +4,7 @@ MyCLI uses [Changesets](https://github.com/changesets/changesets) for version ma
 
 ## Prerequisites
 
-- npm account with publish access to the `@mycli` scope
+- npm account with publish access to the **`@mycli-cli`** scope (org name must be `mycli-cli`)
 - `NPM_TOKEN` set in CI (GitHub Actions secret) for automated releases
 - All packages built: `pnpm build`
 
@@ -48,6 +48,25 @@ The action opens a “Version packages” PR when changesets exist; merging that
 |--------|---------|
 | `NPM_TOKEN` | npm automation token with publish access to `@mycli-cli/*` |
 | `GITHUB_TOKEN` | Provided by Actions — used to open version PRs |
+
+The Release workflow also sets `NODE_AUTH_TOKEN` from `NPM_TOKEN` (required by `actions/setup-node` registry auth).
+
+### Fixing `E404` on `PUT https://registry.npmjs.org/@mycli-cli%2f…`
+
+npm returns **404** (not 403) when the token cannot publish to that scope. Check:
+
+1. Org exists as **`mycli-cli`**: https://www.npmjs.com/settings/~/organizations  
+2. You are an **Owner** of that org  
+3. Token is **Automation** (or Granular with write to `@mycli-cli` packages) from the same account  
+4. GitHub secret is named exactly `NPM_TOKEN`  
+5. Re-run the **Release** workflow after fixing token/org  
+
+Local check:
+
+```bash
+npm whoami
+npm org ls mycli-cli
+```
 
 ## Publishing official plugins
 
